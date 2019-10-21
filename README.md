@@ -2,6 +2,6 @@
 
 ## Èlanovi tima:
 
-* Azra Beæireviæ [Predstavnica]
-* Zinedin Mezit
+* Azra Becirevic [Predstavnica]
+* Zinedin Mezit 
 * Enis Mulic
