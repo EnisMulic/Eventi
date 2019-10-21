@@ -4,4 +4,4 @@
 
 * Azra Beæireviæ [Predstavnica]
 * Zinedin Mezit
-* Enis Muliæ
+* Enis Mulic
