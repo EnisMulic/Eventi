@@ -1,7 +1,7 @@
 # Seminarski rad: Event Attender
 
-## Èlanovi tima:
+## Clanovi tima:
 
-* Azra Becirevic [Predstavnica]
+* Azra Becirevic 
 * Zinedin Mezit 
 * Enis Mulic
