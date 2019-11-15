@@ -1,0 +1,22 @@
+﻿@using EventAttender.Data.Models
+@{
+    ViewData["Title"] = "Index";
+    List<Drzava> drzave = (List<Drzava>)ViewData["drzave"];
+}
+
+<table>
+    <thead>
+        <tr>
+            <th>Naziv</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(Drzava d in drzave)
+        {
+            <tr>
+                <td>@d.Naziv</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
