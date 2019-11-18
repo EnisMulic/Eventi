@@ -13,14 +13,14 @@ namespace EventAttender.Data.EF
         // lokalni1 je ime connectionstringa u appsettings.json
 
         // -> Ovako je u dokumentu rs1 2017-18
-        //public MojContext(DbContextOptions<MojContext> options)
-        // : base(options)
-        //{    // ovako treba, i u sturtup konfiguracija je zakomentarisana-odkomentarisati
-        //}
+        // public MojContext(DbContextOptions<MojContext> options)
+        //  : base(options)
+        // {    // ovako treba, i u sturtup konfiguracija je zakomentarisana-odkomentarisati
+        // }
         // ali onda sta proslijediti u MojContext ctx=new MojContext(); ?
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=localhost;Database=proba1;Trusted_Connection=True;MultipleActiveResultSets=true");
+           optionsBuilder.UseSqlServer("Server=localhost;Database=proba1;Trusted_Connection=True;MultipleActiveResultSets=true");
         }    // ovo ne treba, ali ovako radi, tj uspijeva se povezati sa bazom
         // u sql-u ce se napraviti baza proba1
 
@@ -44,7 +44,7 @@ namespace EventAttender.Data.EF
         public DbSet<RadnikEvent> RadnikEvent { get; set; }
         public DbSet<Recenzija> Recenzija { get; set; }
         public DbSet<Sjediste> Sjediste { get; set; }
-        public DbSet<Sponzor>Sponzor { get; set; }
+        public DbSet<Sponzor> Sponzor { get; set; }
         public DbSet<SponzorEvent> SponzorEvent{ get; set; }
     }
 }

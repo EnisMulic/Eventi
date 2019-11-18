@@ -1,0 +1,37 @@
+﻿@using Microsoft.AspNetCore
+@using Event_Attender.Web.ViewModels
+@{
+    
+    ViewData["Title"] = "Index";
+    List<EventInfo> events = (List<EventInfo>)ViewData["Events"];
+}
+
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Naziv</th>
+            <th>Prostor održavanja</th>
+            <th>Datum održavanja</th>
+            <th>Vrijeme održavanja</th>
+            <th>Kategorija</th>
+            <th>Organizator</th>
+            <th>Akcija</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(EventInfo e in events)
+         {
+            <tr>
+                <td>@e.Naziv</td>
+                <td>@e.ProstorOdrzavanjaNaziv</td>
+                <td>@e.DatumOdrzavanja.ToString("dd/MM/yyyy")</td>
+                <td>@e.VrijemeOdrzavanja</td>
+                <td>@e.Kategorija</td>
+                <td>@e.OrganizatorNaziv</td>
+                <td>@Html.ActionLink("Odobri", "Odobri", new {Id = e.Id})</td>
+            </tr>
+         }
+    </tbody>
+</table>
