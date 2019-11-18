@@ -4,10 +4,11 @@
     List<Drzava> drzave = (List<Drzava>)ViewData["drzave"];
 }
 
-<table>
+<table class="table">
     <thead>
         <tr>
             <th>Naziv</th>
+            <th>Akcija</th>
         </tr>
     </thead>
     <tbody>
@@ -15,8 +16,12 @@
         {
             <tr>
                 <td>@d.Naziv</td>
+                <td><a href="/Drzava/Obrisi?id=@d.Id">Obrisi</a>
+                <a href="/Drzava/Uredi?id=@d.Id">Uredi</a>
+                </td>
             </tr>
         }
     </tbody>
 </table>
+<a href="/Drzava/DodajForma">Dodaj novu drzavu</a>
 
