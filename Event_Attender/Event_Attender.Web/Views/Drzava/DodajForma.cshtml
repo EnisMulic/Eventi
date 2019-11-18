@@ -1,0 +1,16 @@
+@using EventAttender.Data.Models
+@{
+    Drzava d = (Drzava)ViewData["drzava"];
+    int poziv =(int) ViewData["poziv"];
+    int gradId = (int)ViewData["gradId"];
+    
+
+}
+<form action="/Drzava/Snimi">
+    <input type="hidden" name="id" value="@d.Id"/>
+    <label>Naziv drzave</label>  <br />
+    <input type="text" name="naziv" value="@d.Naziv"/>  <br />
+    <input type="submit"/>
+    <input type="hidden" value="@poziv" name="poziv"/>
+    <input type="hidden" value="@gradId" name="gradId" />
+</form>

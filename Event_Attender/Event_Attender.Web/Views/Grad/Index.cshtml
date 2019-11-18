@@ -1,0 +1,29 @@
+﻿@using EventAttender.Data.Models;
+@{
+    ViewData["Title"] = "Index";
+    List<Grad>gradovi=(List<Grad>)ViewData["gradovi"];
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th>Naziv</th>
+            <th>Drzava</th>
+            <th>Akcija</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(Grad g in gradovi)
+        {
+            <tr>
+                <td>@g.Naziv</td>
+                <td>@g.Drzava.Naziv</td>
+                <td>
+                    <a href="/Grad/Obrisi?id=@g.Id">Obrisi</a>
+                    <a href="/Grad/Uredi?id=@g.Id">Uredi</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<a href="/Grad/Dodaj">Dodaj novi grad</a>
+    

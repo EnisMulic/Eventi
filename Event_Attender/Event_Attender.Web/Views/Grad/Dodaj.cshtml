@@ -1,0 +1,30 @@
+﻿@using EventAttender.Data.Models;
+@{
+    ViewData["Title"] = "Dodaj";
+    List<Drzava> drzave = (List<Drzava>)ViewData["drzave"];
+    Grad g = (Grad)ViewData["grad"];
+}
+    <form action="/Grad/Snimi">
+        <input type="hidden" name="id" value="@g.Id"/>
+        <label>Drzava:</label>
+        <select name="drzavaId">
+            <option disabled>Dodaj drzavu</option>
+            @foreach (Drzava d in drzave)
+            {
+                if (d.Id == g.DrzavaId)  // ako je u pitanju update grad ima drzavaid!=0
+                {
+                    <option value="@d.Id" selected>@d.Naziv</option>
+                }
+                else
+                {
+                <option value="@d.Id">@d.Naziv</option>
+                }
+            }
+        </select>
+     
+        <a href="/Drzava/DodajForma?poziv=2&gradId=@g.Id">Dodaj novu drzavu</a> <br />
+        <label>Naziv grada:</label>
+        <input type="text" name="naziv" value="@g.Naziv" /> <br />
+        <input type="submit"/>
+    </form>
+
