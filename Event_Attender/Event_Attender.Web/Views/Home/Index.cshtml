@@ -1,8 +1,29 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
-
+<style>
+    a
+    {
+        text-decoration: none;
+        color: white;
+        font-size: 20px;
+    }
+</style>
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">Sprint 1</h1>
+    @*<p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>*@
+    <div class="container">
+        <div class="p-3 mb-2 bg-info text-white border border-success">
+            <a href="/Administrator">Administrator</a>
+        </div>
+        <div class="p-3 mb-2 bg-info text-white border border-success">
+            <a href="/Drzava">Drzava</a>
+        </div>
+        <div class="p-3 mb-2 bg-info text-white border border-success">
+            <a href="/Grad">Grad</a>
+        </div>
+        <div class="p-3 mb-2 bg-info text-white border border-success">
+            <a href="/Sponzor">Sponzor</a>
+        </div>
+    </div>
 </div>
