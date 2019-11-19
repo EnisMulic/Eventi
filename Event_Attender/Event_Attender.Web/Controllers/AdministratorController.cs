@@ -115,7 +115,7 @@ namespace Event_Attender.Web.Controllers
                         new Event
                         {
                             Naziv = "Event Test " + rndEvent.Next(),
-                            DatumOdrzavanja = Convert.ToDateTime("31.12.2019"),
+                            DatumOdrzavanja = DateTime.ParseExact("31.12.2019", "dd.MM.yyyy", null),
                             VrijemeOdrzavanja = "20:00",
                             Kategorija = (Kategorija)(i % 2 + 1),
                             IsOdobren = false,
