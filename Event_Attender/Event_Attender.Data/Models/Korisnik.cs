@@ -10,8 +10,11 @@ namespace EventAttender.Data.Models
         public string Adresa { get; set; }
         public string PostanskiBroj { get; set; }
 
+        public string BrojKreditneKartice { get; set; }  // ?
         public int OsobaId { get; set; }  
         public Osoba Osoba { get; set; }
+
+
     
     }
 }

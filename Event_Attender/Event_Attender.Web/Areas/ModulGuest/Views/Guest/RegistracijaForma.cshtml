@@ -1,0 +1,69 @@
+﻿@model Event_Attender.Web.Areas.ModulGuest.Models.RegistracijaVM
+
+@{
+    ViewData["Title"] = "RegistracijaForma";
+}
+
+<form asp-area="ModulGuest" asp-controller="Guest" asp-action="RegistracijaSnimi">
+    <div class="form-group">
+        <label for="ime">Ime</label>
+        <input asp-for="Ime" type="text" class="form-control" id="ime" />
+        <span asp-validation-for="Ime" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="prezime">Prezime</label>
+        <input asp-for="Prezime" type="text" class="form-control" id="prezime" />
+        <span asp-validation-for="Prezime" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="telefon">Telefon</label>
+        <input asp-for="Telefon" type="text" class="form-control" id="telefon" />
+        <span asp-validation-for="Telefon" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="drzava">Drzava</label>
+        @*<input asp-for="Drzava" type="text" class="form-control" id="drzava" />
+            <span asp-validation-for="Drzava" class="text-danger"></span>*@
+        <select asp-for="DrzavaId" asp-items="Model.Drzave"></select>
+    </div>
+    <div class="form-group">
+        <label for="grad">Grad</label>
+        <input asp-for="Grad" type="text" class="form-control" id="grad" />
+        <span asp-validation-for="Grad" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="adresa">Adresa</label>
+        <input asp-for="Adresa" type="text" class="form-control" id="adresa" />
+        <span asp-validation-for="Adresa" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="postanskiBroj">Postanski broj</label>
+        <input asp-for="PostanskiBroj" type="text" class="form-control" id="postanskiBroj" />
+        <span asp-validation-for="PostanskiBroj" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="email">Email</label>
+        <input asp-for="Email" type="text" class="form-control" id="email" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="username">Username</label>
+        <input asp-for="Username" type="text" class="form-control" id="username" />
+        <span asp-validation-for="Username" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="password">Password</label>
+        <input asp-for="Password" type="password" class="form-control" id="password" />
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="brojKredKartice">BrojRacuna</label>
+        <input asp-for="BrojKreditneKartice" class="form-control" id="brojKredKartice" />
+        <span asp-validation-for="BrojKreditneKartice" class="text-danger"></span>
+    </div>
+    <input type="submit" value="Potvrdi" class="btn btn-success" /> 
+</form>
+
+
+
+
