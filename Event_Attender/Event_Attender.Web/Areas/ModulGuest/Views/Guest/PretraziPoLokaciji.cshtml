@@ -1,0 +1,27 @@
+﻿@using EventAttender.Data.Models
+@model Event_Attender.Web.Areas.ModulGuest.Models.PretragaEventaVM
+@{
+    ViewData["Title"] = "PretraziPoLokaciji";
+}
+
+<form>
+    <input type="text" name="lokacija" />
+    <input type="submit" value="Trazi" class="btn btn-info" />
+</form>
+@if (Model.eventi != null)
+{
+    <table class="table">
+        <tbody>
+            @foreach (Event e in Model.eventi)
+            {
+                <tr>
+                    <td>@e.Slika</td>
+                    <td>@e.Naziv</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+<a asp-area="" asp-controller="Home", asp-action="Index">Nazad</a>
+
+

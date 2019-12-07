@@ -1,29 +1,61 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
-<style>
-    a
-    {
-        text-decoration: none;
-        color: white;
-        font-size: 20px;
+﻿@*@{  
+        ViewData["Title"] = "Home Page";
     }
-</style>
-<div class="text-center">
-    <h1 class="display-4">Sprint 1</h1>
-    @*<p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>*@
-    <div class="container">
-        <div class="p-3 mb-2 bg-info text-white border border-success">
-            <a href="/Administrator">Administrator</a>
+    <style>
+        a
+        {
+            text-decoration: none;
+            color: white;
+            font-size: 20px;
+        }
+    </style>
+
+
+    <div class="text-center">
+        <h1 class="display-4">Sprint 1</h1>
+        <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+        <div class="container">
+            <div class="p-3 mb-2 bg-info text-white border border-success">
+                <a href="/Administrator">Administrator</a>
+            </div>
+            <div class="p-3 mb-2 bg-info text-white border border-success">
+                <a href="/Drzava">Drzava</a>
+            </div>
+            <div class="p-3 mb-2 bg-info text-white border border-success">
+                <a href="/Grad">Grad</a>
+            </div>
+            <div class="p-3 mb-2 bg-info text-white border border-success">
+                <a href="/Sponzor">Sponzor</a>
+            </div>
         </div>
-        <div class="p-3 mb-2 bg-info text-white border border-success">
-            <a href="/Drzava">Drzava</a>
-        </div>
-        <div class="p-3 mb-2 bg-info text-white border border-success">
-            <a href="/Grad">Grad</a>
-        </div>
-        <div class="p-3 mb-2 bg-info text-white border border-success">
-            <a href="/Sponzor">Sponzor</a>
-        </div>
-    </div>
-</div>
+    </div>*@
+@using EventAttender.Data.Models;
+@model Event_Attender.Web.ViewModels.PretragaEventaVM
+@{
+    ViewData["Title"] = "Prikazi";
+}
+<a class="btn btn-info" href="ModulGuest/Guest/PretraziPoNazivu">Pretraga po nazivu</a>
+<a class="btn btn-info" href="ModulGuest/Guest/PretraziPoLokaciji">Pretraga po lokaciji</a>
+<a class="btn btn-info" href="ModulGuest/Guest/RegistracijaForma">Registruj se</a>
+@*<a class="btn btn-info" href="/Guest/Prijava">Prijavi se</a> //vjerovatno drugi kontroler? *@
+<br />
+@*@<form >
+        <input type="text" name="filter" />
+        <input type="submit" value="Pretraga" />
+    </form> v2 - pretaraga i naziva i lokacije ujedno  *@
+
+
+@*umjesto ovoga ce biti template*@ 
+<table class="table">
+    <tbody>
+        @foreach (Event e in Model.eventi)
+        {
+            <tr>
+                <td>@e.Slika</td>
+                <td>@e.Naziv</td>
+            </tr>
+        }
+
+
+    </tbody>
+</table>

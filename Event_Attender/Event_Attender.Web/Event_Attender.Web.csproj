@@ -19,4 +19,8 @@
     <ProjectReference Include="..\Event_Attender.Data\Event_Attender.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Areas\ModulGuest\Data\" />
+  </ItemGroup>
+
 </Project>

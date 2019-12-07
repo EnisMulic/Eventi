@@ -23,9 +23,9 @@ namespace Event_Attender.Web
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
-        {
+        {   
             //services.AddDbContext<MojContext>(options =>
-            //   options.UseSqlServer(Configuration.GetConnectionString("lokalni1")));
+            //   options.UseSqlServer(Configuration.GetConnectionString("lokalni1"))); // za konstruktor
 
             services.AddControllersWithViews();
         }
@@ -45,13 +45,22 @@ namespace Event_Attender.Web
 
             app.UseRouting();
 
+          
+
             app.UseAuthorization();
 
+
             app.UseEndpoints(endpoints =>
-            {
+            {   
                 endpoints.MapControllerRoute(
+                    name: "areaRoute",
+                    pattern: "{area:exists}/{controller}/{action}" //,
+                    /*defaults: new { action = "Index" }*/);   // moze i bez ovoga
+
+                endpoints.MapControllerRoute(   
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+
             });
         }
     }

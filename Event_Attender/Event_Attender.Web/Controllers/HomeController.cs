@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Event_Attender.Web.Models;
+using EventAttender.Data.Models;
+using Event_Attender.Web.ViewModels;
+using EventAttender.Data.EF;
 
 namespace Event_Attender.Web.Controllers
 {
@@ -20,10 +23,45 @@ namespace Event_Attender.Web.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            PretragaEventaVM model = new PretragaEventaVM();
+            MojContext ctx = new MojContext();
+            model.eventi = ctx.Event.Where(e => e.IsOdobren == true).Where(e => e.IsOtkazan == false).ToList();
+            ctx.Dispose();
+            return View(model);
+
         }
 
-        public IActionResult Privacy()
+        // U slucaju da pretraga po nazivu i pretraga po lakaciji ne idu kao 2 odvojene
+        // pretrage, 2 buttona, moze se vrsiti pretraga i po nazivu i po lokaciji zajedno
+        // u ovom slucaju se ne otvaraju novi view, vec ponovo HomePage tj view Index
+
+        //public IActionResult Index(string filter)  // v2 - pretrazuje i po nazivu i po lokaciji
+        //{
+        //    PretragaEventaVM model = new PretragaEventaVM();
+        //    MojContext ctx = new MojContext();
+
+
+        //    if (filter == null)
+        //    {
+        //        model.eventi = ctx.Event.Where(e => e.IsOdobren == true).Where(e => e.IsOtkazan == false).ToList();
+        //    }
+        //    else
+        //    {
+        //        model.eventi = ctx.Event.Where(e => e.IsOdobren == true).Where(e => e.IsOtkazan == false).
+        //               Where(e => e.Naziv.ToLower().StartsWith(filter.ToLower())
+        //                 || e.Naziv.ToLower().Contains(filter.ToLower()) ||
+        //                  e.ProstorOdrzavanja.Naziv.ToLower().StartsWith(filter.ToLower()) || e.ProstorOdrzavanja.Naziv.ToLower().Contains(filter.ToLower())
+        //                 || e.ProstorOdrzavanja.Grad.Naziv.ToLower().StartsWith(filter.ToLower()) || e.ProstorOdrzavanja.Grad.Naziv.ToLower().Contains(filter.ToLower())).ToList();
+        //    }
+
+        //    return View("Index", model);
+        //}
+        public IActionResult Prijava()
+        {
+            return View("Index");
+        }
+
+        public IActionResult Privacy() 
         {
             return View();
         }
