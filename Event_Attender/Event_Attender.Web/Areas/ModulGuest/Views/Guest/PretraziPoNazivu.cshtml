@@ -2,26 +2,75 @@
 @model Event_Attender.Web.Areas.ModulGuest.Models.PretragaEventaVM
 @{
     ViewData["Title"] = "PretraziPoNazivu";
+    DateTime date = DateTime.Now;
+  
 }
+    <style>
+        form{
+            margin-top:2%;
+        }
+        a.btn{
+            color:grey;
+            margin-top:1%;
+        }
+        #pretraga {
+            
+            color:grey;
+        }
+        #pretraga:hover{
+            color:black;
+        }
+        td {
+            width: 50%;
+        }
+    </style>
 
-<form>
-    <input type="text" name="filter" />
-    <input type="submit" value="Trazi" class="btn btn-info" />
-</form>
+@*<a asp-area="" asp-controller="Home" , asp-action="Index" class="btn btn-light">Nazad na početnu stranicu</a>*@
+    <form>
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Search" name="filter">
+            <div class="input-group-btn">
+                <button id="pretraga" class="btn btn-light" type="submit">Trazi
+                
+                    @*<i class="glyphicon glyphicon-search"></i> ne prepoznaje*@
+                </button>
+            </div>
+        </div>
+    </form>
 @if (Model.eventi != null)
 {
     <table class="table">
         <tbody>
             @foreach (Event e in Model.eventi)
             {
-                <tr>
-                    <td>@e.Slika</td>
-                    <td>@e.Naziv</td>
+               <tr>
+                   
+                    <td>
+                        <div>
+                            @e.Slika
+                        </div>
+                    </td>
+
+                    <td>
+                        <div>
+                            @e.Naziv <br />
+
+                            @e.ProstorOdrzavanja.Naziv,
+                            @e.ProstorOdrzavanja.Adresa  <br />
+                            @e.ProstorOdrzavanja.Grad.Naziv
+
+                            <br />
+                          
+                            @e.DatumOdrzavanja.Day.ToString()/@e.DatumOdrzavanja.Month.ToString()/@e.DatumOdrzavanja.Year.ToString()
+                            - @e.VrijemeOdrzavanja h
+
+                        </div>
+                    </td>
                 </tr>
             }
         </tbody>
     </table>
 }
-<a asp-area="" asp-controller="Home" , asp-action="Index">Nazad</a>
+<a asp-area="" asp-controller="Home" , asp-action="Index" class="btn btn-light">Nazad na početnu stranicu</a>
 
 
