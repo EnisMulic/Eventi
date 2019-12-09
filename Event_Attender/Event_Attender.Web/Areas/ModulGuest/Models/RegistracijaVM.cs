@@ -1,4 +1,4 @@
-﻿using EventAttender.Data.Models;
+﻿using Event_Attender.Data.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;

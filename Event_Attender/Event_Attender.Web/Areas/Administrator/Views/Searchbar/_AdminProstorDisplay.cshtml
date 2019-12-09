@@ -1,0 +1,28 @@
+﻿@using Event_Attender.Data.Models
+@{
+    ViewData["Title"] = "Index";
+    List<ProstorOdrzavanja> ProstoriOdrzavanja = (List<ProstorOdrzavanja>)ViewData["ProstoriOdrzavanja"];
+    Layout = "_Layout";
+}
+
+<link href="~/css/admin-sidebar.css" rel="stylesheet" />
+
+<div id="Admin-Container">
+    @{await Html.RenderPartialAsync("_AdminSidebar");}
+    <div id="Admin-Searchbar">
+        <input type="text" name="search" value="" />
+        <table>
+            <tbody>
+                @foreach (ProstorOdrzavanja p in ProstoriOdrzavanja)
+                {
+                    <tr>
+                        <td>@p.Naziv</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div id="Main-Display">
+
+    </div>
+</div>

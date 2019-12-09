@@ -1,4 +1,4 @@
-﻿using EventAttender.Data.Models;
+﻿using Event_Attender.Data.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
