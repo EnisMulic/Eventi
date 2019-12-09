@@ -1,0 +1,92 @@
+﻿@model Event_Attender.Web.Areas.Administrator.Models.EventDisplayVM
+
+
+<div id="Admin-Container">
+    @{await Html.RenderPartialAsync("_AdminEventDisplay", Model);}
+    <div id="Main-Display">
+        <div>
+            @if (Model.OnDisplay != null)
+            {
+                <h4>EventVM</h4>
+                <hr />
+                <dl class="row">
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.OnDisplay.Id)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.OnDisplay.Id)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.OnDisplay.Naziv)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.OnDisplay.Naziv)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.OnDisplay.Opis)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.OnDisplay.Opis)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.OnDisplay.DatumOdrzavanja)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.OnDisplay.DatumOdrzavanja)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.OnDisplay.VrijemeOdrzavanja)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.OnDisplay.VrijemeOdrzavanja)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.OnDisplay.Kategorija)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.OnDisplay.Kategorija)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.OnDisplay.IsOdobren)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.OnDisplay.IsOdobren)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.OnDisplay.IsOtkazan)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.OnDisplay.IsOtkazan)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.OnDisplay.Slika)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.OnDisplay.Slika)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.OnDisplay.OrganizatorNaziv)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.OnDisplay.OrganizatorNaziv)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.OnDisplay.AdministratorNaziv)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.OnDisplay.AdministratorNaziv)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.OnDisplay.ProstorOdrzavanjaNaziv)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.OnDisplay.ProstorOdrzavanjaNaziv)
+                    </dd>
+                </dl>
+            }
+        </div>
+        <div>
+            @Html.ActionLink("Edit", "Edit", new { /* id = model.OnDisplay.PrimaryKey */ })
+        </div>
+    </div>
+</div>
