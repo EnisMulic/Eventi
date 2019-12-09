@@ -22,6 +22,7 @@ namespace Event_Attender.Web.Controllers
             {
                 List<SponzorVM> sponzori = ctx.Sponzor.Select(s => new SponzorVM
                 {
+                    SponzorID=s.Id,
                     Naziv = s.Naziv,
                     Email = s.Email,
                     Telefon = s.Telefon
@@ -50,6 +51,16 @@ namespace Event_Attender.Web.Controllers
             using (MojContext ctx = new MojContext())
             {
                 ctx.Sponzor.Add(s);
+                ctx.SaveChanges();
+            }
+            return Redirect("SponzorGetAll");
+        }
+
+        public IActionResult DeleteSponzor(int idSponzor)
+        {
+            using(var ctx = new MojContext())
+            {
+                ctx.Sponzor.Remove(ctx.Sponzor.Find(idSponzor));
                 ctx.SaveChanges();
             }
             return Redirect("SponzorGetAll");

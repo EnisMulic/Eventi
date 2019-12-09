@@ -5,11 +5,9 @@ using System.Threading.Tasks;
 
 namespace Event_Attender.Web.ViewModels
 {
-    public class SponzorVM
+    public class ProstorOdrzavanjaVM
     {
-        public int SponzorID { get; set; }
+        public int ProstorOdrzavanjaID { get; set; }
         public string Naziv { get; set; }
-        public string Telefon { get; set; }
-        public string Email { get; set; }
     }
 }
