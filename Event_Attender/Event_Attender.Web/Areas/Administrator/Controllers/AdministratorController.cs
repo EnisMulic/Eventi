@@ -4,38 +4,31 @@ using System.Linq;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using EventAttender.Data.EF;
-using EventAttender.Data.Models;
+using Event_Attender.Data.EF;
+using Event_Attender.Data.Models;
 using Event_Attender.Web.ViewModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace Event_Attender.Web.Controllers
 {
+    [Area("Administrator")]
     public class AdministratorController : Controller
     {
-        
+
         public IActionResult Index()
         {
-            Test_HardCode_DodajEvent(3);
+
+            return View();
+        }
+
+        public IActionResult _AdminEventDisplay()
+        {
+            //Test_HardCode_DodajEvent(3);
             using (MojContext ctx = new MojContext())
             {
-                List<EventInfo> events = ctx.Event
-                    .Select
-                    (
-                        e => new EventInfo
-                        {
-                            Id = e.Id,
-                            Naziv = e.Naziv,
-                            Opis = e.Opis,
-                            DatumOdrzavanja = e.DatumOdrzavanja,
-                            VrijemeOdrzavanja = e.VrijemeOdrzavanja,
-                            Kategorija = e.Kategorija,
-                            IsOdobren = e.IsOdobren,
-                            IsOtkazan = e.IsOtkazan,
-                            OrganizatorNaziv = e.Organizator.Naziv,
-                            ProstorOdrzavanjaNaziv = e.ProstorOdrzavanja.Naziv
-                        }
-                    )
-                    .Where(e => e.IsOdobren == false)
+                List<Event> events = ctx.Event
+                    .Include(o => o.Organizator)
+                    .Include(p => p.ProstorOdrzavanja)
                     .ToList();
 
                 ViewData["Events"] = events;
@@ -46,7 +39,7 @@ namespace Event_Attender.Web.Controllers
 
         public IActionResult Odobri(int Id)
         {
-            using(MojContext ctx = new MojContext())
+            using (MojContext ctx = new MojContext())
             {
                 Event e = ctx.Event.FirstOrDefault(e => e.Id == Id);
                 if (e != null) e.IsOdobren = true;
@@ -55,6 +48,110 @@ namespace Event_Attender.Web.Controllers
             return Redirect("/Administrator");
         }
 
+        public IActionResult _AdminDrzavaDisplay()
+        {
+            using(MojContext ctx = new MojContext())
+            {
+                List<Drzava> Drzave = ctx.Drzava.ToList();
+                ViewData["Drzave"] = Drzave;
+            }
+            return View();
+        }
+
+        public IActionResult _AdminGradDisplay()
+        {
+            using (MojContext ctx = new MojContext())
+            {
+                List<Grad> Gradovi = ctx.Grad
+                    .Include(d => d.Drzava)
+                    .ToList();
+                ViewData["Gradovi"] = Gradovi;
+            }
+            return View();
+        }
+
+        public IActionResult _AdminKorisnikDisplay()
+        {
+            using (MojContext ctx = new MojContext())
+            {
+                List<Korisnik> Korisnici = ctx.Korisnik
+                    .Include(o => o.Osoba)
+                    .ToList();
+                ViewData["Korisnici"] = Korisnici;
+            }
+            return View();
+        }
+
+        public IActionResult _AdminRadnikDisplay()
+        {
+            using (MojContext ctx = new MojContext())
+            {
+                List<Radnik> Radnici = ctx.Radnik
+                    .Include(o => o.Osoba)
+                    .ToList();
+                ViewData["Radnici"] = Radnici;
+            }
+            return View();
+        }
+
+        public IActionResult _AdminOrganizatorDisplay()
+        {
+            using (MojContext ctx = new MojContext())
+            {
+                List<Organizator> Organizatori = ctx.Organizator.ToList();
+                ViewData["Organizatori"] = Organizatori;
+            }
+            return View();
+        }
+
+        public IActionResult _AdminIzvodjacDisplay()
+        {
+            using (MojContext ctx = new MojContext())
+            {
+                List<Izvodjac> Izvodjaci = ctx.Izvodjac.ToList();
+                ViewData["Izvodjaci"] = Izvodjaci;
+            }
+            return View();
+        }
+
+        public IActionResult _AdminSponzorDisplay()
+        {
+            using (MojContext ctx = new MojContext())
+            {
+                List<Sponzor> Sponzori = ctx.Sponzor.ToList();
+                ViewData["Sponzori"] = Sponzori;
+            }
+            return View();
+        }
+
+        public IActionResult _AdminProstorDisplay()
+        {
+            using (MojContext ctx = new MojContext())
+            {
+                List<ProstorOdrzavanja> ProstoriOdrzavanja = ctx.ProstorOdrzavanja.ToList();
+                ViewData["ProstoriOdrzavanja"] = ProstoriOdrzavanja;
+            }
+            return View();
+        }
+
+        public IActionResult _DrzavaForma(int? Id)
+        {
+            Drzava drzava;
+            using (MojContext ctx = new MojContext())
+            {
+                
+                if (Id != null)
+                {
+                    drzava = ctx.Drzava.Find(Id);
+                }
+                else
+                {
+                    drzava = ctx.Drzava.FirstOrDefault();
+                }
+            }
+            
+            return View(drzava);
+        }
         public void Test_HardCode_DodajEvent(int n)
         {
             

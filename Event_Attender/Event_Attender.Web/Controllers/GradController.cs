@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using EventAttender.Data.EF;
-using EventAttender.Data.Models;
+using Event_Attender.Data.EF;
+using Event_Attender.Data.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 

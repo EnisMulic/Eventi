@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Areas\Administrator\Views\Info\" />
     <Folder Include="Areas\ModulGuest\Data\" />
   </ItemGroup>
 

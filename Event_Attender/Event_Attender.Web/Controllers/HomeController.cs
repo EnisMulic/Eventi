@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Event_Attender.Web.Models;
-using EventAttender.Data.Models;
+using Event_Attender.Data.Models;
 using Event_Attender.Web.ViewModels;
-using EventAttender.Data.EF;
+using Event_Attender.Data.EF;
 
 namespace Event_Attender.Web.Controllers
 {

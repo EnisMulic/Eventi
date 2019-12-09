@@ -2,9 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using EventAttender.Data.Models;
+using Event_Attender.Data.Models;
 
-namespace EventAttender.Data.EF
+namespace Event_Attender.Data.EF
 {
     public class MojContext:DbContext
     {
