@@ -1,0 +1,32 @@
+﻿main
+{
+    display: flex;
+}
+
+#Admin-Container
+{
+    display: flex;
+}
+
+#Admin-Sidebar
+{
+  
+    width: 20%;
+}
+
+#Admin-Searchbar
+{
+    width: 20%;
+}
+
+#Admin-Searchbar tbody tr td:hover
+{
+    background: gray;
+}
+
+#Main-Display
+{
+    width: 60%;
+}
+
+

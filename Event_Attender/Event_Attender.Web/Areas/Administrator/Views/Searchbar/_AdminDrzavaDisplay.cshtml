@@ -1,0 +1,27 @@
+﻿@using Event_Attender.Data.Models
+@{
+    ViewData["Title"] = "Index";
+    List<Drzava> Drzave = (List<Drzava>)ViewData["Drzave"];
+    Layout = "_Layout";
+}
+
+<link href="~/css/admin-sidebar.css" rel="stylesheet" />
+
+
+@{await Html.RenderPartialAsync("_AdminSidebar");}
+<div id="Admin-Searchbar">
+    <input type="text" name="search" value="" />
+    <table>
+        <tbody>
+            @foreach (Drzava d in Drzave)
+            {
+                <tr>
+                    <td>@Html.ActionLink(@d.Naziv, "_DrzavaForma")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div id="Main-Display">
+    @Html.Partial("_DrzavaForma")
+</div>

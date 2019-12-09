@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-  public enum TipKarte {Vip, Parter, Tribina, Obicna}
-namespace EventAttender.Data.Models
+
+public enum TipKarte {Vip, Parter, Tribina, Obicna}
+namespace Event_Attender.Data.Models
 {
     public class ProdajaTip
     {

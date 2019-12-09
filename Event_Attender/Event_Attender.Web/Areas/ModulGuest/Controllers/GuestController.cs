@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Event_Attender.Web.Areas.ModulGuest.Models;
-using EventAttender.Data.EF;
+using Event_Attender.Data.EF;
 using Microsoft.AspNetCore.Mvc;
-using EventAttender.Data.Models;
+using Event_Attender.Data.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 

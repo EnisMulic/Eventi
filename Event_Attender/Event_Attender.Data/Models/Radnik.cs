@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace EventAttender.Data.Models
+namespace Event_Attender.Data.Models
 {
     public class Radnik
     {
