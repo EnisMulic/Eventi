@@ -16,6 +16,7 @@ namespace Event_Attender.Web.ViewModels
         public bool IsOdobren { get; set; }
         public bool IsOtkazan { get; set; }
         public string OrganizatorNaziv { get; set; }
+        public int OrganizatorID { get; set; }
         public string ProstorOdrzavanjaNaziv { get; set; }
     }
 }

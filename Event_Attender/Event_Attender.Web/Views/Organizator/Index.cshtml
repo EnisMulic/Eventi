@@ -1,0 +1,113 @@
+﻿@using Event_Attender.Web.ViewModels
+
+@{
+    Layout = null;
+    var prostori = (List<ProstorOdrzavanjaVM>)ViewData["ProstoriOdrzavanja"];
+    var eventiOrganizatora = (List<EventInfo>)ViewData["EventiOrganizatora"];
+
+
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Organizator panel</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <div class="container-fluid">
+
+        <div class="row">
+            <nav class="navbar navbar-default">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="/Organizator">Organizator panel</a>
+                </div>
+            </nav>
+        </div>
+        <div class="row">
+            <div class="col-lg-4">
+                <form action="SnimiEvent" method="post">
+
+                    <div class="form-group">
+                        <label for="nazivEventa">Naziv eventa</label>
+                        <input type="text" class="form-control" id="nazivEventa" name="_nazivEventa">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="opisEventa">Opis</label>
+                        <textarea type="text" class="form-control" id="opisEventa" name="_opisEventa"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="datumEventa">Datum odrzavanja</label>
+                        <input type="date" class="form-control" id="datumEventa" name="_datumEventa">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="vrijemeEventa">Vrijeme odrzavanja</label>
+                        <input type="time" class="form-control" id="vrijemeEventa" name="_vrijemeEventa">
+                    </div>
+
+                    <label>Kategorija eventa</label>
+                    <div class="radio">
+                        <label><input type="radio" name="_optradio" value="0">Muzika</label>
+                    </div>
+                    <div class="radio">
+                        <label><input type="radio" name="_optradio" value="1">Kultura</label>
+                    </div>
+                    <div class="radio">
+                        <label><input type="radio" name="_optradio" value="2">Sport</label>
+                    </div>
+
+                    <label for="odabirProstor">Prostor odrzavanja</label>
+                    <select id="odabirProstor" name="_optcombo">
+                        <option value="" disabled selected>odaberite prostor</option>
+                        @foreach (ProstorOdrzavanjaVM x in prostori)
+                        {
+                            <option value="@x.ProstorOdrzavanjaID">@x.Naziv</option>
+                        }
+                    </select>
+                    <br />
+                    <button type="submit" class="btn btn-default">Submit</button>
+                </form>
+            </div>
+            <div class="col-lg-8">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Naziv</th>
+                            <th scope="col">Opis</th>
+                            <th scope="col">Kategorija</th>
+                            <th scope="col">Datum odrzavanja</th>
+                            <th scope="col">Vrijeme odrzavanja</th>
+                            <th scope="col">Prostor odrzavanja</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (EventInfo i in eventiOrganizatora)
+                        {
+                        <tr>
+                            <td>@i.Naziv</td>
+                            <td>@i.Opis</td>
+                            <td>@i.Kategorija.ToString()</td>
+                            <td>@i.DatumOdrzavanja.ToString()</td>
+                            <td>@i.VrijemeOdrzavanja</td>
+                            <td>@i.ProstorOdrzavanjaNaziv</td>
+
+                        </tr>
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+
+</body>
+</html>
