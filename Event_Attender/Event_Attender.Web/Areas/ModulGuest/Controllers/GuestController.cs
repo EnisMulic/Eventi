@@ -7,6 +7,7 @@ using EventAttender.Data.EF;
 using Microsoft.AspNetCore.Mvc;
 using EventAttender.Data.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
 namespace Event_Attender.Web.Areas.ModulGuest.Controllers
 {   
@@ -17,10 +18,11 @@ namespace Event_Attender.Web.Areas.ModulGuest.Controllers
         {
             PretragaEventaVM model = new PretragaEventaVM();
             MojContext ctx = new MojContext();
-
+            DateTime date = DateTime.Now;
+            //Where(e => e.DatumOdrzavanja.CompareTo(date)==1) // gdje je datum veci od danasnjeg
             if (filter != null)
             {
-                model.eventi = ctx.Event.Where(e => e.IsOdobren == true).Where(e => e.IsOtkazan == false).
+                model.eventi = ctx.Event.Include(e => e.ProstorOdrzavanja).Include(e => e.ProstorOdrzavanja.Grad).Where(e=>e.DatumOdrzavanja.CompareTo(date)==1).Where(e => e.IsOdobren == true).Where(e => e.IsOtkazan == false).
                     Where(e => e.Naziv.ToLower().Equals(filter.ToLower()) || e.Naziv.ToLower().StartsWith(filter.ToLower())
                      || e.Naziv.ToLower().Contains(filter.ToLower())).ToList();
             }
@@ -31,11 +33,11 @@ namespace Event_Attender.Web.Areas.ModulGuest.Controllers
         {
             PretragaEventaVM model = new PretragaEventaVM();
             MojContext ctx = new MojContext();
-
+            DateTime date = DateTime.Now;
             if (lokacija != null)
             {
-                model.eventi = ctx.Event.Where(e => e.IsOdobren == true).Where(e => e.IsOtkazan == false).
-                    Where(e => e.ProstorOdrzavanja.Naziv.ToLower().StartsWith(lokacija.ToLower()) || e.ProstorOdrzavanja.Naziv.ToLower().Contains(lokacija.ToLower())
+                model.eventi = ctx.Event.Include(e=>e.ProstorOdrzavanja).Include(e=>e.ProstorOdrzavanja.Grad).Where(e => e.DatumOdrzavanja.CompareTo(date) == 1).Where(e => e.IsOdobren == true).Where(e => e.IsOtkazan == false).
+                   Where(e => e.ProstorOdrzavanja.Grad.Drzava.Naziv.ToLower().StartsWith(lokacija.ToLower()) || e.ProstorOdrzavanja.Naziv.ToLower().StartsWith(lokacija.ToLower()) || e.ProstorOdrzavanja.Naziv.ToLower().Contains(lokacija.ToLower())
                       || e.ProstorOdrzavanja.Grad.Naziv.ToLower().StartsWith(lokacija.ToLower()) || e.ProstorOdrzavanja.Grad.Naziv.ToLower().Contains(lokacija.ToLower())).ToList();
             }
             ctx.Dispose();
