@@ -3,7 +3,7 @@
 @{
     Layout = null;
     var prostori = (List<ProstorOdrzavanjaVM>)ViewData["ProstoriOdrzavanja"];
-    var eventiOrganizatora = (List<EventInfo>)ViewData["EventiOrganizatora"];
+    var eventiOrganizatora = (List<OrganizatorEventVM>)ViewData["EventiOrganizatora"];
 
 
 }
@@ -24,7 +24,7 @@
         <div class="row">
             <nav class="navbar navbar-default">
                 <div class="navbar-header">
-                    <a class="navbar-brand" href="/Organizator">Organizator panel</a>
+                    <a class="navbar-brand" href="/Organizator/Index">Organizator panel</a>
                 </div>
             </nav>
         </div>
@@ -88,7 +88,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (EventInfo i in eventiOrganizatora)
+                        @foreach (OrganizatorEventVM i in eventiOrganizatora)
                         {
                         <tr>
                             <td>@i.Naziv</td>
