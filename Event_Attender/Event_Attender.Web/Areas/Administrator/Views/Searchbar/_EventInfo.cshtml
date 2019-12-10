@@ -7,86 +7,87 @@
         <div>
             @if (Model.OnDisplay != null)
             {
-                <h4>EventVM</h4>
+                <h4>@Html.DisplayFor(model => model.OnDisplay.Naziv)</h4>
                 <hr />
-                <dl class="row">
-                    <dt class="col-sm-2">
+                <form>
+                    <label>
                         @Html.DisplayNameFor(model => model.OnDisplay.Id)
-                    </dt>
-                    <dd class="col-sm-10">
-                        @Html.DisplayFor(model => model.OnDisplay.Id)
-                    </dd>
-                    <dt class="col-sm-2">
+                    </label>
+                    <input type="text" value="@Html.DisplayFor(model => model.OnDisplay.Id)" readonly />
+
+                    <label>
                         @Html.DisplayNameFor(model => model.OnDisplay.Naziv)
-                    </dt>
-                    <dd class="col-sm-10">
-                        @Html.DisplayFor(model => model.OnDisplay.Naziv)
-                    </dd>
-                    <dt class="col-sm-2">
+                    </label>
+                    <input type="text" value="@Html.DisplayFor(model => model.OnDisplay.Naziv)" readonly />
+
+                    <label>
                         @Html.DisplayNameFor(model => model.OnDisplay.Opis)
-                    </dt>
-                    <dd class="col-sm-10">
-                        @Html.DisplayFor(model => model.OnDisplay.Opis)
-                    </dd>
-                    <dt class="col-sm-2">
+                    </label>
+                    <input type="text" value="@Html.DisplayFor(model => model.OnDisplay.Opis)" readonly />
+
+                    <label>
                         @Html.DisplayNameFor(model => model.OnDisplay.DatumOdrzavanja)
-                    </dt>
-                    <dd class="col-sm-10">
-                        @Html.DisplayFor(model => model.OnDisplay.DatumOdrzavanja)
-                    </dd>
-                    <dt class="col-sm-2">
+                    </label>
+                    <input type="text" value="@Html.DisplayFor(model => model.OnDisplay.DatumOdrzavanja)" readonly />
+
+                    <label>
                         @Html.DisplayNameFor(model => model.OnDisplay.VrijemeOdrzavanja)
-                    </dt>
-                    <dd class="col-sm-10">
-                        @Html.DisplayFor(model => model.OnDisplay.VrijemeOdrzavanja)
-                    </dd>
-                    <dt class="col-sm-2">
+                    </label>
+                    <input type="text" value="@Html.DisplayFor(model => model.OnDisplay.VrijemeOdrzavanja)" readonly />
+
+                    <label>
                         @Html.DisplayNameFor(model => model.OnDisplay.Kategorija)
-                    </dt>
-                    <dd class="col-sm-10">
-                        @Html.DisplayFor(model => model.OnDisplay.Kategorija)
-                    </dd>
-                    <dt class="col-sm-2">
+                    </label>
+                    <input type="text" value="@Html.DisplayFor(model => model.OnDisplay.Kategorija)" readonly />
+
+                    <label>
                         @Html.DisplayNameFor(model => model.OnDisplay.IsOdobren)
-                    </dt>
-                    <dd class="col-sm-10">
-                        @Html.DisplayFor(model => model.OnDisplay.IsOdobren)
-                    </dd>
-                    <dt class="col-sm-2">
+                    </label>
+                    @if (Model.OnDisplay.IsOdobren == true)
+                    {
+                        <input type="checkbox" checked readonly />
+                    }
+                    else
+                    {
+                        <input type="checkbox" readonly />
+                    }
+
+                    <label>
                         @Html.DisplayNameFor(model => model.OnDisplay.IsOtkazan)
-                    </dt>
-                    <dd class="col-sm-10">
-                        @Html.DisplayFor(model => model.OnDisplay.IsOtkazan)
-                    </dd>
-                    <dt class="col-sm-2">
-                        @Html.DisplayNameFor(model => model.OnDisplay.Slika)
-                    </dt>
-                    <dd class="col-sm-10">
-                        @Html.DisplayFor(model => model.OnDisplay.Slika)
-                    </dd>
-                    <dt class="col-sm-2">
-                        @Html.DisplayNameFor(model => model.OnDisplay.OrganizatorNaziv)
-                    </dt>
-                    <dd class="col-sm-10">
-                        @Html.DisplayFor(model => model.OnDisplay.OrganizatorNaziv)
-                    </dd>
-                    <dt class="col-sm-2">
-                        @Html.DisplayNameFor(model => model.OnDisplay.AdministratorNaziv)
-                    </dt>
-                    <dd class="col-sm-10">
-                        @Html.DisplayFor(model => model.OnDisplay.AdministratorNaziv)
-                    </dd>
-                    <dt class="col-sm-2">
+                    </label>
+                    @if (Model.OnDisplay.IsOtkazan == true)
+                    {
+                        <input type="checkbox" checked readonly />
+                    }
+                    else
+                    {
+                        <input type="checkbox" readonly />
+                    }
+
+                    <label>
                         @Html.DisplayNameFor(model => model.OnDisplay.ProstorOdrzavanjaNaziv)
-                    </dt>
-                    <dd class="col-sm-10">
-                        @Html.DisplayFor(model => model.OnDisplay.ProstorOdrzavanjaNaziv)
-                    </dd>
-                </dl>
+                    </label>
+                    <input type="text" value="@Html.DisplayFor(model => model.OnDisplay.ProstorOdrzavanjaNaziv)" readonly />
+
+                    <label>
+                        @Html.DisplayNameFor(model => model.OnDisplay.OrganizatorNaziv)
+                    </label>
+                    <input type="text" value="@Html.DisplayFor(model => model.OnDisplay.OrganizatorNaziv)" readonly />
+
+                    <label>
+                        @Html.DisplayNameFor(model => model.OnDisplay.AdministratorNaziv)
+                    </label>
+                    <input type="text" value="@Html.DisplayFor(model => model.OnDisplay.AdministratorNaziv)" readonly />
+                </form>
             }
         </div>
         <div>
-            @Html.ActionLink("Edit", "Edit", new { /* id = model.OnDisplay.PrimaryKey */ })
+            <button>
+                @Html.ActionLink("Uredi", "Edit", new { /* id = model.OnDisplay.PrimaryKey */ })
+            </button>
+            <button>
+                @Html.ActionLink("Obriši", "Edit", new { /* id = model.OnDisplay.PrimaryKey */ })
+            </button>
         </div>
     </div>
 </div>

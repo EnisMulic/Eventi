@@ -1,28 +1,29 @@
-﻿@using Event_Attender.Data.Models
+﻿@model Event_Attender.Web.Areas.Administrator.Models.IzvodjacDisplayVM
 @{
     ViewData["Title"] = "Index";
-    List<Izvodjac> Izvodjaci = (List<Izvodjac>)ViewData["Izvodjaci"];
-    Layout = "_Layout";
 }
 
 <link href="~/css/admin-sidebar.css" rel="stylesheet" />
 
-<div id="Admin-Container">
-    @{await Html.RenderPartialAsync("_AdminSidebar");}
-    <div id="Admin-Searchbar">
-        <input type="text" name="search" value="" />
-        <table>
-            <tbody>
-                @foreach (Izvodjac i in Izvodjaci)
-                {
-                    <tr>
-                        <td>@i.Naziv</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
-    <div id="Main-Display">
-
-    </div>
+@{await Html.RenderPartialAsync("_AdminSidebar");}
+<div id="Admin-Searchbar">
+    <input type="text" name="search" value="" />
+    <button>
+        @Html.ActionLink("Dodaj", "Edit", new { /* id = model.OnDisplay.PrimaryKey */ })
+    </button>
+    <table>
+        <tbody>
+            @foreach (var item in Model.Izvodjaci)
+            {
+                <tr>
+                    <td>
+                        <a asp-area="Administrator" asp-controller="Searchbar"
+                           asp-action="_IzvodjacInfo" asp-route-id="@item.Id">
+                            @item.Naziv
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>

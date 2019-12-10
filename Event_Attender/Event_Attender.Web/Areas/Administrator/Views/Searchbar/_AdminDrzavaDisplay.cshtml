@@ -1,27 +1,29 @@
-﻿@using Event_Attender.Data.Models
+﻿@model Event_Attender.Web.Areas.Administrator.Models.DrzavaDisplayVM
 @{
     ViewData["Title"] = "Index";
-    List<Drzava> Drzave = (List<Drzava>)ViewData["Drzave"];
-    Layout = "_Layout";
 }
 
 <link href="~/css/admin-sidebar.css" rel="stylesheet" />
 
-
 @{await Html.RenderPartialAsync("_AdminSidebar");}
 <div id="Admin-Searchbar">
     <input type="text" name="search" value="" />
+    <button>
+        @Html.ActionLink("Dodaj", "Edit", new { /* id = model.OnDisplay.PrimaryKey */ })
+    </button>
     <table>
         <tbody>
-            @foreach (Drzava d in Drzave)
+            @foreach (var item in Model.Drzave)
             {
                 <tr>
-                    <td>@Html.ActionLink(@d.Naziv, "_DrzavaForma")</td>
+                    <td>
+                        <a asp-area="Administrator" asp-controller="Searchbar"
+                           asp-action="_DrzavaInfo" asp-route-id="@item.Id">
+                            @item.Naziv
+                        </a>
+                    </td>
                 </tr>
             }
         </tbody>
     </table>
-</div>
-<div id="Main-Display">
-    @Html.Partial("_DrzavaForma")
 </div>

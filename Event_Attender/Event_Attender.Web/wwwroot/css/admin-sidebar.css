@@ -5,7 +5,18 @@
 
 #Admin-Container
 {
-    display: flex;
+    display: contents;
+}
+
+a
+{
+    text-decoration: none;
+    color: black;
+}
+
+a:hover
+{
+    text-decoration: none;
 }
 
 #Admin-Sidebar
@@ -21,12 +32,19 @@
 
 #Admin-Searchbar tbody tr td:hover
 {
-    background: gray;
+    background: #808080;
+    text-decoration: none;
 }
 
 #Main-Display
 {
     width: 60%;
+}
+
+#Main-Display form
+{
+    display: flex;
+    flex-direction: column;
 }
 
 

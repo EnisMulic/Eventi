@@ -1,0 +1,60 @@
+﻿@model Event_Attender.Web.Areas.Administrator.Models.KorisnikDisplayVM
+
+<div id="Admin-Container">
+    @{await Html.RenderPartialAsync("_AdminKorisnikDisplay", Model);}
+    <div id="Main-Display">
+        <div>
+            @if (Model.OnDisplay != null)
+            {
+                <h4>@Model.OnDisplay.Ime + " " + @Model.OnDisplay.Prezime</h4>
+                <hr />
+                <form>
+                    <label>
+                        @Html.DisplayNameFor(model => model.OnDisplay.Id)
+                    </label>
+                    <input type="text" value="@Html.DisplayFor(model => model.OnDisplay.Id)" readonly />
+
+                    <label>
+                        @Html.DisplayNameFor(model => model.OnDisplay.Ime)
+                    </label>
+                    <input type="text" value="@Html.DisplayFor(model => model.OnDisplay.Ime)" readonly />
+
+                    <label>
+                        @Html.DisplayNameFor(model => model.OnDisplay.Prezime)
+                    </label>
+                    <input type="text" value="@Html.DisplayFor(model => model.OnDisplay.Prezime)" readonly />
+
+
+                    <label>
+                        @Html.DisplayNameFor(model => model.OnDisplay.Telefon)
+                    </label>
+                    <input type="text" value="@Html.DisplayFor(model => model.OnDisplay.Telefon)" readonly />
+
+                    <label>
+                        @Html.DisplayNameFor(model => model.OnDisplay.Adresa)
+                    </label>
+                    <input type="text" value="@Html.DisplayFor(model => model.OnDisplay.Adresa)" readonly />
+
+                    <label>
+                        @Html.DisplayNameFor(model => model.OnDisplay.PostanskiBroj)
+                    </label>
+                    <input type="text" value="@Html.DisplayFor(model => model.OnDisplay.PostanskiBroj)" readonly />
+
+
+                    <label>
+                        @Html.DisplayNameFor(model => model.OnDisplay.GradNaziv)
+                    </label>
+                    <input type="text" value="@Html.DisplayFor(model => model.OnDisplay.GradNaziv)" readonly />
+                </form>
+             }
+        </div>
+        <div>
+            <button>
+                @Html.ActionLink("Uredi", "Edit", new { /* id = model.OnDisplay.PrimaryKey */ })
+            </button>
+            <button>
+                @Html.ActionLink("Obriši", "Edit", new { /* id = model.OnDisplay.PrimaryKey */ })
+            </button>
+        </div>
+    </div>
+</div>
