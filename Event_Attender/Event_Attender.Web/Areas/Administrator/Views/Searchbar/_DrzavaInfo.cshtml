@@ -1,0 +1,33 @@
+﻿@model Event_Attender.Web.Areas.Administrator.Models.DrzavaDisplayVM
+
+<div id="Admin-Container">
+    @{await Html.RenderPartialAsync("_AdminDrzavaDisplay", Model);}
+    <div id="Main-Display">
+        <div>
+            @if (Model.OnDisplay != null)
+            {
+                <h4>@Html.DisplayFor(model => model.OnDisplay.Naziv)</h4>
+                <hr />
+                <form>
+                    <label>
+                        @Html.DisplayNameFor(model => model.OnDisplay.Id)
+                    </label>
+                    <input type="text" value="@Html.DisplayFor(model => model.OnDisplay.Id)" readonly />
+
+                    <label>
+                        @Html.DisplayNameFor(model => model.OnDisplay.Naziv)
+                    </label>
+                    <input type="text" value="@Html.DisplayFor(model => model.OnDisplay.Naziv)" readonly />
+                </form>
+            }
+        </div>
+        <div>
+            <button>
+                @Html.ActionLink("Uredi", "Edit", new { /* id = model.OnDisplay.PrimaryKey */ })
+            </button>
+            <button>
+                @Html.ActionLink("Obriši", "Edit", new { /* id = model.OnDisplay.PrimaryKey */ })
+            </button>
+        </div>
+    </div>
+</div>

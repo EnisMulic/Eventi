@@ -1,32 +1,30 @@
-﻿@using Event_Attender.Data.Models
+﻿@model Event_Attender.Web.Areas.Administrator.Models.GradDisplayVM
 @{
     ViewData["Title"] = "Index";
-    List<Grad> Gradovi = (List<Grad>)ViewData["Gradovi"];
-    Layout = "_Layout";
+
 }
 
 <link href="~/css/admin-sidebar.css" rel="stylesheet" />
 
-<div id="Admin-Container">
-    @{await Html.RenderPartialAsync("_AdminSidebar");}
-    <div id="Admin-Searchbar">
-        <input type="text" name="search" value="" />
-        <table>
-            <tbody>
-                @foreach (Grad g in Gradovi)
-                {
-                    <tr>
-                        <td>@g.Naziv</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
-    <div id="Main-Display">
-        <label>Naziv</label><input type="text" name="Grad" value="" />
-        <label>Država</label><input type="text" name="Drzava" value="" />
-    </div>
+@{await Html.RenderPartialAsync("_AdminSidebar");}
+<div id="Admin-Searchbar">
+    <input type="text" name="search" value="" />
+    <button>
+        @Html.ActionLink("Dodaj", "Edit", new { /* id = model.OnDisplay.PrimaryKey */ })
+    </button>
+    <table>
+        <tbody>
+            @foreach (var item in Model.Gradovi)
+            {
+                <tr>
+                    <td>
+                        <a asp-area="Administrator" asp-controller="Searchbar"
+                           asp-action="_GradInfo" asp-route-id="@item.Id">
+                            @item.Naziv
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>
-<script language="JavaScript" type="text/javascript" src="~/lib/jquery/dist/jquery.min.js"></script>
-<script language="JavaScript" type="text/javascript" src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/js/admin-panel.js"></script>

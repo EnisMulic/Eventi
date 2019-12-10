@@ -1,28 +1,29 @@
-﻿@using Event_Attender.Data.Models
+﻿@model Event_Attender.Web.Areas.Administrator.Models.OrganizatorDisplayVM
 @{
     ViewData["Title"] = "Index";
-    List<Organizator> Organizatori = (List<Organizator>)ViewData["Organizatori"];
-    Layout = "_Layout";
 }
 
 <link href="~/css/admin-sidebar.css" rel="stylesheet" />
 
-<div id="Admin-Container">
-    @{await Html.RenderPartialAsync("_AdminSidebar");}
-    <div id="Admin-Searchbar">
-        <input type="text" name="search" value="" />
-        <table>
-            <tbody>
-                @foreach (Organizator o in Organizatori)
-                {
-                    <tr>
-                        <td>@o.Naziv</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
-    <div id="Main-Display">
-
-    </div>
+@{await Html.RenderPartialAsync("_AdminSidebar");}
+<div id="Admin-Searchbar">
+    <input type="text" name="search" value="" />
+    <button>
+        @Html.ActionLink("Dodaj", "Edit", new { /* id = model.OnDisplay.PrimaryKey */ })
+    </button>
+    <table>
+        <tbody>
+            @foreach (var item in Model.Organizatori)
+            {
+                <tr>
+                    <td>
+                        <a asp-area="Administrator" asp-controller="Searchbar"
+                           asp-action="_OrganizatorInfo" asp-route-id="@item.Id">
+                            @item.Naziv
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>

@@ -1,5 +1,4 @@
-﻿@using Event_Attender.Data.Models
-@model Event_Attender.Web.Areas.Administrator.Models.EventDisplayVM
+﻿@model Event_Attender.Web.Areas.Administrator.Models.EventDisplayVM
 @{
 
     ViewData["Title"] = "Index";
@@ -9,22 +8,22 @@
 @{await Html.RenderPartialAsync("_AdminSidebar");}
 <div id="Admin-Searchbar">
     <input type="text" name="search" value="" />
-    
-
-        <table>
-            <tbody>
-                @foreach (var item in Model.Events)
-                {
-                    <tr>
-                        <td>
-                            <a asp-area="Administrator" asp-controller="Searchbar" 
-                               asp-action="_EventInfo" asp-route-id="@item.Id">
-                                @item.Naziv
-                            </a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    
+    <button>
+        @Html.ActionLink("Dodaj", "Edit", new { /* id = model.OnDisplay.PrimaryKey */ })
+    </button>
+    <table>
+        <tbody>
+            @foreach (var item in Model.Events)
+            {
+                <tr>
+                    <td>
+                        <a asp-area="Administrator" asp-controller="Searchbar"
+                           asp-action="_EventInfo" asp-route-id="@item.Id">
+                            @item.Naziv
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>
