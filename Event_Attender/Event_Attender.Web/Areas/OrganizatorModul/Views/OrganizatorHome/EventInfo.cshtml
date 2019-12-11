@@ -1,0 +1,69 @@
+﻿@using Event_Attender.Web.ViewModels
+
+@{
+    Layout = null;
+    var eventInfo = (OrganizatorEventVM)ViewData["eventInfo"];
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Organizator panel</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <nav class="navbar navbar-default">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="Index">Organizator panel</a>
+                </div>
+            </nav>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <h2>Detaljne informacije o eventu <b>@eventInfo.Naziv</b></h2>
+            </div>
+            <div class="col-lg-12">
+                <h4>Naziv : @eventInfo.Naziv</h4>
+            </div>
+            <div class="col-lg-12">
+                <h4>Kategorija : @eventInfo.Kategorija.ToString()</h4>
+            </div>
+            <div class="col-lg-12">
+                <h4>Opis eventa : @eventInfo.Opis</h4>
+            </div>
+            <div class="col-lg-12">
+                <h4>Mjesto odrzavanja : @eventInfo.ProstorOdrzavanjaNaziv</h4>
+            </div>
+            <div class="col-lg-12">
+                <h4>Datum odrzavanja :  @eventInfo.DatumOdrzavanja.ToShortDateString()</h4>
+            </div>
+            <div class="col-lg-12">
+                <h4>Vrijeme odrzavanja : @eventInfo.VrijemeOdrzavanja</h4>
+            </div>
+            <div class="col-lg-12">
+                @if (eventInfo.IsOdobren)
+                {<h4>Odobren : Da</h4> }
+                else
+                { <h4>Odobren : Ne</h4>}
+            </div>
+            <div class="col-lg-12">
+                @if (eventInfo.IsOtkazan)
+                {<h4>Otkazan : Da</h4> }
+                else
+                { <h4>Otkazan : Ne</h4>}
+            </div>
+        </div>
+
+
+    </div>
+
+
+
+</body>
+</html>

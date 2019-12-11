@@ -6,6 +6,7 @@
     var eventiOrganizatora = (List<OrganizatorEventVM>)ViewData["EventiOrganizatora"];
 
 
+
 }
 
 <!DOCTYPE html>
@@ -24,7 +25,7 @@
         <div class="row">
             <nav class="navbar navbar-default">
                 <div class="navbar-header">
-                    <a class="navbar-brand" href="/Organizator/Index">Organizator panel</a>
+                    <a class="navbar-brand" href="Index">Organizator panel</a>
                 </div>
             </nav>
         </div>
@@ -80,25 +81,35 @@
                     <thead>
                         <tr>
                             <th scope="col">Naziv</th>
-                            <th scope="col">Opis</th>
+                            <th scope="col">Prostor odrzavanja</th>
                             <th scope="col">Kategorija</th>
                             <th scope="col">Datum odrzavanja</th>
                             <th scope="col">Vrijeme odrzavanja</th>
-                            <th scope="col">Prostor odrzavanja</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (OrganizatorEventVM i in eventiOrganizatora)
                         {
-                        <tr>
-                            <td>@i.Naziv</td>
-                            <td>@i.Opis</td>
-                            <td>@i.Kategorija.ToString()</td>
-                            <td>@i.DatumOdrzavanja.ToString()</td>
-                            <td>@i.VrijemeOdrzavanja</td>
+                         @if (i.IsOdobren)
+                         {
+                        <tr class="success">
+                            <td><a href="EventInfoPrikaz?EventID=@i.Id">@i.Naziv</a></td>
                             <td>@i.ProstorOdrzavanjaNaziv</td>
-
+                            <td>@i.Kategorija.ToString()</td>
+                            <td>@i.DatumOdrzavanja.ToShortDateString()</td>
+                            <td>@i.VrijemeOdrzavanja</td>
                         </tr>
+                                 }
+                        else {
+                    <tr class="danger">
+                        <td><a href="EventInfoPrikaz?EventID=@i.Id">@i.Naziv</a></td>
+                        <td>@i.ProstorOdrzavanjaNaziv</td>
+                        <td>@i.Kategorija.ToString()</td>
+                        <td>@i.DatumOdrzavanja.ToShortDateString()</td>
+                        <td>@i.VrijemeOdrzavanja</td>
+                    </tr>
+                         }
+                          
                         }
 
                     </tbody>
