@@ -6,10 +6,12 @@ using Event_Attender.Web.ViewModels;
 using Event_Attender.Data.EF;
 using Event_Attender.Data.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Event_Attender.Web.Controllers
 {
-    public class OrganizatorController : Controller
+    [Area("OrganizatorModul")]
+    public class OrganizatorHomeController : Controller
     {
         public IActionResult Index()
         {
@@ -31,14 +33,17 @@ namespace Event_Attender.Web.Controllers
                     VrijemeOdrzavanja = s.VrijemeOdrzavanja,
                     Kategorija = s.Kategorija,
                     OrganizatorNaziv = s.Organizator.Naziv,
-                    ProstorOdrzavanjaNaziv = s.ProstorOdrzavanja.Naziv
+                    ProstorOdrzavanjaNaziv = s.ProstorOdrzavanja.Naziv,
+                    IsOdobren=s.IsOdobren,
+                    IsOtkazan=s.IsOtkazan
+                    
 
 
                 }).Where(g => g.OrganizatorID == 1).ToList();
 
                 ViewData["EventiOrganizatora"] = eventi;
                 ViewData["ProstoriOdrzavanja"] = prostoriOdrzavanja;
-                return View("Index");
+                return View();
             }
         }
 
@@ -71,6 +76,36 @@ namespace Event_Attender.Web.Controllers
             }
             return Redirect("Index");
         }
+
+        public IActionResult EventInfoPrikaz(int EventID)    
+        {
+            using(var ctx = new MojContext())
+            {
+                var e = ctx.Event.Where(e => e.Id == EventID)
+                    .Include(e => e.Organizator)
+                    .Include(e => e.ProstorOdrzavanja)
+                    .FirstOrDefault();
+                
+                var eventInfo = new OrganizatorEventVM {
+                   Id=e.Id,
+                   Naziv=e.Naziv,
+                   Opis=e.Opis,
+                   DatumOdrzavanja=new DateTime(e.DatumOdrzavanja.Year,e.DatumOdrzavanja.Month,e.DatumOdrzavanja.Day),
+                   VrijemeOdrzavanja=e.VrijemeOdrzavanja,
+                   Kategorija=e.Kategorija,
+                   IsOdobren=e.IsOdobren,
+                   IsOtkazan=e.IsOtkazan,
+                   OrganizatorNaziv=e.Organizator.Naziv,
+                   OrganizatorID=e.OrganizatorId,
+                   ProstorOdrzavanjaNaziv=e.ProstorOdrzavanja.Naziv
+               };
+
+                ViewData["eventInfo"] = eventInfo;
+                return View("EventInfo");
+                
+            }
+        }
+            
     }
 
 }
