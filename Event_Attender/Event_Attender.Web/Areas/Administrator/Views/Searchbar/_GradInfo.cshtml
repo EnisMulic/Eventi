@@ -4,12 +4,13 @@
 <div id="Admin-Container">
     @{await Html.RenderPartialAsync("_AdminGradDisplay", Model);}
     <div id="Main-Display">
-        <div>
-            @if (Model.OnDisplay != null)
-            {
+        @if (Model.OnDisplay != null)
+        {
+            <div>
+
                 <h4>@Html.DisplayFor(model => model.OnDisplay.Naziv)</h4>
                 <hr />
-                
+
                 <form>
                     <label>
                         @Html.DisplayNameFor(model => model.OnDisplay.Id)
@@ -26,15 +27,20 @@
                     </label>
                     <input type="text" value="@Html.DisplayFor(model => model.OnDisplay.DrzavaNaziv)" readonly>
                 </form>
-            }
-        </div>
-        <div>
-            <button>
-                @Html.ActionLink("Uredi", "Edit", new { /* id = model.OnDisplay.PrimaryKey */ })
-            </button>
-            <button>
-                @Html.ActionLink("Obriši", "Edit", new { /* id = model.OnDisplay.PrimaryKey */ })
-            </button>
-        </div>
+
+            </div>
+            <div>
+                <a class="btn btn-info"
+                   asp-area="Administrator" asp-controller="Searchbar"
+                   asp-action="UrediGrad" asp-route-id="@Model.OnDisplay.Id">
+                    Uredi
+                </a>
+                <a class="btn btn-danger"
+                   asp-area="Administrator" asp-controller="Searchbar"
+                   asp-action="ObrisiGrad" asp-route-id="@Model.OnDisplay.Id">
+                    Obriši
+                </a>
+            </div>
+         }
     </div>
 </div>

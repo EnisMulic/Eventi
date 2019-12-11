@@ -1,0 +1,41 @@
+﻿@model Event_Attender.Web.Areas.Administrator.Models.RadnikDisplayVM
+
+<div id="Admin-Container">
+    @{await Html.RenderPartialAsync("_AdminRadnikDisplay", Model);}
+    <div id="Main-Display">
+            <div>
+
+                <h4>@Model.OnDisplay.Ime @Model.OnDisplay.Prezime</h4>
+                <hr />
+                <form asp-area="Administrator" asp-controller="Searchbar" asp-action="SnimiRadnik">
+                    <label>
+                        @Html.DisplayNameFor(model => model.OnDisplay.Id)
+                    </label>
+                    <input type="text" name="Id" value="@Html.DisplayFor(model => model.OnDisplay.Id)" readonly />
+
+                    <label>
+                        @Html.DisplayNameFor(model => model.OnDisplay.Ime)
+                    </label>
+                    <input type="text" name="Ime" value="@Html.DisplayFor(model => model.OnDisplay.Ime)" />
+
+                    <label>
+                        @Html.DisplayNameFor(model => model.OnDisplay.Prezime)
+                    </label>
+                    <input type="text" name="Prezime" value="@Html.DisplayFor(model => model.OnDisplay.Prezime)" />
+
+
+                    <label>
+                        @Html.DisplayNameFor(model => model.OnDisplay.Telefon)
+                    </label>
+                    <input type="text" name="Telefon" value="@Html.DisplayFor(model => model.OnDisplay.Telefon)" />
+
+                    <label>
+                        @Html.DisplayNameFor(model => model.OnDisplay.GradNaziv)
+                    </label>
+                    <input type="text" name="Grad" value="@Html.DisplayFor(model => model.OnDisplay.GradNaziv)" />
+
+                    <input type="submit" value="Snimi" class="btn btn-success" />
+                </form>
+            </div>
+    </div>
+</div>

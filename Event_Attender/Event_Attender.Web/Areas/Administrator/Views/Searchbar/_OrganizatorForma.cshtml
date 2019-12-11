@@ -1,0 +1,39 @@
+﻿@model Event_Attender.Web.Areas.Administrator.Models.OrganizatorDisplayVM
+
+<div id="Admin-Container">
+    @{await Html.RenderPartialAsync("_AdminOrganizatorDisplay", Model);}
+    <div id="Main-Display">
+        
+            <div>
+                <h4>@Model.OnDisplay.Naziv</h4>
+                <hr />
+                <form asp-area="Administrator" asp-controller="Searchbar" asp-action="SnimiOrganizator">
+                    <label>
+                        @Html.DisplayNameFor(model => model.OnDisplay.Id)
+                    </label>
+                    <input type="text" name="Id" value="@Html.DisplayFor(model => model.OnDisplay.Id)" readonly />
+
+                    <label>
+                        @Html.DisplayNameFor(model => model.OnDisplay.Naziv)
+                    </label>
+                    <input type="text" name="Naziv" value="@Html.DisplayFor(model => model.OnDisplay.Naziv)" />
+
+                    <label>
+                        @Html.DisplayNameFor(model => model.OnDisplay.Telefon)
+                    </label>
+                    <input type="text" name="Telefon" value="@Html.DisplayFor(model => model.OnDisplay.Telefon)" />
+
+                    <label>
+                        @Html.DisplayNameFor(model => model.OnDisplay.GradNaziv)
+                    </label>
+                    <input type="text" name="Grad" value="@Html.DisplayFor(model => model.OnDisplay.GradNaziv)" />
+                        @*@Html.DropDownListFor(
+                            model => model.OnDisplay.GradNaziv,
+                            new SelectList(Enum.GetValues(typeof(TipKarte)))
+                        )*@
+                    <input type="submit" value="Snimi" class="btn btn-success" />
+                </form>
+
+            </div>
+    </div>
+</div>

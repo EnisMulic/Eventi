@@ -4,53 +4,65 @@
 <div id="Admin-Container">
     @{await Html.RenderPartialAsync("_AdminEventDisplay", Model);}
     <div id="Main-Display">
-        @if (Model.OnDisplay != null)
-        {
             <div>
 
                 <h4>@Html.DisplayFor(model => model.OnDisplay.Naziv)</h4>
                 <hr />
-                <form>
+                <form asp-area="Administrator" asp-controller="Searchbar" asp-action="SnimiEvent">
                     <label>
                         @Html.DisplayNameFor(model => model.OnDisplay.Id)
                     </label>
-                    <input type="text" value="@Html.DisplayFor(model => model.OnDisplay.Id)" readonly />
+                    <input type="text" name="Id" value="@Html.DisplayFor(model => model.OnDisplay.Id)" readonly />
 
                     <label>
                         @Html.DisplayNameFor(model => model.OnDisplay.Naziv)
                     </label>
-                    <input type="text" value="@Html.DisplayFor(model => model.OnDisplay.Naziv)" readonly />
+                    <input type="text" name="Naziv" value="@Html.DisplayFor(model => model.OnDisplay.Naziv)" />
 
                     <label>
                         @Html.DisplayNameFor(model => model.OnDisplay.Opis)
                     </label>
-                    <input type="text" value="@Html.DisplayFor(model => model.OnDisplay.Opis)" readonly />
+                    <input type="text" name="Opis" value="@Html.DisplayFor(model => model.OnDisplay.Opis)" />
 
                     <label>
                         @Html.DisplayNameFor(model => model.OnDisplay.DatumOdrzavanja)
                     </label>
-                    <input type="text" value="@Html.DisplayFor(model => model.OnDisplay.DatumOdrzavanja)" readonly />
+                    <input type="date" name="Datum" value="@Html.DisplayFor(model => model.OnDisplay.DatumOdrzavanja)" />
 
                     <label>
                         @Html.DisplayNameFor(model => model.OnDisplay.VrijemeOdrzavanja)
                     </label>
-                    <input type="text" value="@Html.DisplayFor(model => model.OnDisplay.VrijemeOdrzavanja)" readonly />
+                    <input type="time" name="Vrijeme" value="@Html.DisplayFor(model => model.OnDisplay.VrijemeOdrzavanja)" />
 
                     <label>
                         @Html.DisplayNameFor(model => model.OnDisplay.Kategorija)
                     </label>
-                    <input type="text" value="@Html.DisplayFor(model => model.OnDisplay.Kategorija)" readonly />
+                    <select name="Kategorija">
+                        @{var tipovi = new SelectList(Enum.GetValues(typeof(Kategorija)));}
+                        @foreach (var item in tipovi)
+                        {
+                            if (Model.OnDisplay.Kategorija.ToString() == item.Text)
+                            {
+                                <option value="@item.Text" selected>@item.Text</option>
+                            }
+                            else
+                            {
+                                <option value="@item.Text">@item.Text</option>
+                            }
+                        }
+                    </select>
+
 
                     <label>
                         @Html.DisplayNameFor(model => model.OnDisplay.IsOdobren)
                     </label>
                     @if (Model.OnDisplay.IsOdobren == true)
                     {
-                        <input type="checkbox" checked readonly />
+                        <input value="Odobren" name="IsOdobren" type="checkbox" checked />
                     }
                     else
                     {
-                        <input type="checkbox" readonly />
+                        <input value="Odobren" name="IsOdobren" type="checkbox" />
                     }
 
                     <label>
@@ -58,42 +70,32 @@
                     </label>
                     @if (Model.OnDisplay.IsOtkazan == true)
                     {
-                        <input type="checkbox" checked readonly />
+                        <input value="Otkazan" name="IsOtkazan" type="checkbox" checked />
                     }
                     else
                     {
-                        <input type="checkbox" readonly />
+                        <input value="Otkazan" name="IsOtkazan" type="checkbox" />
                     }
 
                     <label>
                         @Html.DisplayNameFor(model => model.OnDisplay.ProstorOdrzavanjaNaziv)
                     </label>
-                    <input type="text" value="@Html.DisplayFor(model => model.OnDisplay.ProstorOdrzavanjaNaziv)" readonly />
+                    <input type="text" name="Prostor" value="@Html.DisplayFor(model => model.OnDisplay.ProstorOdrzavanjaNaziv)" />
 
                     <label>
                         @Html.DisplayNameFor(model => model.OnDisplay.OrganizatorNaziv)
                     </label>
-                    <input type="text" value="@Html.DisplayFor(model => model.OnDisplay.OrganizatorNaziv)" readonly />
+                    <input type="text" name="Organizator" value="@Html.DisplayFor(model => model.OnDisplay.OrganizatorNaziv)" />
 
                     <label>
                         @Html.DisplayNameFor(model => model.OnDisplay.AdministratorNaziv)
                     </label>
-                    <input type="text" value="@Html.DisplayFor(model => model.OnDisplay.AdministratorNaziv)" readonly />
+                    <input type="text" name="Administrator" value="@Html.DisplayFor(model => model.OnDisplay.AdministratorNaziv)" />
+
+                    <input type="submit" value="Snimi" class="btn btn-success" />
                 </form>
 
             </div>
-            <div>
-                <a class="btn btn-info"
-                   asp-area="Administrator" asp-controller="Searchbar"
-                   asp-action="UrediEvent" asp-route-id="@Model.OnDisplay.Id">
-                    Uredi
-                </a>
-                <a class="btn btn-danger"
-                   asp-area="Administrator" asp-controller="Searchbar"
-                   asp-action="ObrisiEvent" asp-route-id="@Model.OnDisplay.Id">
-                    Obriši
-                </a>
-            </div>
-         }
     </div>
 </div>
+

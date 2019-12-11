@@ -1,0 +1,33 @@
+﻿@model Event_Attender.Web.Areas.Administrator.Models.GradDisplayVM
+
+
+<div id="Admin-Container">
+    @{await Html.RenderPartialAsync("_AdminGradDisplay", Model);}
+    <div id="Main-Display">
+            <div>
+
+                <h4>@Html.DisplayFor(model => model.OnDisplay.Naziv)</h4>
+                <hr />
+
+                <form asp-area="Administrator" asp-controller="Searchbar" asp-action="SnimiGrad">
+                    <label>
+                        @Html.DisplayNameFor(model => model.OnDisplay.Id)
+                    </label>
+                    <input type="text" name="Id" value="@Html.DisplayFor(model => model.OnDisplay.Id)" readonly />
+
+                    <label>
+                        @Html.DisplayNameFor(model => model.OnDisplay.Naziv)
+                    </label>
+                    <input type="text" name="Naziv" value="@Html.DisplayFor(model => model.OnDisplay.Naziv)" />
+
+                    <label>
+                        @Html.DisplayNameFor(model => model.OnDisplay.DrzavaNaziv)
+                    </label>
+                    <input type="text" name="Drzava" value="@Html.DisplayFor(model => model.OnDisplay.DrzavaNaziv)"/>
+
+                    <input type="submit" value="Snimi" class="btn btn-success" />
+                </form>
+
+            </div>
+    </div>
+</div>

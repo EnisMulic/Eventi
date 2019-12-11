@@ -3,9 +3,10 @@
 <div id="Admin-Container">
     @{await Html.RenderPartialAsync("_AdminSponzorDisplay", Model);}
     <div id="Main-Display">
-        <div>
-            @if (Model.OnDisplay != null)
-            {
+        @if (Model.OnDisplay != null)
+        {
+            <div>
+
                 <h4>@Model.OnDisplay.Naziv</h4>
                 <hr />
                 <form>
@@ -29,15 +30,20 @@
                     </label>
                     <input type="text" value="@Html.DisplayFor(model => model.OnDisplay.Email)" readonly />
                 </form>
-             }
-        </div>
-        <div>
-            <button>
-                @Html.ActionLink("Uredi", "Edit", new { /* id = model.OnDisplay.PrimaryKey */ })
-            </button>
-            <button>
-                @Html.ActionLink("Obriši", "Edit", new { /* id = model.OnDisplay.PrimaryKey */ })
-            </button>
-        </div>
+                
+            </div>
+            <div>
+                <a class="btn btn-info"
+                   asp-area="Administrator" asp-controller="Searchbar"
+                   asp-action="UrediSponzor" asp-route-id="@Model.OnDisplay.Id">
+                    Uredi
+                </a>
+                <a class="btn btn-danger"
+                   asp-area="Administrator" asp-controller="Searchbar"
+                   asp-action="ObrisiSponzor" asp-route-id="@Model.OnDisplay.Id">
+                    Obriši
+                </a>
+            </div>
+         }
     </div>
 </div>

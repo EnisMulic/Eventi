@@ -1,0 +1,53 @@
+﻿@model Event_Attender.Web.Areas.Administrator.Models.ProstorOdrzavanjaDisplayVM
+@using Event_Attender.Data.Models
+
+<div id="Admin-Container">
+    @{await Html.RenderPartialAsync("_AdminProstorDisplay", Model);}
+    <div id="Main-Display">
+            <div>
+                <h4>@Model.OnDisplay.Naziv</h4>
+                <hr />
+                <form asp-area="Administrator" asp-controller="Searchbar" asp-action="SnimiProstorOdrzavanja">
+                    <label>
+                        @Html.DisplayNameFor(model => model.OnDisplay.Id)
+                    </label>
+                    <input type="text" name="Id" value="@Html.DisplayFor(model => model.OnDisplay.Id)" readonly />
+
+                    <label>
+                        @Html.DisplayNameFor(model => model.OnDisplay.Naziv)
+                    </label>
+                    <input type="text" name="Naziv" value="@Html.DisplayFor(model => model.OnDisplay.Naziv)" />
+
+                    <label>
+                        @Html.DisplayNameFor(model => model.OnDisplay.Adresa)
+                    </label>
+                    <input type="text" name="Adresa" value="@Html.DisplayFor(model => model.OnDisplay.Adresa)" />
+
+                    <label>
+                        @Html.DisplayNameFor(model => model.OnDisplay.GradNaziv)
+                    </label>
+                    <input type="text" name="Grad" value="@Html.DisplayFor(model => model.OnDisplay.GradNaziv)" />
+
+                    <label>
+                        @Html.DisplayNameFor(model => model.OnDisplay.TipProstoraOdrzavanja)
+                    </label>
+                    <select name="Tip">
+                        @{var tipovi = new SelectList(Enum.GetValues(typeof(TipProstoraOdrzavanja)));}
+                        @foreach (var item in tipovi)
+                        {
+                            if (Model.OnDisplay.TipProstoraOdrzavanja.ToString() == item.Text)
+                            {
+                                <option value="@item.Text" selected>@item.Text</option>
+                            }
+                            else
+                            {
+                                <option value="@item.Text">@item.Text</option>
+                            }
+                        }
+                    </select>
+
+                    <input type="submit" value="Snimi" class="btn btn-success" />
+                </form>
+            </div>
+    </div>
+</div>
