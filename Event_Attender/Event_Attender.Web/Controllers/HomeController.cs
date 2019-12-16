@@ -25,7 +25,8 @@ namespace Event_Attender.Web.Controllers
         {
             PretragaEventaVM model = new PretragaEventaVM();
             MojContext ctx = new MojContext();
-            model.eventi = ctx.Event.Where(e => e.IsOdobren == true).Where(e => e.IsOtkazan == false).ToList();
+            DateTime date = DateTime.Now;
+            model.eventi = ctx.Event.Where(e => e.IsOdobren == true).Where(e => e.IsOtkazan == false).Where(e => e.DatumOdrzavanja.CompareTo(date) == 1).ToList();
             ctx.Dispose();
             return View(model);
 
