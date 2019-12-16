@@ -9,6 +9,7 @@ using Event_Attender.Web.Models;
 using Event_Attender.Data.Models;
 using Event_Attender.Web.ViewModels;
 using Event_Attender.Data.EF;
+using Event_Attender.Web.Helper;
 
 namespace Event_Attender.Web.Controllers
 {
@@ -20,14 +21,22 @@ namespace Event_Attender.Web.Controllers
         {
             _logger = logger;
         }
+        //private MojContext ctx;
 
+        //public HomeController(MojContext context)
+        //{
+        //    ctx = context;
+        //} 
         public IActionResult Index()
         {
+            HttpContext.SetLogiraniUser(null);
+            // kada se otvori stranica, modul je guest, i nijedan user jos nije logiran
+
             PretragaEventaVM model = new PretragaEventaVM();
             MojContext ctx = new MojContext();
             DateTime date = DateTime.Now;
             model.eventi = ctx.Event.Where(e => e.IsOdobren == true).Where(e => e.IsOtkazan == false).Where(e => e.DatumOdrzavanja.CompareTo(date) == 1).ToList();
-            ctx.Dispose();
+            //ctx.Dispose();
             return View(model);
 
         }

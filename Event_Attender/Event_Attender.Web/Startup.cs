@@ -23,9 +23,9 @@ namespace Event_Attender.Web
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
-        {   
+        {
             //services.AddDbContext<MojContext>(options =>
-            //   options.UseSqlServer(Configuration.GetConnectionString("lokalni1"))); // za konstruktor
+            //   options.UseSqlServer(Configuration.GetConnectionString("proba1"))); // za konstruktor
 
             services.AddControllersWithViews();
         }
