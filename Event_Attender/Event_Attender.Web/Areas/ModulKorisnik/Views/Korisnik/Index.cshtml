@@ -1,0 +1,31 @@
+﻿
+@{
+    // Index Registrovani Korisnik
+
+    // ViewData["Title"] = "Index";
+    //Korisnik k = (Korisnik)ViewData["k"];
+    //string poruka =(string) ViewData["poruka"];
+}
+@using Event_Attender.Data.Models;
+@model Event_Attender.Web.Areas.ModulKorisnik.Models.PretragaEventaVM
+
+<a>Pregled posjecenih evenata</a>  
+<a>Pretraga po nazivu</a>
+<a>Pretraga po lokaciji</a>
+<a>LogOtut</a>
+
+@*umjesto ovoga ce biti template*@
+<table class="table">
+    <tbody>
+        @foreach (Event e in Model.eventi)
+        {
+            <tr>
+                <td>@e.Slika</td>
+                <td>@e.Naziv</td>
+            </tr>
+        }
+
+
+    </tbody>
+</table>
+
