@@ -19,9 +19,9 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
             return PartialView();
         }
 
-        public IActionResult _AdminEventDisplay()
-        {
-            return View();
-        }
+        //public IActionResult _AdminEventDisplay()
+        //{
+        //    return View();
+        //}
     }
 }
