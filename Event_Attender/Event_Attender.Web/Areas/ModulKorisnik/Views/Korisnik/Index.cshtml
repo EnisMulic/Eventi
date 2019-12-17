@@ -9,6 +9,7 @@
 @using Event_Attender.Data.Models;
 @model Event_Attender.Web.Areas.ModulKorisnik.Models.PretragaEventaVM
 
+
 <style>
     .col-sm-4 {
         margin-top: 1%;
@@ -55,18 +56,20 @@
 </div>
 
 <div id="glavniDiv" class="row text-center">
-    @foreach (Event e in Model.eventi)
+   
+    @foreach (var e in Model.Eventi)
     {
-        <div class="col-sm-4" >
-            <div id="unutrasnji"  class="thumbnail">
+        <div class="col-sm-4">
+            <div id="unutrasnji" class="thumbnail">
                 <img @*src="event.jpg"*@ alt="Event" width="400" height="300">  @*ili @e.slika  ?*@
                 <p> <a id="linkEvent" asp-area="ModulKorisnik" asp-controller="Korisnik" asp-action="OEventu"><strong>@e.Naziv</strong></a></p>
                 <p>
-                    @e.ProstorOdrzavanja.Grad.Naziv
+                    @e.ProstorOdrzavanjaGrad
                     @*@e.ProstorOdrzavanja.Naziv*@  @*Detaljnije kada klikne na naziv eventa*@
                     <br />
-                    @e.DatumOdrzavanja.Day.ToString()/@e.DatumOdrzavanja.Month.ToString()/@e.DatumOdrzavanja.Year.ToString()
+                    @e.DatumOdrzavanja
                     - @e.VrijemeOdrzavanja h
+                   
                 </p>
                 @*<p class="w3-left"><button class="w3-button w3-white w3-border" onclick="likeFunction(this)"><b><i class="fa fa-thumbs-up"></i> Like</b></button></p>*@
 

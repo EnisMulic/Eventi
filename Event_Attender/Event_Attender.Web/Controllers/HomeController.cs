@@ -35,7 +35,14 @@ namespace Event_Attender.Web.Controllers
             PretragaEventaVM model = new PretragaEventaVM();
             MojContext ctx = new MojContext();
             DateTime date = DateTime.Now;
-            model.eventi = ctx.Event.Where(e => e.IsOdobren == true).Where(e => e.IsOtkazan == false).Where(e => e.DatumOdrzavanja.CompareTo(date) == 1).ToList();
+            model.Eventi = ctx.Event.Where(e => e.IsOdobren == true).Where(e => e.IsOtkazan == false)
+                .Where(e => e.DatumOdrzavanja.CompareTo(date) == 1)
+                .Select(e=>new PretragaEventaVM.Rows { 
+                     EventId=e.Id,
+                     Naziv=e.Naziv,
+                     Kategorija=e.Kategorija.ToString(),
+                     Slika=e.Slika
+                }).ToList();
             //ctx.Dispose();
             return View(model);
 
@@ -66,10 +73,7 @@ namespace Event_Attender.Web.Controllers
 
         //    return View("Index", model);
         //}
-        public IActionResult Prijava()
-        {
-            return View("Index");
-        }
+       
 
         public IActionResult Privacy() 
         {
