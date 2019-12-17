@@ -9,5 +9,6 @@ namespace Event_Attender.Web.Areas.Administrator.Models
     {
         public List<RadnikVM> Radnici { get; set; } = new List<RadnikVM>();
         public RadnikVM OnDisplay { get; set; } = new RadnikVM();
+        public List<GradVM> Gradovi { get; set; } = new List<GradVM>();
     }
 }

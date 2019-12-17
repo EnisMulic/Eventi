@@ -43,8 +43,21 @@
                     <label>
                         @Html.DisplayNameFor(model => model.OnDisplay.GradNaziv)
                     </label>
-                    <input type="text" name="Grad" value="@Html.DisplayFor(model => model.OnDisplay.GradNaziv)" readonly />
-                
+                    <select name="Grad">
+                        @{var gradovi = new SelectList(Model.Gradovi, "Id", "Naziv");}
+                        @foreach (var item in gradovi)
+                        {
+                            if (Model.OnDisplay.GradNaziv == item.Text)
+                            {
+                                <option value="@item.Value" selected>@item.Text</option>
+                            }
+                            else
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        }
+                    </select>
+                    
                     <input type="submit" value="Snimi" class="btn btn-success" />
                 </form>
             </div>

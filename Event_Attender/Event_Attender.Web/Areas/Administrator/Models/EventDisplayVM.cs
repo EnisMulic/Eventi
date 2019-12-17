@@ -9,5 +9,8 @@ namespace Event_Attender.Web.Areas.Administrator.Models
     {
         public List<EventVM> Events { get; set; } = new List<EventVM>();
         public EventVM OnDisplay { get; set; } = new EventVM();
+        public List<ProstorOdrzavanjaVM> Prostori { get; set; } = new List<ProstorOdrzavanjaVM>();
+        public List<OrganizatorVM> Organizatori { get; set; } = new List<OrganizatorVM>();
+        public List<AdministratorVM> Administratori { get; set; } = new List<AdministratorVM>();
     }
 }

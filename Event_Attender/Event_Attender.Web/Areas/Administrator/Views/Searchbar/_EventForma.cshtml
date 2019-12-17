@@ -80,17 +80,56 @@
                     <label>
                         @Html.DisplayNameFor(model => model.OnDisplay.ProstorOdrzavanjaNaziv)
                     </label>
-                    <input type="text" name="Prostor" value="@Html.DisplayFor(model => model.OnDisplay.ProstorOdrzavanjaNaziv)" />
+                    <select name="Prostor">
+                        @{var prostori = new SelectList(Model.Prostori, "Id", "Naziv");}
+                        @foreach (var item in prostori)
+                        {
+                            if (Model.OnDisplay.ProstorOdrzavanjaNaziv == item.Text)
+                            {
+                                <option value="@item.Value" selected>@item.Text</option>
+                            }
+                            else
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        }
+                    </select>
 
                     <label>
                         @Html.DisplayNameFor(model => model.OnDisplay.OrganizatorNaziv)
                     </label>
-                    <input type="text" name="Organizator" value="@Html.DisplayFor(model => model.OnDisplay.OrganizatorNaziv)" />
+                    <select name="Organizator">
+                        @{var organizatori = new SelectList(Model.Organizatori, "Id", "Naziv");}
+                        @foreach (var item in organizatori)
+                        {
+                            if (Model.OnDisplay.Naziv == item.Text)
+                            {
+                                <option value="@item.Value" selected>@item.Text</option>
+                            }
+                            else
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        }
+                    </select>
 
                     <label>
                         @Html.DisplayNameFor(model => model.OnDisplay.AdministratorNaziv)
                     </label>
-                    <input type="text" name="Administrator" value="@Html.DisplayFor(model => model.OnDisplay.AdministratorNaziv)" />
+                    <select name="Administrator">
+                        @{var administratori = new SelectList(Model.Administratori, "Id", "Ime" + " " + "Prezime");}
+                        @foreach (var item in administratori)
+                        {
+                            if (Model.OnDisplay.AdministratorNaziv == item.Text)
+                            {
+                                <option value="@item.Value" selected>@item.Text</option>
+                            }
+                            else
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        }
+                    </select>
 
                     <input type="submit" value="Snimi" class="btn btn-success" />
                 </form>

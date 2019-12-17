@@ -7,6 +7,7 @@ using Event_Attender.Data.EF;
 using Event_Attender.Data.Models;
 using Event_Attender.Web.Areas.Administrator.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
 
 namespace Event_Attender.Web.Areas.Administrator.Controllers
 {
@@ -20,7 +21,24 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
         //    _context = context;
         //}
         //EventDisplayVM EventModels = new EventDisplayVM();
+        public List<GradVM> GetGradovi()
+        {
+            MojContext ctx = new MojContext();
+            var Gradovi = ctx.Grad
+                .Select
+                (
+                    i => new GradVM
+                    {
+                        Id = i.Id,
+                        Naziv = i.Naziv,
+                        DrzavaNaziv = i.Drzava.Naziv
+                    }
+                )
+                .ToList();
 
+            ctx.Dispose();
+            return Gradovi;
+        }
 
         public IActionResult _AdminSidebar()
         {
@@ -28,39 +46,8 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
         }
 
         #region Event: ToDo: Uredi, Spasi
-        public IActionResult _AdminEventDisplay()
-        {
-            EventDisplayVM EventModels = new EventDisplayVM();
-
-            MojContext ctx = new MojContext();
-            List<EventVM> events = ctx.Event
-                .Select
-                (
-                    e => new EventVM
-                    {
-                        Id = e.Id,
-                        Naziv = e.Naziv,
-                        Opis = e.Opis,
-                        DatumOdrzavanja = e.DatumOdrzavanja,
-                        VrijemeOdrzavanja = e.VrijemeOdrzavanja,
-                        Kategorija = e.Kategorija,
-                        IsOdobren = e.IsOdobren,
-                        IsOtkazan = e.IsOtkazan,
-                        OrganizatorNaziv = e.Organizator.Naziv,
-                        AdministratorNaziv = e.AdministratorId != null ? "N/A"
-                                                                       : e.Administrator.Osoba.Ime + " " +
-                                                                         e.Administrator.Osoba.Prezime,
-                        ProstorOdrzavanjaNaziv = e.ProstorOdrzavanja.Naziv
-                    }
-                 )
-                .ToList();
-
-            ctx.Dispose();
-            EventModels.Events = events;
-            return View(EventModels);
-        }
-
-        public IActionResult _EventInfo(int Id)
+        
+        public EventDisplayVM GetEventDisplayVMModel(int? Id, bool dodatno = false)
         {
             EventDisplayVM EventModels = new EventDisplayVM();
             MojContext ctx = new MojContext();
@@ -86,7 +73,9 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
                     }
                  )
                 .ToList();
-            EventModels.OnDisplay = ctx.Event
+            if(Id != null)
+            {
+                EventModels.OnDisplay = ctx.Event
                 .Select
                 (
                     e => new EventVM
@@ -105,13 +94,60 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
                                                                          e.Administrator.Osoba.Prezime,
                         ProstorOdrzavanjaNaziv = e.ProstorOdrzavanja.Naziv
                     }
+
                  )
                 .Where(e => e.Id == Id)
                 .FirstOrDefault();
+            }
+            if(dodatno == true)
+            {
+                EventModels.Prostori = ctx.ProstorOdrzavanja
+                    .Select
+                    (
+                        i => new ProstorOdrzavanjaVM
+                        {
+                            Id = i.Id,
+                            Naziv = i.Naziv,
+                            TipProstoraOdrzavanja = i.TipProstoraOdrzavanja,
+                            GradNaziv = i.Grad.Naziv
+                        }
+                    )
+                    .ToList();
+                EventModels.Organizatori = ctx.Organizator
+                    .Select
+                    (
+                        i => new OrganizatorVM
+                        {
+                            Id = i.Id,
+                            Naziv = i.Naziv,
+                            Telefon = i.Telefon,
+                            GradNaziv = i.Grad.Naziv
+                        }
+                    )
+                    .ToList();
+                EventModels.Administratori = ctx.Administrator
+                    .Select
+                    (
+                        i => new AdministratorVM
+                        {
+                            Id = i.Id,
+                            Ime = i.Osoba.Ime,
+                            Prezime = i.Osoba.Prezime,
+                            Telefon = i.Osoba.Telefon,
+                            Grad = i.Osoba.Grad.Naziv
+                        }
+                    )
+                    .ToList();
+
+                
+            }
 
             ctx.Dispose();
-            return View(EventModels);
+            return EventModels;
         }
+        public IActionResult _AdminEventDisplay() => View(GetEventDisplayVMModel(null));
+
+        public IActionResult _EventInfo(int Id) => View(GetEventDisplayVMModel(Id));
 
         public IActionResult ObrisiEvent(int Id)
         {
@@ -131,87 +167,31 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
             return Redirect("_AdminEventDisplay");
         }
 
-        public IActionResult UrediEvent(int Id)
-        {
-            EventDisplayVM EventModels = new EventDisplayVM();
-            MojContext ctx = new MojContext();
+        public IActionResult UrediEvent(int Id) => View("_EventForma", GetEventDisplayVMModel(Id, true));
 
-            EventModels.Events = ctx.Event
-                .Select
-                (
-                    e => new EventVM
-                    {
-                        Id = e.Id,
-                        Naziv = e.Naziv,
-                        Opis = e.Opis,
-                        DatumOdrzavanja = e.DatumOdrzavanja,
-                        VrijemeOdrzavanja = e.VrijemeOdrzavanja,
-                        Kategorija = e.Kategorija,
-                        IsOdobren = e.IsOdobren,
-                        IsOtkazan = e.IsOtkazan,
-                        OrganizatorNaziv = e.Organizator.Naziv,
-                        AdministratorNaziv = e.AdministratorId != null ? "N/A"
-                                                                       : e.Administrator.Osoba.Ime + " " +
-                                                                         e.Administrator.Osoba.Prezime,
-                        ProstorOdrzavanjaNaziv = e.ProstorOdrzavanja.Naziv
-                    }
-                 )
-                .ToList();
-            EventModels.OnDisplay = ctx.Event
-                .Select
-                (
-                    e => new EventVM
-                    {
-                        Id = e.Id,
-                        Naziv = e.Naziv,
-                        Opis = e.Opis,
-                        DatumOdrzavanja = e.DatumOdrzavanja,
-                        VrijemeOdrzavanja = e.VrijemeOdrzavanja,
-                        Kategorija = e.Kategorija,
-                        IsOdobren = e.IsOdobren,
-                        IsOtkazan = e.IsOtkazan,
-                        OrganizatorNaziv = e.Organizator.Naziv,
-                        AdministratorNaziv = e.AdministratorId != null ? "N/A"
-                                                                       : e.Administrator.Osoba.Ime + " " +
-                                                                         e.Administrator.Osoba.Prezime,
-                        ProstorOdrzavanjaNaziv = e.ProstorOdrzavanja.Naziv
-                    }
-                 )
-                .Where(e => e.Id == Id)
-                .FirstOrDefault();
-
-            ctx.Dispose();
-            return View("_EventForma", EventModels);
-        }
-
-        public IActionResult SnimiEvent
-        (
-            string Id, 
-            string Naziv, 
-            string Opis,
-            string Datum, 
-            string Vrijeme,
-            string Kategorija,
-            string IsOdobren,
-            string IsOtkatan,
-            string Prostor,
-            string Organizator,
-            string Administrator)
+        public IActionResult SnimiEvent(IFormCollection formCollection)
         {
             MojContext ctx = new MojContext();
-            Event item = ctx.Event.Find(int.Parse(Id));
-            item.Naziv = Naziv;
-            item.Opis = Opis;
-            item.DatumOdrzavanja = DateTime.ParseExact(Datum, "yyyy-MM-dd", null);
-            item.VrijemeOdrzavanja = Vrijeme;
-            item.Kategorija = (Kategorija)Enum.Parse(typeof(Kategorija), Kategorija);
-            item.IsOdobren = IsOdobren != null ? true : false;
-            item.IsOtkazan = IsOtkatan != null ? true : false;
+
+            Event item = ctx.Event.Find(int.Parse(formCollection["id"]));
+            item.Naziv = formCollection["Naziv"];
+            item.Opis = formCollection["Opis"];
+            item.DatumOdrzavanja = DateTime.ParseExact(formCollection["Datum"], "yyyy-MM-dd", null);
+            item.VrijemeOdrzavanja = formCollection["Vrijeme"];
+            item.Kategorija = (Kategorija)Enum.Parse(typeof(Kategorija), formCollection["Kategorija"]);
+            item.IsOdobren = formCollection["IsOdobren"] == "true,false" ? true : false;
+            item.IsOtkazan = formCollection["IsOtkazan"] == "true,false" ? true : false;
+            item.ProstorOdrzavanjaId = int.Parse(formCollection["Prostor"]);
+            item.OrganizatorId = int.Parse(formCollection["Organizator"]);
+            if(formCollection.ContainsKey("Administrator"))
+            {
+                item.AdministratorId = int.Parse(formCollection["Administrator"]);
+            }
 
             ctx.SaveChanges();
             ctx.Dispose();
 
-            return Redirect("_AdminEventDisplay");
+            return Redirect($"_EventInfo?id={formCollection["id"]}");
         }
 
         #endregion
@@ -227,7 +207,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
         }
 
         #region Drzava:
-        public IActionResult _AdminDrzavaDisplay()
+        public DrzavaDisplayVM GetDrzavaDisplayVMModel(int? Id)
         {
             DrzavaDisplayVM DrzavaModels = new DrzavaDisplayVM();
             MojContext ctx = new MojContext();
@@ -242,27 +222,9 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
                     }
                 )
                 .ToList();
-
-            ctx.Dispose();
-            return View(DrzavaModels);
-        }
-
-        public IActionResult _DrzavaInfo(int Id)
-        {
-            DrzavaDisplayVM DrzavaModels = new DrzavaDisplayVM();
-            MojContext ctx = new MojContext();
-
-            DrzavaModels.Drzave = ctx.Drzava
-                .Select
-                (
-                    i => new DrzavaVM
-                    {
-                        Id = i.Id,
-                        Naziv = i.Naziv
-                    }
-                )
-                .ToList();
-            DrzavaModels.OnDisplay = ctx.Drzava
+            if(Id != null)
+            {
+                DrzavaModels.OnDisplay = ctx.Drzava
                 .Select
                 (
                     i => new DrzavaVM
@@ -273,11 +235,15 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
                 )
                 .Where(i => i.Id == Id)
                 .FirstOrDefault();
+            }
 
             ctx.Dispose();
-            return View(DrzavaModels);
+            return DrzavaModels;
         }
-
+        
+        public IActionResult _AdminDrzavaDisplay() => View(GetDrzavaDisplayVMModel(null));
+        public IActionResult _DrzavaInfo(int Id) => View(GetDrzavaDisplayVMModel(Id));
+        public IActionResult UrediDrzava(int Id) => View("_DrzavaForma", GetDrzavaDisplayVMModel(Id));
         public IActionResult ObrisiDrzava(int Id)
         {
             MojContext ctx = new MojContext();
@@ -295,54 +261,22 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
 
             return Redirect("_AdminDrzavaDisplay");
         }
-
-        public IActionResult UrediDrzava(int Id)
-        {
-            DrzavaDisplayVM DrzavaModels = new DrzavaDisplayVM();
-            MojContext ctx = new MojContext();
-
-            DrzavaModels.Drzave = ctx.Drzava
-                .Select
-                (
-                    i => new DrzavaVM
-                    {
-                        Id = i.Id,
-                        Naziv = i.Naziv
-                    }
-                )
-                .ToList();
-            DrzavaModels.OnDisplay = ctx.Drzava
-                .Select
-                (
-                    i => new DrzavaVM
-                    {
-                        Id = i.Id,
-                        Naziv = i.Naziv
-                    }
-                )
-                .Where(i => i.Id == Id)
-                .FirstOrDefault();
-
-            ctx.Dispose();
-            return View("_DrzavaForma", DrzavaModels);
-        }
-
-        public IActionResult SnimiDrzava(string Id, string Naziv)
+        public IActionResult SnimiDrzava(IFormCollection formCollection)
         {
             MojContext ctx = new MojContext();
-            Drzava item = ctx.Drzava.Find(int.Parse(Id));
-            item.Naziv = Naziv;
+            Drzava item = ctx.Drzava.Find(int.Parse(formCollection["Id"]));
+            item.Naziv = formCollection["Naziv"];
 
             ctx.SaveChanges();
             ctx.Dispose();
 
-            return Redirect("_AdminDrzavaDisplay");
+            return Redirect($"_DrzavaInfo?id={formCollection["Id"]}");
         }
 
         #endregion
 
-        #region Grad: ToDo: SnimiGrad - Drzava
-        public IActionResult _AdminGradDisplay()
+        #region Grad:
+        public GradDisplayVM GetGradDisplayVMModel(int? gradID, bool dodatno = false)
         {
             GradDisplayVM GradModels = new GradDisplayVM();
             MojContext ctx = new MojContext();
@@ -358,17 +292,9 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
                     }
                 )
                 .ToList();
-
-            ctx.Dispose();
-            return View(GradModels);
-        }
-
-        public IActionResult _GradInfo(int Id)
-        {
-            GradDisplayVM GradModels = new GradDisplayVM();
-            MojContext ctx = new MojContext();
-
-            GradModels.Gradovi = ctx.Grad
+            if(gradID != null)
+            {
+                GradModels.OnDisplay = ctx.Grad
                 .Select
                 (
                     i => new GradVM
@@ -378,23 +304,33 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
                         DrzavaNaziv = i.Drzava.Naziv
                     }
                 )
-                .ToList();
-            GradModels.OnDisplay = ctx.Grad
-                .Select
-                (
-                    i => new GradVM
-                    {
-                        Id = i.Id,
-                        Naziv = i.Naziv,
-                        DrzavaNaziv = i.Drzava.Naziv
-                    }
-                )
-                .Where(i => i.Id == Id)
+                .Where(i => i.Id == gradID)
                 .FirstOrDefault();
+            }
+
+            if(dodatno == true)
+            {
+                GradModels.Drzave = ctx.Drzava
+                .Select
+                (
+                    i => new DrzavaVM
+                    {
+                        Id = i.Id,
+                        Naziv = i.Naziv
+                    }
+                )
+                .ToList();
+            }
 
             ctx.Dispose();
-            return View(GradModels);
+            return GradModels;
+
         }
+        public IActionResult _AdminGradDisplay() => View(GetGradDisplayVMModel(null));
+
+        public IActionResult _GradInfo(int Id) => View(GetGradDisplayVMModel(Id));
+
+        public IActionResult UrediGrad(int Id) => View("_GradForma", GetGradDisplayVMModel(Id, true));
 
         public IActionResult ObrisiGrad(int Id)
         {
@@ -414,56 +350,23 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
             return Redirect("_AdminGradDisplay");
         }
 
-        public IActionResult UrediGrad(int Id)
-        {
-            GradDisplayVM GradModels = new GradDisplayVM();
-            MojContext ctx = new MojContext();
-
-            GradModels.Gradovi = ctx.Grad
-                .Select
-                (
-                    i => new GradVM
-                    {
-                        Id = i.Id,
-                        Naziv = i.Naziv,
-                        DrzavaNaziv = i.Drzava.Naziv
-                    }
-                )
-                .ToList();
-            GradModels.OnDisplay = ctx.Grad
-                .Select
-                (
-                    i => new GradVM
-                    {
-                        Id = i.Id,
-                        Naziv = i.Naziv,
-                        DrzavaNaziv = i.Drzava.Naziv
-                    }
-                )
-                .Where(i => i.Id == Id)
-                .FirstOrDefault();
-
-            ctx.Dispose();
-            return View("_GradForma", GradModels);
-        }
-
-        public IActionResult SnimiGrad(string Id, string Naziv, string Drzava)
+        public IActionResult SnimiGrad(IFormCollection formCollection)
         {
             MojContext ctx = new MojContext();
-            Grad item = ctx.Grad.Find(int.Parse(Id));
-            item.Naziv = Naziv;
-            //implement Drzava
+            Grad item = ctx.Grad.Find(int.Parse(formCollection["Id"]));
+            item.Naziv = formCollection["Naziv"];
+            item.DrzavaId = int.Parse(formCollection["Drzava"]);
 
             ctx.SaveChanges();
             ctx.Dispose();
 
-            return Redirect("_AdminGradDisplay");
+            return Redirect($"_GradInfo?id={formCollection["Id"]}");
         }
 
         #endregion
 
-        #region Korisnik: ToDo: Snimi - Grad
-        public IActionResult _AdminKorisnikDisplay()
+        #region Korisnik:
+        public KorisnikDisplayVM GetKorisnikDisplayVMModel(int? Id, bool dodatno = false)
         {
             KorisnikDisplayVM KorisnikModels = new KorisnikDisplayVM();
             MojContext ctx = new MojContext();
@@ -483,32 +386,9 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
                     }
                 )
                 .ToList();
-
-            ctx.Dispose();
-            return View(KorisnikModels);
-        }
-
-        public IActionResult _KorisnikInfo(int Id)
-        {
-            KorisnikDisplayVM KorisnikModels = new KorisnikDisplayVM();
-            MojContext ctx = new MojContext();
-
-            KorisnikModels.Korisnici = ctx.Korisnik
-                .Select
-                (
-                    i => new KorisnikVM
-                    {
-                        Id = i.Id,
-                        Ime = i.Osoba.Ime,
-                        Prezime = i.Osoba.Prezime,
-                        Telefon = i.Osoba.Telefon,
-                        Adresa = i.Adresa,
-                        GradNaziv = i.Osoba.Grad.Naziv,
-                        PostanskiBroj = i.PostanskiBroj
-                    }
-                )
-                .ToList();
-            KorisnikModels.OnDisplay = ctx.Korisnik
+            if(Id != null)
+            {
+                KorisnikModels.OnDisplay = ctx.Korisnik
                 .Select
                 (
                     i => new KorisnikVM
@@ -524,12 +404,21 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
                 )
                 .Where(i => i.Id == Id)
                 .FirstOrDefault();
+            }
+            if(dodatno == true)
+            {
+                KorisnikModels.Gradovi = GetGradovi();
+            }
 
 
             ctx.Dispose();
-            return View(KorisnikModels);
+            return KorisnikModels;
         }
+        public IActionResult _AdminKorisnikDisplay() => View(GetKorisnikDisplayVMModel(null));
 
+        public IActionResult _KorisnikInfo(int Id) => View(GetKorisnikDisplayVMModel(Id));
+
+        public IActionResult UrediKorisnik(int Id) => View("_KorisnikForma", GetKorisnikDisplayVMModel(Id, true));
         public IActionResult ObrisiKorisnik(int Id)
         {
             MojContext ctx = new MojContext();
@@ -548,81 +437,31 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
             return Redirect("_AdminKorisnikDisplay");
         }
 
-        public IActionResult UrediKorisnik(int Id)
-        {
-            KorisnikDisplayVM KorisnikModels = new KorisnikDisplayVM();
-            MojContext ctx = new MojContext();
-
-            KorisnikModels.Korisnici = ctx.Korisnik
-                .Select
-                (
-                    i => new KorisnikVM
-                    {
-                        Id = i.Id,
-                        Ime = i.Osoba.Ime,
-                        Prezime = i.Osoba.Prezime,
-                        Telefon = i.Osoba.Telefon,
-                        Adresa = i.Adresa,
-                        GradNaziv = i.Osoba.Grad.Naziv,
-                        PostanskiBroj = i.PostanskiBroj
-                    }
-                )
-                .ToList();
-            KorisnikModels.OnDisplay = ctx.Korisnik
-                .Select
-                (
-                    i => new KorisnikVM
-                    {
-                        Id = i.Id,
-                        Ime = i.Osoba.Ime,
-                        Prezime = i.Osoba.Prezime,
-                        Telefon = i.Osoba.Telefon,
-                        Adresa = i.Adresa,
-                        GradNaziv = i.Osoba.Grad.Naziv,
-                        PostanskiBroj = i.PostanskiBroj
-                    }
-                )
-                .Where(i => i.Id == Id)
-                .FirstOrDefault();
-
-
-            ctx.Dispose();
-            return View("_KorisnikForma", KorisnikModels);
-        }
-
-        public IActionResult SnimiKorisnik
-        (
-            string Id,
-            string Ime,
-            string Prezime,
-            string Telefon,
-            string Adresa,
-            string PostanskiBroj,
-            string Grad
-        )
+        public IActionResult SnimiKorisnik(IFormCollection formCollection)
         {
             MojContext ctx = new MojContext();
             Korisnik item = ctx.Korisnik
                 .Include(i => i.Osoba)
-                .Where(i => i.Id == int.Parse(Id))
+                .Where(i => i.Id == int.Parse(formCollection["Id"]))
                 .FirstOrDefault();
                 
-            item.Osoba.Ime = Ime;
-            item.Osoba.Prezime = Prezime;
-            item.Osoba.Telefon = Telefon;
-            item.Adresa = Adresa;
-            item.PostanskiBroj = PostanskiBroj;
+            item.Osoba.Ime = formCollection["Ime"];
+            item.Osoba.Prezime = formCollection["Prezime"];
+            item.Osoba.Telefon = formCollection["Telefon"];
+            item.Adresa = formCollection["Adresa"];
+            item.PostanskiBroj = formCollection["PostanskiBroj"];
+            item.Osoba.GradId = int.Parse(formCollection["Grad"]);
 
             ctx.SaveChanges();
             ctx.Dispose();
 
-            return Redirect("_AdminKorisnikDisplay");
+            return Redirect($"_KorisnikInfo?id={formCollection["Id"]}");
         }
 
         #endregion
 
-        #region Radnik: ToDo: Snimi - Grad
-        public IActionResult _AdminRadnikDisplay()
+        #region Radnik:
+        public RadnikDisplayVM GetRadnikDisplayVMModel(int? Id, bool dodatno = false)
         {
             RadnikDisplayVM RadnikModels = new RadnikDisplayVM();
             MojContext ctx = new MojContext();
@@ -640,30 +479,9 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
                     }
                 )
                 .ToList();
-
-            ctx.Dispose();
-            return View(RadnikModels);
-        }
-
-        public IActionResult _RadnikInfo(int Id)
-        {
-            RadnikDisplayVM RadnikModels = new RadnikDisplayVM();
-            MojContext ctx = new MojContext();
-
-            RadnikModels.Radnici = ctx.Radnik
-                .Select
-                (
-                    i => new RadnikVM
-                    {
-                        Id = i.Id,
-                        Ime = i.Osoba.Ime,
-                        Prezime = i.Osoba.Prezime,
-                        Telefon = i.Osoba.Telefon,
-                        GradNaziv = i.Osoba.Grad.Naziv
-                    }
-                )
-                .ToList();
-            RadnikModels.OnDisplay = ctx.Radnik
+            if (Id != null)
+            {
+                RadnikModels.OnDisplay = ctx.Radnik
                 .Select
                 (
                     i => new RadnikVM
@@ -677,11 +495,23 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
                 )
                 .Where(i => i.Id == Id)
                 .FirstOrDefault();
-                
+            }
+            if (dodatno == true)
+            {
+                RadnikModels.Gradovi = GetGradovi();
+            }
+
 
             ctx.Dispose();
-            return View(RadnikModels);
+            return RadnikModels;
+
+
         }
+        public IActionResult _AdminRadnikDisplay() => View(GetRadnikDisplayVMModel(null));
+
+        public IActionResult _RadnikInfo(int Id) => View(GetRadnikDisplayVMModel(Id));
+
+        public IActionResult UrediRadnik(int Id) => View("_RadnikForma", GetRadnikDisplayVMModel(Id));
 
         public IActionResult ObrisRadnik(int Id)
         {
@@ -701,66 +531,29 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
             return Redirect("_AdminRadnikDisplay");
         }
 
-        public IActionResult UrediRadnik(int Id)
-        {
-            RadnikDisplayVM RadnikModels = new RadnikDisplayVM();
-            MojContext ctx = new MojContext();
-
-            RadnikModels.Radnici = ctx.Radnik
-                .Select
-                (
-                    i => new RadnikVM
-                    {
-                        Id = i.Id,
-                        Ime = i.Osoba.Ime,
-                        Prezime = i.Osoba.Prezime,
-                        Telefon = i.Osoba.Telefon,
-                        GradNaziv = i.Osoba.Grad.Naziv
-                    }
-                )
-                .ToList();
-            RadnikModels.OnDisplay = ctx.Radnik
-                .Select
-                (
-                    i => new RadnikVM
-                    {
-                        Id = i.Id,
-                        Ime = i.Osoba.Ime,
-                        Prezime = i.Osoba.Prezime,
-                        Telefon = i.Osoba.Telefon,
-                        GradNaziv = i.Osoba.Grad.Naziv
-                    }
-                )
-                .Where(i => i.Id == Id)
-                .FirstOrDefault();
-
-
-            ctx.Dispose();
-            return View("_RadnikForma", RadnikModels);
-        }
-
-        public IActionResult SnimiRadnik(string Id, string Ime, string Prezime, string Telefon, string Grad)
+        public IActionResult SnimiRadnik(IFormCollection formCollection)
         {
             MojContext ctx = new MojContext();
             Radnik item = ctx.Radnik
                 .Include(i => i.Osoba)
-                .Where(i => i.Id == int.Parse(Id))
+                .Where(i => i.Id == int.Parse(formCollection["Id"]))
                 .FirstOrDefault();
 
-            item.Osoba.Ime = Ime;
-            item.Osoba.Prezime = Prezime;
-            item.Osoba.Telefon = Telefon;
-            
+            item.Osoba.Ime = formCollection["Ime"];
+            item.Osoba.Prezime = formCollection["Prezime"];
+            item.Osoba.Telefon = formCollection["Telefon"];
+            item.Osoba.GradId = int.Parse(formCollection["Grad"]);
+
             ctx.SaveChanges();
             ctx.Dispose();
 
-            return Redirect("_AdminKorisnikDisplay");
+            return Redirect($"_KorisnikInfo?id={formCollection["Id"]}");
         }
 
         #endregion
 
-        #region Organizator: ToDo: Snimi - Grad
-        public IActionResult _AdminOrganizatorDisplay()
+        #region Organizator:
+        public OrganizatorDisplayVM GetOrganizatorDisplayVMModel(int? Id, bool dodatno = false)
         {
             OrganizatorDisplayVM OrganizatorModels = new OrganizatorDisplayVM();
             MojContext ctx = new MojContext();
@@ -777,31 +570,9 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
                     }
                 )
                 .ToList();
-           
-
-
-            ctx.Dispose();
-            return View(OrganizatorModels);
-        }
-
-        public IActionResult _OrganizatorInfo(int Id)
-        {
-            OrganizatorDisplayVM OrganizatorModels = new OrganizatorDisplayVM();
-            MojContext ctx = new MojContext();
-
-            OrganizatorModels.Organizatori = ctx.Organizator
-                .Select
-                (
-                    i => new OrganizatorVM
-                    {
-                        Id = i.Id,
-                        Naziv = i.Naziv,
-                        Telefon = i.Telefon,
-                        GradNaziv = i.Grad.Naziv
-                    }
-                )
-                .ToList();
-            OrganizatorModels.OnDisplay = ctx.Organizator
+            if(Id != null)
+            {
+                OrganizatorModels.OnDisplay = ctx.Organizator
                 .Select
                 (
                     i => new OrganizatorVM
@@ -814,12 +585,21 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
                 )
                 .Where(i => i.Id == Id)
                 .FirstOrDefault();
-
+            }
+            if(dodatno == true)
+            {
+                OrganizatorModels.Gradovi = GetGradovi();
+            }
 
             ctx.Dispose();
-            return View(OrganizatorModels);
+            return OrganizatorModels;
         }
+        public IActionResult _AdminOrganizatorDisplay() => View(GetOrganizatorDisplayVMModel(null));
 
+        public IActionResult _OrganizatorInfo(int Id) => View(GetOrganizatorDisplayVMModel(Id));
+
+        public IActionResult UrediOrganizator(int Id)
+            => View("_OrganizatorForma", GetOrganizatorDisplayVMModel(Id, true));
         public IActionResult ObrisiOrganizator(int Id)
         {
             MojContext ctx = new MojContext();
@@ -838,60 +618,25 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
             return Redirect("_AdminOrganizatorDisplay");
         }
 
-        public IActionResult UrediOrganizator(int Id)
-        {
-            OrganizatorDisplayVM OrganizatorModels = new OrganizatorDisplayVM();
-            MojContext ctx = new MojContext();
-
-            OrganizatorModels.Organizatori = ctx.Organizator
-                .Select
-                (
-                    i => new OrganizatorVM
-                    {
-                        Id = i.Id,
-                        Naziv = i.Naziv,
-                        Telefon = i.Telefon,
-                        GradNaziv = i.Grad.Naziv
-                    }
-                )
-                .ToList();
-            OrganizatorModels.OnDisplay = ctx.Organizator
-                .Select
-                (
-                    i => new OrganizatorVM
-                    {
-                        Id = i.Id,
-                        Naziv = i.Naziv,
-                        Telefon = i.Telefon,
-                        GradNaziv = i.Grad.Naziv
-                    }
-                )
-                .Where(i => i.Id == Id)
-                .FirstOrDefault();
-
-
-            ctx.Dispose();
-            return View("_OrganizatorForma", OrganizatorModels);
-        }
-
-        public IActionResult SnimiOrganizator(string Id, string Naziv, string Telefon, string Grad)
+        public IActionResult SnimiOrganizator(IFormCollection formCollection)
         {
             MojContext ctx = new MojContext();
-            Organizator item = ctx.Organizator.Find(int.Parse(Id));
-            item.Naziv = Naziv;
-            item.Telefon = Telefon;
-            //imprement Grad
+            Organizator item = ctx.Organizator.Find(int.Parse(formCollection["Id"]));
+            item.Naziv = formCollection["Naziv"];
+            item.Telefon = formCollection["Telefon"];
+            if(formCollection.ContainsKey("Grad"))
+                item.GradId = int.Parse(formCollection["Grad"]);
 
             ctx.SaveChanges();
             ctx.Dispose();
 
-            return Redirect("_AdminDrzavaDisplay");
+            return Redirect($"_OrganizatorInfo?id={formCollection["Id"]}");
         }
 
         #endregion
 
         #region Izvodjac
-        public IActionResult _AdminIzvodjacDisplay()
+        public IzvodjacDisplayVM GetIzvodjacDisplayVMModel(int? Id)
         {
             IzvodjacDisplayVM IzvodjacModels = new IzvodjacDisplayVM();
             MojContext ctx = new MojContext();
@@ -907,29 +652,9 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
                     }
                 )
                 .ToList();
-
-
-            ctx.Dispose();
-            return View(IzvodjacModels);
-        }
-
-        public IActionResult _IzvodjacInfo(int Id)
-        {
-            IzvodjacDisplayVM IzvodjacModels = new IzvodjacDisplayVM();
-            MojContext ctx = new MojContext();
-
-            IzvodjacModels.Izvodjaci = ctx.Izvodjac
-                .Select
-                (
-                    i => new IzvodjacVM
-                    {
-                        Id = i.Id,
-                        Naziv = i.Naziv,
-                        TipIzvodjaca = i.TipIzvodjaca
-                    }
-                )
-                .ToList();
-            IzvodjacModels.OnDisplay = ctx.Izvodjac
+            if(Id != null)
+            {
+                IzvodjacModels.OnDisplay = ctx.Izvodjac
                 .Select
                 (
                     i => new IzvodjacVM
@@ -941,12 +666,16 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
                 )
                 .Where(i => i.Id == Id)
                 .FirstOrDefault();
-
+            }
 
             ctx.Dispose();
-            return View(IzvodjacModels);
+            return IzvodjacModels;
         }
+        public IActionResult _AdminIzvodjacDisplay() => View(GetIzvodjacDisplayVMModel(null));
 
+        public IActionResult _IzvodjacInfo(int Id) => View(GetIzvodjacDisplayVMModel(Id));
+
+        public IActionResult UrediIzvodjac(int Id) => View("_IzvodjacForma", GetIzvodjacDisplayVMModel(Id));
         public IActionResult ObrisiIzvodjac(int Id)
         {
             MojContext ctx = new MojContext();
@@ -965,58 +694,23 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
             return Redirect("_AdminIzvodjacDisplay");
         }
 
-        public IActionResult UrediIzvodjac(int Id)
-        {
-            IzvodjacDisplayVM IzvodjacModels = new IzvodjacDisplayVM();
-            MojContext ctx = new MojContext();
-
-            IzvodjacModels.Izvodjaci = ctx.Izvodjac
-                .Select
-                (
-                    i => new IzvodjacVM
-                    {
-                        Id = i.Id,
-                        Naziv = i.Naziv,
-                        TipIzvodjaca = i.TipIzvodjaca
-                    }
-                )
-                .ToList();
-            IzvodjacModels.OnDisplay = ctx.Izvodjac
-                .Select
-                (
-                    i => new IzvodjacVM
-                    {
-                        Id = i.Id,
-                        Naziv = i.Naziv,
-                        TipIzvodjaca = i.TipIzvodjaca
-                    }
-                )
-                .Where(i => i.Id == Id)
-                .FirstOrDefault();
-
-
-            ctx.Dispose();
-            return View("_IzvodjacForma", IzvodjacModels);
-        }
-
-        public IActionResult SnimiIzvodjac(string Id, string Naziv, string Tip)
+        public IActionResult SnimiIzvodjac(IFormCollection formCollection)
         {
             MojContext ctx = new MojContext();
-            Izvodjac item = ctx.Izvodjac.Find(int.Parse(Id));
-            item.Naziv = Naziv;
-            item.TipIzvodjaca = (TipIzvodjaca)Enum.Parse(typeof(TipIzvodjaca), Tip);
+            Izvodjac item = ctx.Izvodjac.Find(int.Parse(formCollection["Id"]));
+            item.Naziv = formCollection["Naziv"];
+            item.TipIzvodjaca = (TipIzvodjaca)Enum.Parse(typeof(TipIzvodjaca), formCollection["Tip"]);
 
             ctx.SaveChanges();
             ctx.Dispose();
 
-            return Redirect("_AdminIzvodjacDisplay");
+            return Redirect($"_IzvodjacInfo?id={formCollection["Id"]}");
         }
 
         #endregion
 
         #region Sponzor:
-
-        public IActionResult _AdminSponzorDisplay()
+        public SponzorDisplayVM GetSponzorDisplayVMModel(int? Id)
         {
             SponzorDisplayVM SponzorModels = new SponzorDisplayVM();
             MojContext ctx = new MojContext();
@@ -1033,29 +727,9 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
                     }
                 )
                 .ToList();
-            
-            ctx.Dispose();
-            return View(SponzorModels);
-        }
-
-        public IActionResult _SponzorInfo(int Id)
-        {
-            SponzorDisplayVM SponzorModels = new SponzorDisplayVM();
-            MojContext ctx = new MojContext();
-
-            SponzorModels.Sponzori = ctx.Sponzor
-                .Select
-                (
-                    i => new SponzorVM
-                    {
-                        Id = i.Id,
-                        Naziv = i.Naziv,
-                        Telefon = i.Telefon,
-                        Email = i.Email
-                    }
-                )
-                .ToList();
-            SponzorModels.OnDisplay = ctx.Sponzor
+            if(Id != null)
+            {
+                SponzorModels.OnDisplay = ctx.Sponzor
                 .Select
                 (
                     i => new SponzorVM
@@ -1068,11 +742,17 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
                 )
                 .Where(i => i.Id == Id)
                 .FirstOrDefault();
-
+            }
 
             ctx.Dispose();
-            return View(SponzorModels);
+            return SponzorModels;
         }
+
+        public IActionResult _AdminSponzorDisplay() => View(GetSponzorDisplayVMModel(null));
+
+        public IActionResult _SponzorInfo(int Id) => View(GetSponzorDisplayVMModel(Id));
+
+        public IActionResult UrediSponzor(int Id) => View("_SponzorForma", GetSponzorDisplayVMModel(Id));
 
         public IActionResult ObrisiSponzor(int Id)
         {
@@ -1092,60 +772,24 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
             return Redirect("_AdminSponzorDisplay");
         }
 
-        public IActionResult UrediSponzor(int Id)
-        {
-            SponzorDisplayVM SponzorModels = new SponzorDisplayVM();
-            MojContext ctx = new MojContext();
-
-            SponzorModels.Sponzori = ctx.Sponzor
-                .Select
-                (
-                    i => new SponzorVM
-                    {
-                        Id = i.Id,
-                        Naziv = i.Naziv,
-                        Telefon = i.Telefon,
-                        Email = i.Email
-                    }
-                )
-                .ToList();
-            SponzorModels.OnDisplay = ctx.Sponzor
-                .Select
-                (
-                    i => new SponzorVM
-                    {
-                        Id = i.Id,
-                        Naziv = i.Naziv,
-                        Telefon = i.Telefon,
-                        Email = i.Email
-                    }
-                )
-                .Where(i => i.Id == Id)
-                .FirstOrDefault();
-
-
-            ctx.Dispose();
-            return View("_SponzorForma", SponzorModels);
-        }
-
-        public IActionResult SnimiSponzor(string Id, string Naziv, string Telefon, string Email)
+        public IActionResult SnimiSponzor(IFormCollection formCollection)
         {
             MojContext ctx = new MojContext();
-            Sponzor item = ctx.Sponzor.Find(int.Parse(Id));
-            item.Naziv = Naziv;
-            item.Telefon = Telefon;
-            item.Email = Email;
+            Sponzor item = ctx.Sponzor.Find(int.Parse(formCollection["Id"]));
+            item.Naziv = formCollection["Naziv"];
+            item.Telefon = formCollection["Telefon"];
+            item.Email = formCollection["Email"];
 
             ctx.SaveChanges();
             ctx.Dispose();
 
-            return Redirect("_AdminSponzorDisplay");
+            return Redirect($"_SponzorInfo?id={formCollection["Id"]}");
         }
 
         #endregion
 
-        #region Prostor: ToDo: Snimi - Grad
-        public IActionResult _AdminProstorDisplay()
+        #region Prostor:
+        public ProstorOdrzavanjaDisplayVM GetProstorOdrzavanjaDisplayVMModel(int? Id, bool dodatno = false)
         {
             ProstorOdrzavanjaDisplayVM ProstorOdrzavanjaModels = new ProstorOdrzavanjaDisplayVM();
             MojContext ctx = new MojContext();
@@ -1163,32 +807,9 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
                     }
                 )
                 .ToList();
-           
-
-
-            ctx.Dispose();
-            return View(ProstorOdrzavanjaModels);
-        }
-
-        public IActionResult _ProstorOdrzavanjaInfo(int Id)
-        {
-            ProstorOdrzavanjaDisplayVM ProstorOdrzavanjaModels = new ProstorOdrzavanjaDisplayVM();
-            MojContext ctx = new MojContext();
-
-            ProstorOdrzavanjaModels.Prostori = ctx.ProstorOdrzavanja
-                .Select
-                (
-                    i => new ProstorOdrzavanjaVM
-                    {
-                        Id = i.Id,
-                        Naziv = i.Naziv,
-                        Adresa = i.Adresa,
-                        GradNaziv = i.Grad.Naziv,
-                        TipProstoraOdrzavanja = i.TipProstoraOdrzavanja
-                    }
-                )
-                .ToList();
-            ProstorOdrzavanjaModels.OnDisplay = ctx.ProstorOdrzavanja
+            if(Id != null)
+            {
+                ProstorOdrzavanjaModels.OnDisplay = ctx.ProstorOdrzavanja
                 .Select
                 (
                     i => new ProstorOdrzavanjaVM
@@ -1202,11 +823,23 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
                 )
                 .Where(i => i.Id == Id)
                 .FirstOrDefault();
+            }
+            if (dodatno == true)
+            {
+                ProstorOdrzavanjaModels.Gradovi = GetGradovi();
+            }
 
 
             ctx.Dispose();
-            return View(ProstorOdrzavanjaModels);
+            return ProstorOdrzavanjaModels;
         }
+
+        public IActionResult _AdminProstorDisplay() => View(GetProstorOdrzavanjaDisplayVMModel(null));
+
+        public IActionResult _ProstorOdrzavanjaInfo(int Id) => View(GetProstorOdrzavanjaDisplayVMModel(Id));
+
+        public IActionResult UrediProstorOdrzavanja(int Id) 
+            => View("_ProstorOdrzavanjaForma", GetProstorOdrzavanjaDisplayVMModel(Id, true));
 
         public IActionResult ObrisiProstorOdrzavanja(int Id)
         {
@@ -1226,57 +859,22 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
             return Redirect("_AdminProstorDisplay");
         }
 
-        public IActionResult UrediProstorOdrzavanja(int Id) 
-        {
-            ProstorOdrzavanjaDisplayVM ProstorOdrzavanjaModels = new ProstorOdrzavanjaDisplayVM();
-            MojContext ctx = new MojContext();
 
-            ProstorOdrzavanjaModels.Prostori = ctx.ProstorOdrzavanja
-                .Select
-                (
-                    i => new ProstorOdrzavanjaVM
-                    {
-                        Id = i.Id,
-                        Naziv = i.Naziv,
-                        Adresa = i.Adresa,
-                        GradNaziv = i.Grad.Naziv,
-                        TipProstoraOdrzavanja = i.TipProstoraOdrzavanja
-                    }
-                )
-                .ToList();
-            ProstorOdrzavanjaModels.OnDisplay = ctx.ProstorOdrzavanja
-                .Select
-                (
-                    i => new ProstorOdrzavanjaVM
-                    {
-                        Id = i.Id,
-                        Naziv = i.Naziv,
-                        Adresa = i.Adresa,
-                        GradNaziv = i.Grad.Naziv,
-                        TipProstoraOdrzavanja = i.TipProstoraOdrzavanja
-                    }
-                )
-                .Where(i => i.Id == Id)
-                .FirstOrDefault();
-
-
-            ctx.Dispose();
-            return View("_ProstorOdrzavanjaForma", ProstorOdrzavanjaModels);
-
-        }
-
-        public IActionResult SnimiProstorOdrzavanja(string Id, string Naziv, string Adresa, string Grad, string Tip) 
+        public IActionResult SnimiProstorOdrzavanja(IFormCollection formCollection) 
         {
             MojContext ctx = new MojContext();
-            ProstorOdrzavanja item = ctx.ProstorOdrzavanja.Find(int.Parse(Id));
-            item.Naziv = Naziv;
-            item.Adresa = Adresa;
-            item.TipProstoraOdrzavanja = (TipProstoraOdrzavanja)Enum.Parse(typeof(TipProstoraOdrzavanja), Tip);
+            ProstorOdrzavanja item = ctx.ProstorOdrzavanja.Find(int.Parse(formCollection["Id"]));
+            item.Naziv = formCollection["Naziv"];
+            item.Adresa = formCollection["Adresa"];
+            item.TipProstoraOdrzavanja = (TipProstoraOdrzavanja)Enum.Parse(
+                typeof(TipProstoraOdrzavanja), formCollection["Tip"]
+                );
+            item.GradId = int.Parse(formCollection["Id"]);
 
             ctx.SaveChanges();
             ctx.Dispose();
 
-            return Redirect("_AdminProstorDisplay");
+            return Redirect($"_ProstorOdrzavanjaInfo?id={formCollection["Id"]}");
         }
         #endregion
     }
