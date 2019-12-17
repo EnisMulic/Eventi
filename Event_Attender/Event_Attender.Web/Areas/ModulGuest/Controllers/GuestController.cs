@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Event_Attender.Data.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+//using Event_Attender.Web.ViewModels;
 
 namespace Event_Attender.Web.Areas.ModulGuest.Controllers
 {   
@@ -17,17 +18,31 @@ namespace Event_Attender.Web.Areas.ModulGuest.Controllers
         public IActionResult PretraziPoNazivu(string filter)  // v1- odvojena pretraga po lokaciji
         {
             PretragaEventaVM model = new PretragaEventaVM();
+           
             MojContext ctx = new MojContext();
             DateTime date = DateTime.Now;
             //Where(e => e.DatumOdrzavanja.CompareTo(date)==1) // gdje je datum veci od danasnjeg
             if (filter != null)
             {
-                model.eventi = ctx.Event.Include(e => e.ProstorOdrzavanja).Include(e => e.ProstorOdrzavanja.Grad).Where(e=>e.DatumOdrzavanja.CompareTo(date)==1).Where(e => e.IsOdobren == true).Where(e => e.IsOtkazan == false).
+                //model.eventi = ctx.Event.Include(e => e.ProstorOdrzavanja).Include(e => e.ProstorOdrzavanja.Grad).Where(e=>e.DatumOdrzavanja.CompareTo(date)==1).Where(e => e.IsOdobren == true).Where(e => e.IsOtkazan == false).
+                //    Where(e => e.Naziv.ToLower().Equals(filter.ToLower()) || e.Naziv.ToLower().StartsWith(filter.ToLower())
+                //     || e.Naziv.ToLower().Contains(filter.ToLower())).ToList();
+                model.Eventi = ctx.Event.Include(e => e.ProstorOdrzavanja).Include(e => e.ProstorOdrzavanja.Grad).Where(e => e.DatumOdrzavanja.CompareTo(date) == 1).Where(e => e.IsOdobren == true).Where(e => e.IsOtkazan == false).
                     Where(e => e.Naziv.ToLower().Equals(filter.ToLower()) || e.Naziv.ToLower().StartsWith(filter.ToLower())
-                     || e.Naziv.ToLower().Contains(filter.ToLower())).ToList();
+                     || e.Naziv.ToLower().Contains(filter.ToLower()))
+                    .Select(e => new PretragaEventaVM.Rows {
+                        EventId = e.Id,
+                        Naziv = e.Naziv,
+                        Kategorija = e.Kategorija.ToString(),
+                        ProstorOdrzavanjaNaziv = e.ProstorOdrzavanja.Naziv,
+                        ProstorOdrzavanjaGrad = e.ProstorOdrzavanja.Grad.Naziv,
+                        DatumOdrzavanja = e.DatumOdrzavanja.Day.ToString() + "." + e.DatumOdrzavanja.Month.ToString() + "." + e.DatumOdrzavanja.Year.ToString(),
+                        VrijemeOdrzavanja = e.VrijemeOdrzavanja,
+                        Slika = e.Slika
+                    }).ToList();
             }
             ctx.Dispose();
-            return View(model);
+            return View(model);  
         }
         public IActionResult PretraziPoLokaciji(string lokacija)  //v1 - odvojena pretraga po nazivu
         {
@@ -36,9 +51,19 @@ namespace Event_Attender.Web.Areas.ModulGuest.Controllers
             DateTime date = DateTime.Now;
             if (lokacija != null)
             {
-                model.eventi = ctx.Event.Include(e=>e.ProstorOdrzavanja).Include(e=>e.ProstorOdrzavanja.Grad).Where(e => e.DatumOdrzavanja.CompareTo(date) == 1).Where(e => e.IsOdobren == true).Where(e => e.IsOtkazan == false).
+                model.Eventi = ctx.Event.Include(e=>e.ProstorOdrzavanja).Include(e=>e.ProstorOdrzavanja.Grad).Where(e => e.DatumOdrzavanja.CompareTo(date) == 1).Where(e => e.IsOdobren == true).Where(e => e.IsOtkazan == false).
                    Where(e => e.ProstorOdrzavanja.Grad.Drzava.Naziv.ToLower().StartsWith(lokacija.ToLower()) || e.ProstorOdrzavanja.Naziv.ToLower().StartsWith(lokacija.ToLower()) || e.ProstorOdrzavanja.Naziv.ToLower().Contains(lokacija.ToLower())
-                      || e.ProstorOdrzavanja.Grad.Naziv.ToLower().StartsWith(lokacija.ToLower()) || e.ProstorOdrzavanja.Grad.Naziv.ToLower().Contains(lokacija.ToLower())).ToList();
+                      || e.ProstorOdrzavanja.Grad.Naziv.ToLower().StartsWith(lokacija.ToLower()) || e.ProstorOdrzavanja.Grad.Naziv.ToLower().Contains(lokacija.ToLower()))
+                   .Select(e=>new PretragaEventaVM.Rows {
+                       EventId = e.Id,
+                       Naziv = e.Naziv,
+                       Kategorija = e.Kategorija.ToString(),
+                       ProstorOdrzavanjaNaziv = e.ProstorOdrzavanja.Naziv,
+                       ProstorOdrzavanjaGrad = e.ProstorOdrzavanja.Grad.Naziv,
+                       DatumOdrzavanja = e.DatumOdrzavanja.Day.ToString() + "." + e.DatumOdrzavanja.Month.ToString() + "." + e.DatumOdrzavanja.Year.ToString(),
+                       VrijemeOdrzavanja = e.VrijemeOdrzavanja,
+                       Slika = e.Slika
+                   }).ToList();
             }
             ctx.Dispose();
             return View(model);

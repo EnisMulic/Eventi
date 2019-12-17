@@ -28,7 +28,7 @@
 
 <form>
     <div class="input-group">
-        <input type="text" class="form-control" placeholder="Search" name="lokacija">
+        <input type="text" class="form-control" placeholder="Search" name="lokacija" maxlength="30">
         <div class="input-group-btn">
             <button id="pretraga" class="btn btn-light" type="submit">
                 Trazi
@@ -37,11 +37,11 @@
         </div>
     </div>
 </form>
-@if (Model.eventi != null)
+@if (Model.Eventi != null)
 {
     <table class="table">
         <tbody>
-            @foreach (Event e in Model.eventi)
+            @foreach (var e in Model.Eventi)
             {
                 <tr>
 
@@ -55,13 +55,12 @@
                         <div>
                             @e.Naziv <br />
                            
-                            @e.ProstorOdrzavanja.Naziv,   
-                            @e.ProstorOdrzavanja.Adresa  <br /> 
-                            @e.ProstorOdrzavanja.Grad.Naziv
+                            @e.ProstorOdrzavanjaNaziv   
+                           <br /> 
+                            @e.ProstorOdrzavanjaGrad
                        
                            <br />
-                            @e.DatumOdrzavanja.Day.ToString()/@e.DatumOdrzavanja.Month.ToString()/@e.DatumOdrzavanja.Year.ToString()
-                            - @e.VrijemeOdrzavanja h
+                            @e.DatumOdrzavanja- @e.VrijemeOdrzavanja h
                             
                         </div>
                     </td>

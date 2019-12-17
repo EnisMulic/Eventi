@@ -46,9 +46,24 @@ namespace Event_Attender.Web.Areas.ModulKorisnik.Controllers
             PretragaEventaVM model = new PretragaEventaVM();
            
             DateTime date = DateTime.Now;
-            model.eventi = ctx.Event.Include(e=>e.ProstorOdrzavanja).Include(e=>e.ProstorOdrzavanja.Grad).Where(e => e.IsOdobren == true).Where(e => e.IsOtkazan == false).Where(e => e.DatumOdrzavanja.CompareTo(date) == 1).ToList();
-            //ctx.Dispose();
-            return View(model);
+
+            model.Eventi = ctx.Event.Include(e => e.ProstorOdrzavanja).Include(e => e.ProstorOdrzavanja.Grad)
+                .Where(e => e.IsOdobren == true).Where(e => e.IsOtkazan == false).Where(e => e.DatumOdrzavanja.CompareTo(date) == 1)
+                .Select(e => new PretragaEventaVM.Rows
+                {
+                    EventId = e.Id,
+                    Naziv = e.Naziv,
+                    Kategorija = e.Kategorija.ToString(),
+                    Opis = e.Opis,
+                    ProstorOdrzavanjaNaziv = e.ProstorOdrzavanja.Naziv,
+                    ProstorOdrzavanjaAdresa = e.ProstorOdrzavanja.Adresa,
+                    ProstorOdrzavanjaGrad = e.ProstorOdrzavanja.Grad.Naziv,
+                    DatumOdrzavanja = e.DatumOdrzavanja.Day.ToString() + "." + e.DatumOdrzavanja.Month.ToString() + "." + e.DatumOdrzavanja.Year.ToString(),
+                    VrijemeOdrzavanja = e.VrijemeOdrzavanja,
+                    Slika = e.Slika
+                }).ToList();
+
+            return View(model);  
         }
 
         public string OEventu()
