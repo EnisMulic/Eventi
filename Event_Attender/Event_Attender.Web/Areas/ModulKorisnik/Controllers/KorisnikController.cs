@@ -46,9 +46,26 @@ namespace Event_Attender.Web.Areas.ModulKorisnik.Controllers
             PretragaEventaVM model = new PretragaEventaVM();
            
             DateTime date = DateTime.Now;
-            model.eventi = ctx.Event.Where(e => e.IsOdobren == true).Where(e => e.IsOtkazan == false).Where(e => e.DatumOdrzavanja.CompareTo(date) == 1).ToList();
+            model.eventi = ctx.Event.Include(e=>e.ProstorOdrzavanja).Include(e=>e.ProstorOdrzavanja.Grad).Where(e => e.IsOdobren == true).Where(e => e.IsOtkazan == false).Where(e => e.DatumOdrzavanja.CompareTo(date) == 1).ToList();
             //ctx.Dispose();
             return View(model);
+        }
+
+        public string OEventu()
+        {
+            return "Event";
+            //MojContext ctx = new MojContext();
+            //LogPodaci l= HttpContext.GetLogiraniUser();
+            //if (l != null)
+            //{
+            //    Korisnik k = ctx.Korisnik.Where(k => k.Osoba.LogPodaciId == l.Id).SingleOrDefault();
+            //    if (k != null)
+            //    {
+            //        // u 1 VM podaci o korinsiku, njegov Id, i podaci o izabranom eventu
+            //    }
+            //    return View();
+            //}
+            //return Redirect("ModulKorisnik/Korisnik/Index");   //?
         }
     }
 }

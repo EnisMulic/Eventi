@@ -9,23 +9,114 @@
 @using Event_Attender.Data.Models;
 @model Event_Attender.Web.Areas.ModulKorisnik.Models.PretragaEventaVM
 
-<a>Pregled posjecenih evenata</a>  
-<a>Pretraga po nazivu</a>
-<a>Pretraga po lokaciji</a>
-<a>LogOtut</a>
+<style>
+    .col-sm-4 {
+        margin-top: 1%;
+        margin-bottom: 1%;
+        padding-left: 0%;
+        padding-right: 0%;
+        /*background-color:#e7e7e7*/
+    }
+    #opcijeDiv{
+        margin-bottom:2%;
+    }
+    #linkEvent {
+        color: black;
+    }
 
-@*umjesto ovoga ce biti template*@
-<table class="table">
-    <tbody>
-        @foreach (Event e in Model.eventi)
-        {
-            <tr>
-                <td>@e.Slika</td>
-                <td>@e.Naziv</td>
-            </tr>
-        }
+    #linkEvent:hover {
+            color: red;
+            text-decoration: none;
+    }
+    #izbornik{
+            display:inline;
+            float:right;
+            /*Za manje rezolucije float left*/
+            /*background-color:#e7e7e7;*/  
+     }
+    #unutrasnji{
+        /*background-color:lightgray;*/
+    }
+   
+</style>
+
+<div id="opcijeDiv">
+    <form class="form-inline" style="display:inline">
+        <input type="text" placeholder="Pretrazite po nazivu ili lokaciji..." class="form-control" size="30" />
+        <input type="submit" class="btn btn-light" value="Trazi" />
+    </form>
+    <div id="izbornik">
+            <a class="btn btn-light">Sve </a>
+            <a class="btn btn-light" >Muzika </a>
+            <a class="btn btn-light" >Kultura</a>
+            <a class="btn btn-light" >Sport </a>
+            <a class="btn btn-light">Posjeceni eventi</a>
+        </div>
+</div>
+
+<div id="glavniDiv" class="row text-center">
+    @foreach (Event e in Model.eventi)
+    {
+        <div class="col-sm-4" >
+            <div id="unutrasnji"  class="thumbnail">
+                <img @*src="event.jpg"*@ alt="Event" width="400" height="300">  @*ili @e.slika  ?*@
+                <p> <a id="linkEvent" asp-area="ModulKorisnik" asp-controller="Korisnik" asp-action="OEventu"><strong>@e.Naziv</strong></a></p>
+                <p>
+                    @e.ProstorOdrzavanja.Grad.Naziv
+                    @*@e.ProstorOdrzavanja.Naziv*@  @*Detaljnije kada klikne na naziv eventa*@
+                    <br />
+                    @e.DatumOdrzavanja.Day.ToString()/@e.DatumOdrzavanja.Month.ToString()/@e.DatumOdrzavanja.Year.ToString()
+                    - @e.VrijemeOdrzavanja h
+                </p>
+                @*<p class="w3-left"><button class="w3-button w3-white w3-border" onclick="likeFunction(this)"><b><i class="fa fa-thumbs-up"></i> Like</b></button></p>*@
+
+                @*Ispisati broj likeova ako je veci od 0 ?*@
+
+                <a class="btn btn-light">Like</a>  <br />  <br />
+            </div>
+        </div>
+    }
+
+</div>
+
+@*Prva verzija*@
+@*<table class="table">
+        <tbody>
+            @foreach (Event e in Model.eventi)
+            {
+                <tr>
+                    @/*<td>@e.Slika</td>
+                    <td>@e.Naziv</td>*/@
+    <td>
+        <div>
+            @e.Slika
+        </div>
+    </td>
+    <td>
+        <div id="opis_@e.Id">
+            @e.Naziv <br />
+
+            @e.ProstorOdrzavanja.Naziv
+            @e.ProstorOdrzavanja.Adresa  <br />
+            @e.ProstorOdrzavanja.Grad.Naziv
+
+            <br />
+            @e.DatumOdrzavanja.Day.ToString()/@e.DatumOdrzavanja.Month.ToString()/@e.DatumOdrzavanja.Year.ToString()
+            - @e.VrijemeOdrzavanja h
 
 
-    </tbody>
-</table>
+        </div>
+    </td>
+    <td>
+        <div>
+            <a class="btn btn-lg btn-secondary">Kupi kartu</a>
+            <br /><br />
+            <a class="btn btn-light">  Like  </a>
+        </div>
+    </td>
+                </tr>
+            }
 
+
+        </tbody>
+    </table>  *@
