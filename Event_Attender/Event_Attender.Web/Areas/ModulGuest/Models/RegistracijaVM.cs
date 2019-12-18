@@ -11,15 +11,15 @@ namespace Event_Attender.Web.Areas.ModulGuest.Models
 {
     public class RegistracijaVM
     {
-        [Required]
+        [Required(ErrorMessage ="Obavezno polje")]
         [MaxLength(20)]
         public string Ime { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Obavezno polje")]
         [MaxLength(30)]
         public string Prezime { get; set; }
 
-        [Required]   
+        [Required(ErrorMessage = "Obavezno polje")]   
        // [Phone (ErrorMessage = "Niste unijeli pravilan format broja telefona")]// problem
        [RegularExpression(@"\+[0-9]{3}[\s][0-9]{3}[\s][0-9]{3}[\s][0-9]{3}", ErrorMessage ="U formatu +387 xxx xxx xxx")]
         public string Telefon { get; set; }
@@ -27,34 +27,34 @@ namespace Event_Attender.Web.Areas.ModulGuest.Models
         [Required]
         public int DrzavaId { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Obavezno polje")]
         [MaxLength(20)]
         [RegularExpression("[A-Za-z]+", ErrorMessage ="Morate unijeti naziv nekog grada")]
         public string Grad { get; set; }  // kao string?
 
-        [Required]
+        [Required(ErrorMessage = "Obavezno polje")]
         [MaxLength(40)]
         public string Adresa { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Obavezno polje")]
         [MaxLength(10)]
         [RegularExpression(@"\d{1,10}", ErrorMessage = "Niste unijeli pravilan format")]
         public string PostanskiBroj { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Obavezno polje")] 
         [EmailAddress(ErrorMessage = "Niste unijeli pravilan format")]
         public string Email { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Obavezno polje")]
         [Remote(action:"VerifyUserName", controller:"Guest", areaName:"ModulGuest", ErrorMessage ="Ovaj username je vec u upotrebi")]  // probati
         public string Username { get; set; }  //? da li korisnik unosi ili formirati od Id korisnika pa samo prikazati korisniku
 
-        [Required]
+        [Required(ErrorMessage = "Obavezno polje")]
         [MinLength(8, ErrorMessage = "Minimalno 8 znakova")]
         [MaxLength(25)]
         public string Password { get; set; }
           
-        [Required]     
+        [Required(ErrorMessage = "Obavezno polje")]     
        // [CreditCard(ErrorMessage ="format kreditne kartice")]//problem
        [RegularExpression(@"[0-9]{14,19}", ErrorMessage="Neispravan format kartice")]
         public string BrojKreditneKartice{ get; set; }
