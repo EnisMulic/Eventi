@@ -26,8 +26,8 @@ namespace Event_Attender.Web.Helper
         }
         public static /*int*/ LogPodaci GetLogiraniUser(this HttpContext context)
         {
-            //MojContext ctx = context.RequestServices.GetService<MojContext>();
-            MojContext ctx = new MojContext();
+            MojContext ctx = context.RequestServices.GetService<MojContext>();
+            //MojContext ctx = new MojContext();
 
             string logPodaciIdCookie = context.Request.GetCookieJson<string>(LogiraniUser);
 

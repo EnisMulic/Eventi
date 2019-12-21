@@ -9,6 +9,9 @@ namespace Event_Attender.Web.Areas.ModulKorisnik.Models
     public class PretragaEventaVM
     {
         public List<Rows> Eventi { get; set; }
+         public int KorisnikId { get; set; } // ili u akciji getLogiraniUser ?
+        
+       // bool IsLikean { get; set; }   // ?
         public class Rows
         {
             public int EventId { get; set; }
@@ -23,5 +26,7 @@ namespace Event_Attender.Web.Areas.ModulKorisnik.Models
             public byte[] Slika { get; set; }
 
         }
+
+         
     }
 }

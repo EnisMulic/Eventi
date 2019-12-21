@@ -15,37 +15,31 @@ namespace Event_Attender.Web.Areas.ModulKorisnik.Controllers
     [Area("ModulKorisnik")]
     public class KorisnikController : Controller
     {
-        //private MojContext ctx;
+        private readonly MojContext ctx;
 
-        //public KorisnikController(MojContext context)
-        //{
-        //    ctx = context;
-        //}
+        public KorisnikController(MojContext context)
+        {
+            ctx = context;
+        }
         public IActionResult Index(string filter)
         {   
-            MojContext ctx = new MojContext();
+          //  MojContext ctx = new MojContext();
 
             //// v1
             //int logPodaciId = HttpContext.GetLogiraniUser();
             //Korisnik k = ctx.Korisnik.Where(k => k.Osoba.LogPodaciId == logPodaciId).Include(k => k.Osoba).SingleOrDefault();
             //ViewData["k"] = k;
-
+              PretragaEventaVM model = new PretragaEventaVM();
             // v2
-            //LogPodaci l = HttpContext.GetLogiraniUser();
-            //if (l != null)
-            //{
-            //    Korisnik k = ctx.Korisnik.Where(k => k.Osoba.LogPodaciId == l.Id).Include(k=>k.Osoba).SingleOrDefault();
-            //    ViewData["k"] = k;
-            //}
-            //else
-            //{
-            //    ViewData["poruka"] = "vraceno null";
-            //}
-
-            
-            PretragaEventaVM model = new PretragaEventaVM();
+            LogPodaci l = HttpContext.GetLogiraniUser();
+            if (l != null)
+            {
+                Korisnik k = ctx.Korisnik.Where(k => k.Osoba.LogPodaciId == l.Id).Include(k => k.Osoba).SingleOrDefault();
+                model.KorisnikId = k.Id;
+            }
+        
             DateTime date = DateTime.Now;
-
+           
             if (filter == "Muzika")
             {
                 model.Eventi = PretragaPoKategoriji(Kategorija.Muzika);
@@ -74,7 +68,7 @@ namespace Event_Attender.Web.Areas.ModulKorisnik.Controllers
         List<PretragaEventaVM.Rows> PrikazEvenata()
         {
             DateTime date = DateTime.Now;
-            MojContext ctx = new MojContext();
+           // MojContext ctx = new MojContext();
             List<PretragaEventaVM.Rows> lista= ctx.Event/*.Include(e => e.ProstorOdrzavanja).Include(e => e.ProstorOdrzavanja.Grad)*/
                 .Where(e => e.IsOdobren == true).Where(e => e.IsOtkazan == false).Where(e => e.DatumOdrzavanja.CompareTo(date) == 1)
                 .Select(e => new PretragaEventaVM.Rows
@@ -95,7 +89,7 @@ namespace Event_Attender.Web.Areas.ModulKorisnik.Controllers
         List<PretragaEventaVM.Rows> PretragaPoKategoriji(Kategorija k)
         {
             DateTime date = DateTime.Now;
-            MojContext ctx = new MojContext();
+          //  MojContext ctx = new MojContext();
             List<PretragaEventaVM.Rows> lista = ctx.Event/*.Include(e => e.ProstorOdrzavanja).Include(e => e.ProstorOdrzavanja.Grad)*/
             .Where(e => e.Kategorija == k).Where(e => e.IsOdobren == true).Where(e => e.IsOtkazan == false).Where(e => e.DatumOdrzavanja.CompareTo(date) == 1)
             .Select(e => new PretragaEventaVM.Rows
@@ -116,7 +110,7 @@ namespace Event_Attender.Web.Areas.ModulKorisnik.Controllers
         List<PretragaEventaVM.Rows> PretragaPoNazivuLokaciji(string filter)
         {
             DateTime date = DateTime.Now;
-            MojContext ctx = new MojContext();
+         //   MojContext ctx = new MojContext();
             List<PretragaEventaVM.Rows> lista= ctx.Event.Where(e => e.IsOdobren == true)
                 .Where(e => e.IsOtkazan == false).Where(e => e.DatumOdrzavanja.CompareTo(date) == 1)
                 .Where(e => e.Naziv.ToLower().StartsWith(filter.ToLower())
@@ -138,21 +132,32 @@ namespace Event_Attender.Web.Areas.ModulKorisnik.Controllers
                       }).ToList();
             return lista;
         }
-        public string OEventu()
+        public void LikeEvent(int E, int K) {
+          //  MojContext ctx = new MojContext();
+             if(ctx.Event.Where(e=>e.Id==E).Any() && ctx.Korisnik.Where(x => x.Id == K).Any())
+            {
+                // ako taj id eventa i taj id korisnika postoje u bazi
+                Like l = new Like
+                {
+                    KorisnikId = K,
+                    EventId = E,
+                    DatumLajka = DateTime.Now
+                };
+                ctx.Like.Add(l);
+                ctx.SaveChanges();
+            }
+        }
+        public /*IActionResult*/ string OEventu(string eId, string korId)
         {
-            return "Event";
-            //MojContext ctx = new MojContext();
-            //LogPodaci l= HttpContext.GetLogiraniUser();
-            //if (l != null)
+            //if(eId==null || korId == null)
             //{
-            //    Korisnik k = ctx.Korisnik.Where(k => k.Osoba.LogPodaciId == l.Id).SingleOrDefault();
-            //    if (k != null)
-            //    {
-            //        // u 1 VM podaci o korinsiku, njegov Id, i podaci o izabranom eventu
-            //    }
-            //    return View();
+            //    return RedirectToAction("Index");
             //}
-            //return Redirect("ModulKorisnik/Korisnik/Index");   //?
+            //MojContext ctx = new MojContext();
+
+            //Korisnik k = ctx.Korisnik.Find(korId);  // ili getlogiraniUser
+
+            return eId + " " + korId; 
         }
     }
 }

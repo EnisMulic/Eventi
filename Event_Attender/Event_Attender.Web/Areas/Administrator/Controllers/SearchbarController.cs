@@ -21,9 +21,16 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
         //    _context = context;
         //}
         //EventDisplayVM EventModels = new EventDisplayVM();
+
+        private readonly MojContext ctx;
+
+        public SearchbarController(MojContext context)
+        {
+            ctx = context;
+        }
         public List<GradVM> GetGradovi()
         {
-            MojContext ctx = new MojContext();
+           // MojContext ctx = new MojContext();
             var Gradovi = ctx.Grad
                 .Select
                 (
@@ -50,7 +57,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
         public EventDisplayVM GetEventDisplayVMModel(int? Id, bool dodatno = false)
         {
             EventDisplayVM EventModels = new EventDisplayVM();
-            MojContext ctx = new MojContext();
+           // MojContext ctx = new MojContext();
 
             EventModels.Events = ctx.Event
                 .Select
@@ -142,7 +149,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
                 
             }
 
-            ctx.Dispose();
+         //   ctx.Dispose();
             return EventModels;
         }
         public IActionResult _AdminEventDisplay() => View(GetEventDisplayVMModel(null));
@@ -151,7 +158,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
 
         public IActionResult ObrisiEvent(int Id)
         {
-            MojContext ctx = new MojContext();
+          //  MojContext ctx = new MojContext();
 
             Event item = ctx.Event.Find(Id);
 
@@ -162,7 +169,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
                 ctx.SaveChanges();
             }
 
-            ctx.Dispose();
+          //  ctx.Dispose();
 
             return Redirect("_AdminEventDisplay");
         }
@@ -171,7 +178,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
 
         public IActionResult SnimiEvent(IFormCollection formCollection)
         {
-            MojContext ctx = new MojContext();
+          //  MojContext ctx = new MojContext();
 
             Event item = ctx.Event.Find(int.Parse(formCollection["id"]));
             item.Naziv = formCollection["Naziv"];
@@ -189,7 +196,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
             }
 
             ctx.SaveChanges();
-            ctx.Dispose();
+         //   ctx.Dispose();
 
             return Redirect($"_EventInfo?id={formCollection["id"]}");
         }
@@ -197,12 +204,12 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
         #endregion
         public IActionResult Odobri(int Id)
         {
-            using (MojContext ctx = new MojContext())
-            {
+            //using (MojContext ctx = new MojContext())
+            //{
                 Event e = ctx.Event.FirstOrDefault(e => e.Id == Id);
                 if (e != null) e.IsOdobren = true;
                 ctx.SaveChanges();
-            }
+          //  }
             return Redirect("/Administrator");
         }
 
@@ -210,7 +217,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
         public DrzavaDisplayVM GetDrzavaDisplayVMModel(int? Id)
         {
             DrzavaDisplayVM DrzavaModels = new DrzavaDisplayVM();
-            MojContext ctx = new MojContext();
+            //MojContext ctx = new MojContext();
 
             DrzavaModels.Drzave = ctx.Drzava
                 .Select
@@ -237,7 +244,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
                 .FirstOrDefault();
             }
 
-            ctx.Dispose();
+           // ctx.Dispose();
             return DrzavaModels;
         }
         
@@ -246,7 +253,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
         public IActionResult UrediDrzava(int Id) => View("_DrzavaForma", GetDrzavaDisplayVMModel(Id));
         public IActionResult ObrisiDrzava(int Id)
         {
-            MojContext ctx = new MojContext();
+           // MojContext ctx = new MojContext();
 
             Drzava item = ctx.Drzava.Find(Id);
 
@@ -257,18 +264,18 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
                 ctx.SaveChanges();
             }
 
-            ctx.Dispose();
+           // ctx.Dispose();
 
             return Redirect("_AdminDrzavaDisplay");
         }
         public IActionResult SnimiDrzava(IFormCollection formCollection)
         {
-            MojContext ctx = new MojContext();
+           // MojContext ctx = new MojContext();
             Drzava item = ctx.Drzava.Find(int.Parse(formCollection["Id"]));
             item.Naziv = formCollection["Naziv"];
 
             ctx.SaveChanges();
-            ctx.Dispose();
+          //  ctx.Dispose();
 
             return Redirect($"_DrzavaInfo?id={formCollection["Id"]}");
         }
@@ -279,7 +286,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
         public GradDisplayVM GetGradDisplayVMModel(int? gradID, bool dodatno = false)
         {
             GradDisplayVM GradModels = new GradDisplayVM();
-            MojContext ctx = new MojContext();
+           // MojContext ctx = new MojContext();
 
             GradModels.Gradovi = ctx.Grad
                 .Select
@@ -322,7 +329,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
                 .ToList();
             }
 
-            ctx.Dispose();
+         //   ctx.Dispose();
             return GradModels;
 
         }
@@ -334,7 +341,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
 
         public IActionResult ObrisiGrad(int Id)
         {
-            MojContext ctx = new MojContext();
+          //  MojContext ctx = new MojContext();
 
             Grad item = ctx.Grad.Find(Id);
 
@@ -345,20 +352,20 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
                 ctx.SaveChanges();
             }
 
-            ctx.Dispose();
+         //   ctx.Dispose();
 
             return Redirect("_AdminGradDisplay");
         }
 
         public IActionResult SnimiGrad(IFormCollection formCollection)
         {
-            MojContext ctx = new MojContext();
+          //  MojContext ctx = new MojContext();
             Grad item = ctx.Grad.Find(int.Parse(formCollection["Id"]));
             item.Naziv = formCollection["Naziv"];
             item.DrzavaId = int.Parse(formCollection["Drzava"]);
 
             ctx.SaveChanges();
-            ctx.Dispose();
+         //   ctx.Dispose();
 
             return Redirect($"_GradInfo?id={formCollection["Id"]}");
         }
@@ -369,7 +376,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
         public KorisnikDisplayVM GetKorisnikDisplayVMModel(int? Id, bool dodatno = false)
         {
             KorisnikDisplayVM KorisnikModels = new KorisnikDisplayVM();
-            MojContext ctx = new MojContext();
+            //MojContext ctx = new MojContext();
 
             KorisnikModels.Korisnici = ctx.Korisnik
                 .Select
@@ -411,7 +418,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
             }
 
 
-            ctx.Dispose();
+      //      ctx.Dispose();
             return KorisnikModels;
         }
         public IActionResult _AdminKorisnikDisplay() => View(GetKorisnikDisplayVMModel(null));
@@ -421,7 +428,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
         public IActionResult UrediKorisnik(int Id) => View("_KorisnikForma", GetKorisnikDisplayVMModel(Id, true));
         public IActionResult ObrisiKorisnik(int Id)
         {
-            MojContext ctx = new MojContext();
+           // MojContext ctx = new MojContext();
 
             Korisnik item = ctx.Korisnik.Find(Id);
 
@@ -432,14 +439,14 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
                 ctx.SaveChanges();
             }
 
-            ctx.Dispose();
+       //     ctx.Dispose();
 
             return Redirect("_AdminKorisnikDisplay");
         }
 
         public IActionResult SnimiKorisnik(IFormCollection formCollection)
         {
-            MojContext ctx = new MojContext();
+           // MojContext ctx = new MojContext();
             Korisnik item = ctx.Korisnik
                 .Include(i => i.Osoba)
                 .Where(i => i.Id == int.Parse(formCollection["Id"]))
@@ -453,7 +460,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
             item.Osoba.GradId = int.Parse(formCollection["Grad"]);
 
             ctx.SaveChanges();
-            ctx.Dispose();
+           // ctx.Dispose();
 
             return Redirect($"_KorisnikInfo?id={formCollection["Id"]}");
         }
@@ -464,7 +471,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
         public RadnikDisplayVM GetRadnikDisplayVMModel(int? Id, bool dodatno = false)
         {
             RadnikDisplayVM RadnikModels = new RadnikDisplayVM();
-            MojContext ctx = new MojContext();
+           // MojContext ctx = new MojContext();
 
             RadnikModels.Radnici = ctx.Radnik
                 .Select
@@ -502,7 +509,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
             }
 
 
-            ctx.Dispose();
+           // ctx.Dispose();
             return RadnikModels;
 
 
@@ -515,7 +522,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
 
         public IActionResult ObrisRadnik(int Id)
         {
-            MojContext ctx = new MojContext();
+          //  MojContext ctx = new MojContext();
 
             Radnik item = ctx.Radnik.Find(Id);
 
@@ -526,14 +533,14 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
                 ctx.SaveChanges();
             }
 
-            ctx.Dispose();
+          //  ctx.Dispose();
 
             return Redirect("_AdminRadnikDisplay");
         }
 
         public IActionResult SnimiRadnik(IFormCollection formCollection)
         {
-            MojContext ctx = new MojContext();
+          //  MojContext ctx = new MojContext();
             Radnik item = ctx.Radnik
                 .Include(i => i.Osoba)
                 .Where(i => i.Id == int.Parse(formCollection["Id"]))
@@ -545,7 +552,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
             item.Osoba.GradId = int.Parse(formCollection["Grad"]);
 
             ctx.SaveChanges();
-            ctx.Dispose();
+           // ctx.Dispose();
 
             return Redirect($"_KorisnikInfo?id={formCollection["Id"]}");
         }
@@ -556,7 +563,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
         public OrganizatorDisplayVM GetOrganizatorDisplayVMModel(int? Id, bool dodatno = false)
         {
             OrganizatorDisplayVM OrganizatorModels = new OrganizatorDisplayVM();
-            MojContext ctx = new MojContext();
+           // MojContext ctx = new MojContext();
 
             OrganizatorModels.Organizatori = ctx.Organizator
                 .Select
@@ -591,7 +598,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
                 OrganizatorModels.Gradovi = GetGradovi();
             }
 
-            ctx.Dispose();
+            //ctx.Dispose();
             return OrganizatorModels;
         }
         public IActionResult _AdminOrganizatorDisplay() => View(GetOrganizatorDisplayVMModel(null));
@@ -602,7 +609,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
             => View("_OrganizatorForma", GetOrganizatorDisplayVMModel(Id, true));
         public IActionResult ObrisiOrganizator(int Id)
         {
-            MojContext ctx = new MojContext();
+          //  MojContext ctx = new MojContext();
 
             Organizator item = ctx.Organizator.Find(Id);
 
@@ -613,14 +620,14 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
                 ctx.SaveChanges();
             }
 
-            ctx.Dispose();
+          //  ctx.Dispose();
 
             return Redirect("_AdminOrganizatorDisplay");
         }
 
         public IActionResult SnimiOrganizator(IFormCollection formCollection)
         {
-            MojContext ctx = new MojContext();
+           // MojContext ctx = new MojContext();
             Organizator item = ctx.Organizator.Find(int.Parse(formCollection["Id"]));
             item.Naziv = formCollection["Naziv"];
             item.Telefon = formCollection["Telefon"];
@@ -628,7 +635,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
                 item.GradId = int.Parse(formCollection["Grad"]);
 
             ctx.SaveChanges();
-            ctx.Dispose();
+          //  ctx.Dispose();
 
             return Redirect($"_OrganizatorInfo?id={formCollection["Id"]}");
         }
@@ -639,7 +646,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
         public IzvodjacDisplayVM GetIzvodjacDisplayVMModel(int? Id)
         {
             IzvodjacDisplayVM IzvodjacModels = new IzvodjacDisplayVM();
-            MojContext ctx = new MojContext();
+           // MojContext ctx = new MojContext();
 
             IzvodjacModels.Izvodjaci = ctx.Izvodjac
                 .Select
@@ -668,7 +675,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
                 .FirstOrDefault();
             }
 
-            ctx.Dispose();
+          //  ctx.Dispose();
             return IzvodjacModels;
         }
         public IActionResult _AdminIzvodjacDisplay() => View(GetIzvodjacDisplayVMModel(null));
@@ -678,7 +685,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
         public IActionResult UrediIzvodjac(int Id) => View("_IzvodjacForma", GetIzvodjacDisplayVMModel(Id));
         public IActionResult ObrisiIzvodjac(int Id)
         {
-            MojContext ctx = new MojContext();
+           // MojContext ctx = new MojContext();
 
             Izvodjac item = ctx.Izvodjac.Find(Id);
 
@@ -689,20 +696,20 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
                 ctx.SaveChanges();
             }
 
-            ctx.Dispose();
+         //   ctx.Dispose();
 
             return Redirect("_AdminIzvodjacDisplay");
         }
 
         public IActionResult SnimiIzvodjac(IFormCollection formCollection)
         {
-            MojContext ctx = new MojContext();
+         //   MojContext ctx = new MojContext();
             Izvodjac item = ctx.Izvodjac.Find(int.Parse(formCollection["Id"]));
             item.Naziv = formCollection["Naziv"];
             item.TipIzvodjaca = (TipIzvodjaca)Enum.Parse(typeof(TipIzvodjaca), formCollection["Tip"]);
 
             ctx.SaveChanges();
-            ctx.Dispose();
+          //  ctx.Dispose();
 
             return Redirect($"_IzvodjacInfo?id={formCollection["Id"]}");
         }
@@ -713,7 +720,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
         public SponzorDisplayVM GetSponzorDisplayVMModel(int? Id)
         {
             SponzorDisplayVM SponzorModels = new SponzorDisplayVM();
-            MojContext ctx = new MojContext();
+           // MojContext ctx = new MojContext();
 
             SponzorModels.Sponzori = ctx.Sponzor
                 .Select
@@ -744,7 +751,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
                 .FirstOrDefault();
             }
 
-            ctx.Dispose();
+          //  ctx.Dispose();
             return SponzorModels;
         }
 
@@ -756,7 +763,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
 
         public IActionResult ObrisiSponzor(int Id)
         {
-            MojContext ctx = new MojContext();
+          //  MojContext ctx = new MojContext();
 
             Sponzor item = ctx.Sponzor.Find(Id);
 
@@ -767,21 +774,21 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
                 ctx.SaveChanges();
             }
 
-            ctx.Dispose();
+          //  ctx.Dispose();
 
             return Redirect("_AdminSponzorDisplay");
         }
 
         public IActionResult SnimiSponzor(IFormCollection formCollection)
         {
-            MojContext ctx = new MojContext();
+          //  MojContext ctx = new MojContext();
             Sponzor item = ctx.Sponzor.Find(int.Parse(formCollection["Id"]));
             item.Naziv = formCollection["Naziv"];
             item.Telefon = formCollection["Telefon"];
             item.Email = formCollection["Email"];
 
             ctx.SaveChanges();
-            ctx.Dispose();
+          //  ctx.Dispose();
 
             return Redirect($"_SponzorInfo?id={formCollection["Id"]}");
         }
@@ -792,7 +799,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
         public ProstorOdrzavanjaDisplayVM GetProstorOdrzavanjaDisplayVMModel(int? Id, bool dodatno = false)
         {
             ProstorOdrzavanjaDisplayVM ProstorOdrzavanjaModels = new ProstorOdrzavanjaDisplayVM();
-            MojContext ctx = new MojContext();
+          //  MojContext ctx = new MojContext();
 
             ProstorOdrzavanjaModels.Prostori = ctx.ProstorOdrzavanja
                 .Select
@@ -830,7 +837,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
             }
 
 
-            ctx.Dispose();
+           // ctx.Dispose();
             return ProstorOdrzavanjaModels;
         }
 
@@ -843,7 +850,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
 
         public IActionResult ObrisiProstorOdrzavanja(int Id)
         {
-            MojContext ctx = new MojContext();
+           // MojContext ctx = new MojContext();
 
             ProstorOdrzavanja item = ctx.ProstorOdrzavanja.Find(Id);
 
@@ -854,7 +861,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
                 ctx.SaveChanges();
             }
 
-            ctx.Dispose();
+           // ctx.Dispose();
 
             return Redirect("_AdminProstorDisplay");
         }
@@ -862,7 +869,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
 
         public IActionResult SnimiProstorOdrzavanja(IFormCollection formCollection) 
         {
-            MojContext ctx = new MojContext();
+           // MojContext ctx = new MojContext();
             ProstorOdrzavanja item = ctx.ProstorOdrzavanja.Find(int.Parse(formCollection["Id"]));
             item.Naziv = formCollection["Naziv"];
             item.Adresa = formCollection["Adresa"];
@@ -872,7 +879,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
             item.GradId = int.Parse(formCollection["Id"]);
 
             ctx.SaveChanges();
-            ctx.Dispose();
+         //   ctx.Dispose();
 
             return Redirect($"_ProstorOdrzavanjaInfo?id={formCollection["Id"]}");
         }

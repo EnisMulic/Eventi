@@ -13,10 +13,16 @@ namespace Event_Attender.Web.Controllers
     [Area("OrganizatorModul")]
     public class OrganizatorHomeController : Controller
     {
+        private readonly MojContext ctx;
+
+        public OrganizatorHomeController(MojContext context)
+        {
+            ctx = context;
+        }
         public IActionResult Index()
         {
-            using(var ctx= new MojContext())
-            {
+            //using(var ctx= new MojContext())
+            //{
                 List<ProstorOdrzavanjaVM> prostoriOdrzavanja = ctx.ProstorOdrzavanja.Select(s => new ProstorOdrzavanjaVM
                 {
                     ProstorOdrzavanjaID = s.Id,
@@ -44,7 +50,7 @@ namespace Event_Attender.Web.Controllers
                 ViewData["EventiOrganizatora"] = eventi;
                 ViewData["ProstoriOdrzavanja"] = prostoriOdrzavanja;
                 return View();
-            }
+            //}
         }
 
         public IActionResult SnimiEvent(
@@ -69,18 +75,18 @@ namespace Event_Attender.Web.Controllers
             e.IsOtkazan = false;
             e.OrganizatorId = 1;
 
-            using (MojContext ctx=new MojContext())
-            {
+            //using (MojContext ctx=new MojContext())
+            //{
                 ctx.Event.Add(e);
                 ctx.SaveChanges();
-            }
+          //  }
             return Redirect("Index");
         }
 
         public IActionResult EventInfoPrikaz(int EventID)    
         {
-            using(var ctx = new MojContext())
-            {
+            //using(var ctx = new MojContext())
+            //{
                 var e = ctx.Event.Where(e => e.Id == EventID)
                     .Include(e => e.Organizator)
                     .Include(e => e.ProstorOdrzavanja)
@@ -103,7 +109,7 @@ namespace Event_Attender.Web.Controllers
                 ViewData["eventInfo"] = eventInfo;
                 return View("EventInfo");
                 
-            }
+           // }
         }
             
     }

@@ -18,27 +18,30 @@
         padding-right: 0%;
         /*background-color:#e7e7e7*/
     }
-    #opcijeDiv{
-        margin-bottom:2%;
+
+    #opcijeDiv {
+        margin-bottom: 2%;
     }
+
     #linkEvent {
         color: black;
     }
 
-    #linkEvent:hover {
+        #linkEvent:hover {
             color: red;
             text-decoration: none;
+        }
+
+    #izbornik {
+        display: inline;
+        float: right;
+        /*Za manje rezolucije float left*/
+        /*background-color:#e7e7e7;*/
     }
-    #izbornik{
-            display:inline;
-            float:right;
-            /*Za manje rezolucije float left*/
-            /*background-color:#e7e7e7;*/  
-     }
-    #unutrasnji{
+
+    #unutrasnji {
         /*background-color:lightgray;*/
     }
-   
 </style>
 
 <div id="opcijeDiv">
@@ -47,35 +50,37 @@
         <input type="submit" class="btn btn-light" value="Trazi" />
     </form>
     <div id="izbornik">
-            <a asp-area="ModulKorisnik" asp-controller="Korisnik" asp-action="Index" class="btn btn-light">Sve </a>
-            <a asp-area="ModulKorisnik" asp-controller="Korisnik" asp-action="Index" asp-route-filter="Muzika" class="btn btn-light" >Muzika </a>
-            <a asp-area="ModulKorisnik" asp-controller="Korisnik" asp-action="Index" asp-route-filter="Kultura" class="btn btn-light" >Kultura</a>
-            <a asp-area="ModulKorisnik" asp-controller="Korisnik" asp-action="Index" asp-route-filter="Sport" class="btn btn-light" >Sport </a>
-            <a class="btn btn-light">Posjeceni eventi</a>
-        </div>
+        <a asp-area="ModulKorisnik" asp-controller="Korisnik" asp-action="Index" class="btn btn-light">Sve </a>
+        <a asp-area="ModulKorisnik" asp-controller="Korisnik" asp-action="Index" asp-route-filter="Muzika" class="btn btn-light">Muzika </a>
+        <a asp-area="ModulKorisnik" asp-controller="Korisnik" asp-action="Index" asp-route-filter="Kultura" class="btn btn-light">Kultura</a>
+        <a asp-area="ModulKorisnik" asp-controller="Korisnik" asp-action="Index" asp-route-filter="Sport" class="btn btn-light">Sport </a>
+        <a class="btn btn-light">Posjeceni eventi</a>
+    </div>
 </div>
 
 <div id="glavniDiv" class="row text-center">
-   
+
     @foreach (var e in Model.Eventi)
     {
         <div class="col-sm-4">
             <div id="unutrasnji" class="thumbnail">
                 <img @*src="event.jpg"*@ alt="Event" width="400" height="300">  @*ili @e.slika  ?*@
-                <p> <a id="linkEvent" asp-area="ModulKorisnik" asp-controller="Korisnik" asp-action="OEventu"><strong>@e.Naziv</strong></a></p>
+                <p> <a id="linkEvent" asp-area="ModulKorisnik" asp-controller="Korisnik" asp-action="OEventu" asp-route-eId="@e.EventId" asp-route-korId="@Model.KorisnikId"><strong>@e.Naziv</strong></a></p>
                 <p>
                     @e.ProstorOdrzavanjaGrad
                     @*@e.ProstorOdrzavanja.Naziv*@  @*Detaljnije kada klikne na naziv eventa*@
                     <br />
                     @e.DatumOdrzavanja
                     - @e.VrijemeOdrzavanja h
-                   
+
                 </p>
                 @*<p class="w3-left"><button class="w3-button w3-white w3-border" onclick="likeFunction(this)"><b><i class="fa fa-thumbs-up"></i> Like</b></button></p>*@
 
                 @*Ispisati broj likeova ako je veci od 0 ?*@
-
-                <a class="btn btn-light">Like</a>  <br />  <br />
+                <div id="rezLike">
+                    <a  class="btn btn-light">Like</a>
+                </div>  
+                <br /><br />
             </div>
         </div>
     }

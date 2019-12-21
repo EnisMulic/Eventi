@@ -13,6 +13,12 @@ namespace Event_Attender.Web.Controllers
 {
     public class PrijavaController : Controller
     {
+        private MojContext ctx;
+
+        public PrijavaController(MojContext context)
+        {
+            ctx = context;
+        }
         public IActionResult Index()
         {
             LoginVM model = new LoginVM();
@@ -21,7 +27,7 @@ namespace Event_Attender.Web.Controllers
 
         public IActionResult LogIn( LoginVM input)
         {
-            MojContext ctx = new MojContext();
+            //MojContext ctx = new MojContext();
 
             Korisnik k= ctx.Korisnik.Include(k => k.Osoba).Include(o => o.Osoba.LogPodaci)
                 .Where(o => o.Osoba.LogPodaci.Username == input.username && o.Osoba.LogPodaci.Password == input.password).SingleOrDefault();

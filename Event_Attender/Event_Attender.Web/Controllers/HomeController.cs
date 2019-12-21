@@ -14,26 +14,27 @@ using Event_Attender.Web.Helper;
 namespace Event_Attender.Web.Controllers
 {
     public class HomeController : Controller
-    {
-        private readonly ILogger<HomeController> _logger;
+    {  
+        //private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
-        {
-            _logger = logger;
-        }
-        //private MojContext ctx;
-
-        //public HomeController(MojContext context)
+        //public HomeController(ILogger<HomeController> logger)
         //{
-        //    ctx = context;
-        //} 
+        //    _logger = logger;
+        //}
+
+        private readonly MojContext ctx;
+
+        public HomeController(MojContext context)
+        {
+            ctx = context;
+        }
         public IActionResult Index()
         {
             HttpContext.SetLogiraniUser(null);
             // kada se otvori stranica, modul je guest, i nijedan user jos nije logiran
 
             PretragaEventaVM model = new PretragaEventaVM();
-            MojContext ctx = new MojContext();
+            //MojContext ctx = new MojContext();
             DateTime date = DateTime.Now;
             model.Eventi = ctx.Event.Where(e => e.IsOdobren == true).Where(e => e.IsOtkazan == false)
                 .Where(e => e.DatumOdrzavanja.CompareTo(date) == 1)
