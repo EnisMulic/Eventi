@@ -48,10 +48,10 @@ namespace Event_Attender.Web.Helper
                 return;  
             }
 
-            //MojContext ctx = context.HttpContext.RequestServices.GetService<MojContext>();
+            MojContext ctx = context.HttpContext.RequestServices.GetService<MojContext>();
             // ne moze zato sto u MojContext.cs nije dependency injection
 
-            MojContext ctx = new MojContext();
+           // MojContext ctx = new MojContext();
 
             // verzija 1 
             //if(_korisnik && ctx.Korisnik.Where(k => k.Osoba.LogPodaciId == logPodaciId).Count() == 1)

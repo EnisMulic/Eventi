@@ -11,6 +11,12 @@ namespace Event_Attender.Web.Controllers
 {
     public class SponzorController : Controller
     {
+        private readonly MojContext ctx;
+
+        public SponzorController(MojContext context)
+        {
+            ctx = context;
+        }
         public IActionResult Index()
         {
             return View();
@@ -18,8 +24,8 @@ namespace Event_Attender.Web.Controllers
 
         public IActionResult SponzorGetAll()
         {
-            using (MojContext ctx = new MojContext())
-            {
+            //using (MojContext ctx = new MojContext())
+            //{
                 List<SponzorVM> sponzori = ctx.Sponzor.Select(s => new SponzorVM
                 {
                     SponzorID=s.Id,
@@ -30,7 +36,7 @@ namespace Event_Attender.Web.Controllers
 
                 ViewData["sponzorKljuc"] = sponzori;
                 return View();
-            }
+           // }
 
         }
 
@@ -48,21 +54,21 @@ namespace Event_Attender.Web.Controllers
                 Email = _email
             };
 
-            using (MojContext ctx = new MojContext())
-            {
+            //using (MojContext ctx = new MojContext())
+            //{
                 ctx.Sponzor.Add(s);
                 ctx.SaveChanges();
-            }
+           // }
             return Redirect("SponzorGetAll");
         }
 
         public IActionResult DeleteSponzor(int idSponzor)
         {
-            using(var ctx = new MojContext())
-            {
+            //using(var ctx = new MojContext())
+            //{
                 ctx.Sponzor.Remove(ctx.Sponzor.Find(idSponzor));
                 ctx.SaveChanges();
-            }
+           // }
             return Redirect("SponzorGetAll");
         }
     }

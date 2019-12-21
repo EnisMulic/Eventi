@@ -15,11 +15,17 @@ namespace Event_Attender.Web.Areas.ModulGuest.Controllers
     [Area("ModulGuest")]
     public class GuestController : Controller
     {
+        private readonly MojContext ctx;
+
+        public GuestController(MojContext context)
+        {
+            ctx = context;
+        }
         public IActionResult PretraziPoNazivu(string filter)  // v1- odvojena pretraga po lokaciji
         {
             PretragaEventaVM model = new PretragaEventaVM();
            
-            MojContext ctx = new MojContext();
+           // MojContext ctx = new MojContext();
             DateTime date = DateTime.Now;
             //Where(e => e.DatumOdrzavanja.CompareTo(date)==1) // gdje je datum veci od danasnjeg
             if (filter != null)
@@ -41,13 +47,13 @@ namespace Event_Attender.Web.Areas.ModulGuest.Controllers
                         Slika = e.Slika
                     }).ToList();
             }
-            ctx.Dispose();
+          //  ctx.Dispose();
             return View(model);  
         }
         public IActionResult PretraziPoLokaciji(string lokacija)  //v1 - odvojena pretraga po nazivu
         {
             PretragaEventaVM model = new PretragaEventaVM();
-            MojContext ctx = new MojContext();
+          //  MojContext ctx = new MojContext();
             DateTime date = DateTime.Now;
             if (lokacija != null)
             {
@@ -65,24 +71,24 @@ namespace Event_Attender.Web.Areas.ModulGuest.Controllers
                        Slika = e.Slika
                    }).ToList();
             }
-            ctx.Dispose();
+          //  ctx.Dispose();
             return View(model);
         }
         public IActionResult RegistracijaForma()
         {
-            MojContext ctx = new MojContext();
+          //  MojContext ctx = new MojContext();
 
             RegistracijaVM model = new RegistracijaVM();
             model.Drzave = ctx.Drzava.Select(d => new SelectListItem(d.Naziv, d.Id.ToString())).ToList();
 
-            ctx.Dispose();
+         //   ctx.Dispose();
             return View(model);
         }
 
         public bool VerifyUserName(string username)
         {
             // trebali bi se povuci svi username iz baze, pa provjeravati da li vec postoji isti
-            MojContext ctx = new MojContext();
+         //   MojContext ctx = new MojContext();
             List<LogPodaci> logPodaci = ctx.LogPodaci.ToList();
             if (logPodaci == null)
             {
@@ -96,12 +102,12 @@ namespace Event_Attender.Web.Areas.ModulGuest.Controllers
                         return false;
                 }
             }
-            ctx.Dispose();
+          //  ctx.Dispose();
             return true;
         }
         public IActionResult RegistracijaSnimi(RegistracijaVM model)
         {
-            MojContext ctx = new MojContext();
+          //  MojContext ctx = new MojContext();
 
             Korisnik k = new Korisnik();
             k.Osoba = new Osoba
@@ -137,7 +143,7 @@ namespace Event_Attender.Web.Areas.ModulGuest.Controllers
 
             ctx.Korisnik.Add(k);
             ctx.SaveChanges();
-            ctx.Dispose();
+           // ctx.Dispose();
            // treba redirect na Prijava, Prijava na Korisnik Panel
             // return Redirect("nekicontroller/Prijava");
             return Redirect("/Home");
