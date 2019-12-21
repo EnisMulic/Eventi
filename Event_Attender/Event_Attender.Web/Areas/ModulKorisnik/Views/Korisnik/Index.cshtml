@@ -28,7 +28,7 @@
     }
 
         #linkEvent:hover {
-            color: red;
+            color:#e61c41;
             text-decoration: none;
         }
 
@@ -68,18 +68,13 @@
                 <p> <a id="linkEvent" asp-area="ModulKorisnik" asp-controller="Korisnik" asp-action="OEventu" asp-route-eId="@e.EventId" asp-route-korId="@Model.KorisnikId"><strong>@e.Naziv</strong></a></p>
                 <p>
                     @e.ProstorOdrzavanjaGrad
-                    @*@e.ProstorOdrzavanja.Naziv*@  @*Detaljnije kada klikne na naziv eventa*@
+                    
                     <br />
                     @e.DatumOdrzavanja
                     - @e.VrijemeOdrzavanja h
 
                 </p>
-                @*<p class="w3-left"><button class="w3-button w3-white w3-border" onclick="likeFunction(this)"><b><i class="fa fa-thumbs-up"></i> Like</b></button></p>*@
-
-                @*Ispisati broj likeova ako je veci od 0 ?*@
-                <div id="rezLike">
-                    <a  class="btn btn-light">Like</a>
-                </div>  
+              
                 <br /><br />
             </div>
         </div>
