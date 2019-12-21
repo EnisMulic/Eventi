@@ -2,28 +2,40 @@
 @{
 
     ViewData["Title"] = "Index";
+    Layout = null;
 }
-<link href="~/css/admin-sidebar.css" rel="stylesheet" />
 
-@{await Html.RenderPartialAsync("_AdminSidebar");}
-<div id="Admin-Searchbar">
-    <input type="text" name="search" value="" />
-    <button>
-        @Html.ActionLink("Dodaj", "Edit", new { /* id = model.OnDisplay.PrimaryKey */ })
-    </button>
-    <table>
-        <tbody>
-            @foreach (var item in Model.Events)
-            {
-                <tr>
-                    <td>
-                        <a asp-area="Administrator" asp-controller="Searchbar"
-                           asp-action="_EventInfo" asp-route-id="@item.Id">
-                            @item.Naziv
-                        </a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-</div>
+@*@{await Html.RenderPartialAsync("_AdminSidebar");}*@
+@*<div id="Admin-Searchbar">
+        <input type="text" name="search" value="" />
+        <button>
+            @Html.ActionLink("Dodaj", "Edit", new { /* id = model.OnDisplay.PrimaryKey */ })
+        </button>
+        <table>
+            <tbody>
+                @foreach (var item in Model.Events)
+                {
+                    <tr>
+                        <td>
+                            <a asp-area="Administrator" asp-controller="Searchbar"
+                               asp-action="_EventInfo" asp-route-id="@item.Id">
+                                @item.Naziv
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>*@
+<input type="text" name="search" value="" />
+
+@*<button>
+    @Html.ActionLink("Dodaj", "Edit", new { /* id = model.OnDisplay.PrimaryKey */ })
+</button>*@
+
+<div role="button" for="Event" class="dodaj">Dodaj</div>
+
+@foreach (var item in Model.Events)
+{
+    <div for="Event" role="button" class="info" id="@item.Id">@item.Naziv</div>
+}

@@ -2,6 +2,85 @@
 @{
     ViewData["Title"] = "Index";
 }
+<link href="~/css/admin-sidebar.css" rel="stylesheet" />
 
 @{await Html.RenderPartialAsync("_AdminSidebar");}
 
+<div id="Admin-Searchbar"></div>
+<div id="Main-Display"></div>
+
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        var x = sessionStorage.getItem("display");
+        if (x != null) {
+            $(document).html(x);
+            //alert(x);
+
+            GetItems(sessionStorage.getItem("search"));
+            SetEventsForItems();
+
+            GetItemForDisplay(sessionStorage.getItem("lastType"), sessionStorage.getItem("lastID"));
+            SetEventForUredi();
+
+
+            //sessionStorage.clear();
+        }
+
+        $("div.searchbar").on('click', function (e) {
+            $("#Main-Display").html("");
+
+            GetItems(e.target.id);
+            sessionStorage.setItem("search", e.target.id);
+        });
+
+        function SetEventsForItems() {
+            var html = $(document);
+            $("div.info").on('click', function (e) {
+                
+                sessionStorage.setItem("display", html);
+                sessionStorage.setItem("lastType", e.target.getAttribute("for"));
+                sessionStorage.setItem("lastID", e.target.id);
+
+                GetItemForDisplay(e.target.getAttribute("for"), e.target.id);
+            });
+
+            $("div.dodaj").on('click', function (e) {
+                GetFormForAdd(e.target.getAttribute("for"));
+            });
+        }
+
+        function GetItems(type) {
+            $.get("../Searchbar/" + type, function (response) {
+                $("#Admin-Searchbar").html(response);
+
+                SetEventsForItems();
+            });
+        }
+
+        function GetFormForAdd(type) {
+            $.get("../Searchbar/_" + type + "FormaAdd", function (response) {
+                $("#Main-Display").html(response);
+
+            });
+        }
+
+        function GetItemForDisplay(type, id) {
+            $.get("../Searchbar/_" + type + "Info?id=" + id, function (response) {
+                $("#Main-Display").html(response);;
+
+                SetEventForUredi();
+            });
+        }
+
+        function SetEventForUredi() {
+            $("div.uredi").on('click', function (e) {
+                $.get("../Searchbar/Uredi" + e.target.getAttribute("for") + "?id=" + e.target.id, function (response) {
+                    $("#Main-Display").html(response);
+                });
+            })
+        }
+
+    })
+</script>
