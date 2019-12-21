@@ -1,11 +1,12 @@
 ﻿@model Event_Attender.Web.Areas.Administrator.Models.OrganizatorDisplayVM
 @{
     ViewData["Title"] = "Index";
+    Layout = null;
 }
 
-<link href="~/css/admin-sidebar.css" rel="stylesheet" />
+@*<link href="~/css/admin-sidebar.css" rel="stylesheet" />
 
-@{await Html.RenderPartialAsync("_AdminSidebar");}
+@{await Html.RenderPartialAsync("_AdminSidebar");}*@
 <div id="Admin-Searchbar">
     <input type="text" name="search" value="" />
     <button>

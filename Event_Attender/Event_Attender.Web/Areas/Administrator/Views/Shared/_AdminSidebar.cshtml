@@ -1,14 +1,23 @@
-﻿ 
+﻿<style>
+    div[role="button"]
+    {
+        cursor: pointer;
+    }
+    div[role="button"]:hover
+    {
+        background-color: #d3cbcb;
+    }
+</style>
 
 <div id="Admin-Sidebar">
     <div><a asp-area="Administrator" asp-controller="Home" asp-action="Index">Home</a></div>
-    <div><a asp-area="Administrator" asp-controller="Searchbar" asp-action="_AdminEventDisplay">Event</a></div>
-    <div><a asp-area="Administrator" asp-controller="Searchbar" asp-action="_AdminOrganizatorDisplay">Organizator</a></div>
-    <div><a asp-area="Administrator" asp-controller="Searchbar" asp-action="_AdminKorisnikDisplay">Korisnik</a></div>
-    <div><a asp-area="Administrator" asp-controller="Searchbar" asp-action="_AdminRadnikDisplay">Radnik</a></div>
-    <div><a asp-area="Administrator" asp-controller="Searchbar" asp-action="_AdminIzvodjacDisplay">Izvođač</a></div>
-    <div><a asp-area="Administrator" asp-controller="Searchbar" asp-action="_AdminProstorDisplay">Prostor</a></div>
-    <div><a asp-area="Administrator" asp-controller="Searchbar" asp-action="_AdminSponzorDisplay">Sponzor</a></div>
-    <div><a asp-area="Administrator" asp-controller="Searchbar" asp-action="_AdminGradDisplay">Grad</a></div>
-    <div><a asp-area="Administrator" asp-controller="Searchbar" asp-action="_AdminDrzavaDisplay">Država</a></div>
+    <div role="button" class="searchbar" id="_AdminEventDisplay">Event</div>
+    <div role="button" class="searchbar" id="_AdminOrganizatorDisplay">Organizator</div>
+    <div role="button" class="searchbar" id="_AdminKorisnikDisplay">Korisnik</div>
+    <div role="button" class="searchbar" id="_AdminRadnikDisplay">Radnik</div>
+    <div role="button" class="searchbar" id="_AdminIzvodjacDisplay">Izvođač</div>
+    <div role="button" class="searchbar" id="_AdminProstorDisplay">Prostor</div>
+    <div role="button" class="searchbar" id="_AdminSponzorDisplay">Sponzor</div>
+    <div role="button" class="searchbar" id="_AdminGradDisplay">Grad</div>
+    <div role="button" class="searchbar" id="_AdminDrzavaDisplay">Država</div>
 </div>

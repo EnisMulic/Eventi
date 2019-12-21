@@ -1,11 +1,84 @@
-﻿@model Event_Attender.Web.Areas.Administrator.Models.EventDisplayVM
+﻿@model Event_Attender.Web.Areas.Administrator.Models.EventVM
 @using Event_Attender.Web.Helper
-@{
+@{ 
     Layout = null;
 }
 
+<h4>EventVM</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="_EventFormaAddSnimi">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Naziv" class="control-label"></label>
+                <input asp-for="Naziv" class="form-control" />
+                <span asp-validation-for="Naziv" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Opis" class="control-label"></label>
+                <input asp-for="Opis" class="form-control" />
+                <span asp-validation-for="Opis" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DatumOdrzavanja" class="control-label"></label>
+                <input asp-for="DatumOdrzavanja" class="form-control" />
+                <span asp-validation-for="DatumOdrzavanja" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="VrijemeOdrzavanja" class="control-label"></label>
+                <input asp-for="VrijemeOdrzavanja" class="form-control" />
+                <span asp-validation-for="VrijemeOdrzavanja" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Kategorija" class="control-label"></label>
+                <select name="Kategorija" class="form-control">
+                    @{var tipovi = new SelectList(Enum.GetValues(typeof(Kategorija)));}
+                    @foreach (var item in tipovi)
+                    {
+                        <option value="@item.Text">@item.Text</option>
+                    }
+                </select>
+                <span asp-validation-for="Kategorija" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsOdobren" /> @Html.DisplayNameFor(model => model.IsOdobren)
+                </label>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsOtkazan" /> @Html.DisplayNameFor(model => model.IsOtkazan)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="Slika" class="control-label"></label>
+                <input asp-for="Slika" class="form-control" />
+                <span asp-validation-for="Slika" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OrganizatorId" class="control-label"></label>
+                <select asp-for="OrganizatorId" asp-items="Model.Organizatori" class="form-control"></select>
+                <span asp-validation-for="OrganizatorNaziv" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AdministratorId" class="control-label"></label>
+                <select asp-for="AdministratorId" asp-items="Model.Administratori" class="form-control"></select>
+                <span asp-validation-for="AdministratorNaziv" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProstorOdrzavanjaId" class="control-label"></label>
+                <select asp-for="ProstorOdrzavanjaId" asp-items="Model.Prostori" class="form-control"></select>
+                <span asp-validation-for="ProstorOdrzavanjaNaziv" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
 
-<div>
+@*<div>
     <h4>@Html.DisplayFor(model => model.OnDisplay.Naziv)</h4>
     <hr />
     <form asp-area="Administrator" asp-controller="Searchbar" asp-action="SnimiEvent">
@@ -94,8 +167,6 @@
                 }
             }
         </select>
-        
-
 
         <label>
             @Html.DisplayNameFor(model => model.OnDisplay.OrganizatorNaziv)
@@ -134,5 +205,5 @@
         </select>
         <input type="submit" value="Snimi" class="btn btn-success" />
     </form>
-</div>
+</div>*@
 

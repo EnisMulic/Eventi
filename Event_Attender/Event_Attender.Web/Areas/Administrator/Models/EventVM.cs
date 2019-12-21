@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -20,13 +21,23 @@ namespace Event_Attender.Web.Areas.Administrator.Models
         public bool IsOtkazan { get; set; }
         public byte[] Slika { get; set; }
 
+        public int OrganizatorId { get; set; }
+
         [DisplayName("Naziv organizatora")]
         public string OrganizatorNaziv { get; set; }
+
+        public int AdministratorId { get; set; }
 
         [DisplayName("Naziv administratora")]
         public string AdministratorNaziv { get; set; }
 
+        public int ProstorOdrzavanjaId { get; set; }
+
         [DisplayName("Prostor održavanja")]
         public string ProstorOdrzavanjaNaziv { get; set; }
+
+        public List<SelectListItem> Organizatori { get; set; }
+        public List<SelectListItem> Administratori { get; set; }
+        public List<SelectListItem> Prostori { get; set; }
     }
 }
