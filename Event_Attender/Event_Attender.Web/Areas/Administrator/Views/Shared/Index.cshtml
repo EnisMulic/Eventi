@@ -1,86 +1,40 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "Index";
 }
-<link href="~/css/admin-sidebar.css" rel="stylesheet" />
 
-@{await Html.RenderPartialAsync("_AdminSidebar");}
+<!-- Bootstrap core CSS -->
+<link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+<!-- Material Design Bootstrap -->
+<link href="~/lib/mdb/css/mdb.min.css" rel="stylesheet" />
+<!-- Your custom styles (optional) -->
+<link href="~/css/admin-panel.css" rel="stylesheet" />
+<!-- MDBootstrap Datatables  -->
+<link href="~/lib/mdb/css/addons/datatables.min.css" rel="stylesheet" />
 
-<div id="Admin-Searchbar"></div>
-<div id="Main-Display"></div>
-
-
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script>
-    $(document).ready(function () {
-        var x = sessionStorage.getItem("display");
-        if (x != null) {
-            $(document).html(x);
-            //alert(x);
-
-            GetItems(sessionStorage.getItem("search"));
-            SetEventsForItems();
-
-            GetItemForDisplay(sessionStorage.getItem("lastType"), sessionStorage.getItem("lastID"));
-            SetEventForUredi();
+<div id="Admin-Container">
+    @{await Html.RenderPartialAsync("_AdminSidebar");}
+    <div id="Main-Display"></div>
+</div>
 
 
-            //sessionStorage.clear();
-        }
 
-        $("div.searchbar").on('click', function (e) {
-            $("#Main-Display").html("");
+<!-- SCRIPTS -->
+<!-- JQuery -->
+<script type="text/javascript" src="~/lib/jquery/dist/jquery.min.js"></script>
+<!-- Bootstrap tooltips -->
+<script type="text/javascript" src="~/lib/mdb/js/popper.min.js"></script>
+<!-- Bootstrap core JavaScript -->
+<script type="text/javascript" src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+<!-- MDB core JavaScript -->
+<script type="text/javascript" src="~/lib/mdb/js/mdb.min.js"></script>
+<!-- MDBootstrap Datatables  -->
+<script type="text/javascript" src="~/lib/mdb/js/addons/datatables.min.js"></script>
+<!-- DataTables Select CSS -->
+<link href="~/lib/mdb/css/addons/datatables-select.min.css" rel="stylesheet" />
+<!-- DataTables Select CSS -->
+<script type="text/javascript" src="~/lib/mdb/js/addons/datatables-select.min.js"></script>
 
-            GetItems(e.target.id);
-            sessionStorage.setItem("search", e.target.id);
-        });
 
-        function SetEventsForItems() {
-            var html = $(document);
-            $("div.info").on('click', function (e) {
-                
-                sessionStorage.setItem("display", html);
-                sessionStorage.setItem("lastType", e.target.getAttribute("for"));
-                sessionStorage.setItem("lastID", e.target.id);
-
-                GetItemForDisplay(e.target.getAttribute("for"), e.target.id);
-            });
-
-            $("div.dodaj").on('click', function (e) {
-                GetFormForAdd(e.target.getAttribute("for"));
-            });
-        }
-
-        function GetItems(type) {
-            $.get("../Searchbar/" + type, function (response) {
-                $("#Admin-Searchbar").html(response);
-
-                SetEventsForItems();
-            });
-        }
-
-        function GetFormForAdd(type) {
-            $.get("../Searchbar/_" + type + "FormaAdd", function (response) {
-                $("#Main-Display").html(response);
-
-            });
-        }
-
-        function GetItemForDisplay(type, id) {
-            $.get("../Searchbar/_" + type + "Info?id=" + id, function (response) {
-                $("#Main-Display").html(response);;
-
-                SetEventForUredi();
-            });
-        }
-
-        function SetEventForUredi() {
-            $("div.uredi").on('click', function (e) {
-                $.get("../Searchbar/Uredi" + e.target.getAttribute("for") + "?id=" + e.target.id, function (response) {
-                    $("#Main-Display").html(response);
-                });
-            })
-        }
-
-    })
-</script>
+<link href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" />
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="~/js/admin-panel.js"></script>
