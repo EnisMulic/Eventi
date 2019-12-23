@@ -1,0 +1,107 @@
+﻿
+@{
+    ViewData["Title"] = "OEventu";
+}
+
+@model Event_Attender.Web.Areas.ModulKorisnik.Models.EventKorisnikVM
+
+<style>
+
+    #manja, #veca {
+        width: 100%; /*100 % roditelja */
+    }
+    tr{
+        border:solid 5px white;
+    }
+    td {
+        width: 50%;
+    }
+
+    #prviTd {
+        /*background-color:#e7e7e7;*/
+        width: 50%;
+    }
+
+    #drugiTd {
+        /*background-color: #e7e7e7;*/
+        width: 50%;
+    }
+    #likeTd{
+        text-align:center;
+        background-color: #268c59 ;  /*#cf405a; */
+    }
+    #kupiKartuTd{
+        text-align:center;
+        background-color: #58ad67;    /*#4bc98a;    /* #b50543  */  /*#5a93b8*/
+    }
+    #likeTd:hover {
+        background-color:#ace6b7;                 /*#b7e8c0 sv zelena*/
+       
+    }
+    #kupiKartuTd:hover{
+         background-color:#ace6b7;     
+    }
+    a.tdLink{
+        color:white;
+    }
+    a.tdLink:hover{
+       text-decoration:none;
+       color:white;
+     
+    }
+   
+</style>
+<h5><strong> @Model.Naziv</strong></h5>
+<br/>
+<div id="oEventuId">
+    <table id="veca">
+        <tr>
+            <td id="prviTd">
+                <img alt="Event" />
+                @*@Model.Slika   Slika eventa*@
+            </td>
+            <td id="drugiTd">
+
+                <table id="manja">
+                    <tr>
+                        <td >
+                            <div id="likeTd">
+                                @if (Model.IsLikean == false)
+                                {
+                                    <a class="tdLink" href="/ModulKorisnik/Korisnik/LikeEvent?eId=@Model.EventId&korId=@Model.KorisnikId" ajax-poziv="like" ajax-rezultat="likeTd">Like</a>
+                                }
+                                else
+                                {
+                                    <a class="tdLink" href="/ModulKorisnik/Korisnik/DisLikeEvent?eId=@Model.EventId&korId=@Model.KorisnikId" ajax-poziv="dislike"
+                                       ajax-rezultat="likeTd">Dislike</a>
+                                }
+                            </div>
+                        </td>
+                        <td >
+                            <div id="kupiKartuTd">
+                                <a class="tdLink" href="#">Kupi kartu</a>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+               
+            </td>
+        </tr>
+       
+        <tr class="bg-light">
+
+            <td id="treciTd" colspan="2">
+
+                <p>Kategorija: @Model.Kategorija</p>
+                <p>Datum: @Model.DatumOdrzavanja u @Model.VrijemeOdrzavanja</p>
+                <p>Grad: @Model.ProstorOdrzavanjaGrad</p>
+                <p>Prostor odrzvanja: @Model.ProstorOdrzavanjaNaziv  - @Model.ProstorOdrzavanjaAdresa</p>
+                @if (@Model.Opis != null)
+                {
+                    <p>O eventu: @Model.Opis</p>
+                }
+            </td>
+        </tr>
+    </table>
+</div>
+
