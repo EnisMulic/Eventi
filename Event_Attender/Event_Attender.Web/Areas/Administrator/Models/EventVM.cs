@@ -12,8 +12,10 @@ namespace Event_Attender.Web.Areas.Administrator.Models
         public int Id { get; set; }
         public string Naziv { get; set; }
         public string Opis { get; set; }
+        
         [DisplayName("Datum održavanja")]
         public DateTime DatumOdrzavanja { get; set; }
+        
         [DisplayName("Vrijeme održavanja")]
         public string VrijemeOdrzavanja { get; set; }
         public Kategorija Kategorija { get; set; }
@@ -28,9 +30,10 @@ namespace Event_Attender.Web.Areas.Administrator.Models
 
         public int AdministratorId { get; set; }
 
-        [DisplayName("Naziv administratora")]
         public string AdministratorNaziv { get; set; }
+        public string AdministratorIme { get; set; }
 
+        public string AdministratorPrezime { get; set; }
         public int ProstorOdrzavanjaId { get; set; }
 
         [DisplayName("Prostor održavanja")]
