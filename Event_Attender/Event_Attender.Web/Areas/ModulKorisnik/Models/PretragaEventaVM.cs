@@ -11,7 +11,6 @@ namespace Event_Attender.Web.Areas.ModulKorisnik.Models
         public List<Rows> Eventi { get; set; }
          public int KorisnikId { get; set; } // ili u akciji getLogiraniUser ?
         
-       // bool IsLikean { get; set; }   // ?
         public class Rows
         {
             public int EventId { get; set; }
@@ -21,7 +20,7 @@ namespace Event_Attender.Web.Areas.ModulKorisnik.Models
             public string ProstorOdrzavanjaNaziv { get; set; }
             public string ProstorOdrzavanjaAdresa { get; set; }
             public string ProstorOdrzavanjaGrad { get; set; }
-            public string DatumOdrzavanja { get; set; }  // Date?
+            public string DatumOdrzavanja { get; set; }  
             public string VrijemeOdrzavanja { get; set; }
             public byte[] Slika { get; set; }
 
