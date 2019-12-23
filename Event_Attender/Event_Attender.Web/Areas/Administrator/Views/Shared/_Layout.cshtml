@@ -1,0 +1,82 @@
+﻿@using Event_Attender.Data.Models
+@using Event_Attender.Web.Helper
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Event Attender</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    @*<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">  ?*@
+</head>
+<body>
+    <header>
+        @*Svijetla verzija*@
+        @*<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container">
+                <a class="navbar-brand" asp-area="ModulKorisnik" asp-controller="Korisnik" asp-action="Index">Početna</a>
+                <ul class="nav navbar-nav navbar-right">
+                    <li> <a class="navbar-brand" asp-area="" asp-controller="Prijava" asp-action="LogOut">@logPodaci.Username</a></li>
+                    <li> <a class="navbar-brand" asp-area="" asp-controller="Prijava" asp-action="LogOut"> Odjava</a></li>
+                </ul>
+
+             </div>
+            </nav>*@
+
+        @*Tamna verzija*@
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm bg-dark box-shadow navbar-dark">
+                <div class="container">
+                    <a class="navbar-brand" asp-area="" asp-controller="" asp-action="Index">Početna</a>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li> <a class="navbar-brand" asp-area="" asp-controller="Prijava" asp-action="LogOut"> Odjava</a></li>
+                    </ul>
+                </div>
+            </nav>
+
+        @*Siva verzija*@
+        @*<nav class="navbar navbar-expand-sm navbar-toggleable-sm bg-secondary border-bottom box-shadow mb-3 navbar-dark">
+            <div class="container">
+                <a class="navbar-brand" asp-area="ModulKorisnik" asp-controller="Korisnik" asp-action="Index">Početna</a>
+                <ul class="nav navbar-nav navbar-right">
+                    <li> <a class="navbar-brand" asp-area="" asp-controller="Prijava" asp-action="LogOut">@logPodaci.Username</a></li>
+                    <li> <a class="navbar-brand" asp-area="" asp-controller="Prijava" asp-action="LogOut"> Odjava</a></li>
+                </ul>
+            </div>
+        </nav>*@
+
+    </header>
+    <main role="main">
+        @RenderBody()
+    </main>
+
+    @*Svijetla verzija
+        <footer class="border-top footer text-muted ">
+            <div class="container">
+                &copy; 2019 - Event Attender - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            </div>
+        </footer>*@
+    @*Tamna verzija*@
+    <footer class="footer text-muted bg-dark ">
+        <div class="container">
+            &copy; 2019 - Event Attender - <a style="color:white" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    @*Siva verzija*@
+    @*<footer class="border-top footer text-muted bg-secondary ">
+        <div class="container" style="color:white">
+            &copy; 2019 - Event Attender - <a style="color:white" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>*@
+
+    @*
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.11/jquery.validate.unobtrusive.min.js"></script>*@
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>
