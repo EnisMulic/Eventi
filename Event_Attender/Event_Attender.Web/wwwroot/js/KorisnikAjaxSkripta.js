@@ -18,15 +18,17 @@
         $.get(urlPoziv, function (data, status) {
             $("#likeTd").html(data);
         })
-    })
+    });
 }
 
 
 $(document).ready(function () {
     DodajAjaxEvente();
+    
 });
 $(document).ajaxComplete(function () {
     DodajAjaxEvente();
+  
 });
 
 

@@ -184,7 +184,7 @@ namespace Event_Attender.Web.Areas.ModulKorisnik.Controllers
             Event e = ctx.Event.Where(e => e.Id == eId).Include(e => e.ProstorOdrzavanja)
                 .Include(e => e.ProstorOdrzavanja.Grad).SingleOrDefault();
             Like like = ctx.Like.Where(l => l.EventId == e.Id && l.KorisnikId == k.Id).FirstOrDefault();
-            List<ProdajaTip> tipoviKarata = ctx.ProdajaTip.Where(p => p.EventId == e.Id).ToList();
+           // List<ProdajaTip> tipoviKarata = ctx.ProdajaTip.Where(p => p.EventId == e.Id).ToList();
             // provjera je li null
             EventKorisnikVM model = new EventKorisnikVM {
                 EventId = e.Id,
@@ -202,16 +202,7 @@ namespace Event_Attender.Web.Areas.ModulKorisnik.Controllers
                 KorisnikPrezime = k.Osoba.Prezime,
                 KorisnikAdresa = k.Adresa,
                 KorisnikBrojracun = k.BrojKreditneKartice,
-                TipoviProdaje = ctx.ProdajaTip.Where(p => p.EventId == e.Id)
-                .Select(t => new EventKorisnikVM.TipProdaje {
-                    ProdajaTipId = t.Id,
-                    TipKarte = t.TipKarte.ToString(),
-                    CijenaTip = t.CijenaTip,
-                    UkupnoKarataTip = t.UkupnoKarataTip,
-                    BrojProdatihKarataTip = t.BrojProdatihKarataTip,
-                    PostojeSjedista = t.PostojeSjedista,
-                    BrojPreostalihKarata = t.UkupnoKarataTip - t.BrojProdatihKarataTip
-                }).ToList()
+               
             };
             if (like != null)
                 model.IsLikean = true;
@@ -219,6 +210,147 @@ namespace Event_Attender.Web.Areas.ModulKorisnik.Controllers
                 model.IsLikean = false;
             return View(model);
           
+        }
+
+        public IActionResult KupiKartu(int eId, int kId)
+        {
+            if(kId<=0 || eId <= 0)
+            {
+                return PartialView("NemKupovina");
+            }
+            Korisnik k = ctx.Korisnik.Where(k => k.Id == kId).Include(k => k.Osoba).Include(k=>k.Osoba.Grad).SingleOrDefault();
+            Event e = ctx.Event.Where(e => e.Id == eId).SingleOrDefault();
+            if (k == null || e == null)
+                return PartialView("NemKupovina");
+              
+            //List<ProdajaTip> prodaja = ctx.ProdajaTip.Where(p => p.EventId == e.Id).ToList();
+            KupiKartuVM model = new KupiKartuVM
+            {
+                EventId = e.Id,
+                KorisnikId = k.Id,
+                KorisnikIme = k.Osoba.Ime,
+                KorisnikPrezime = k.Osoba.Prezime,
+                KorisnikGrad = k.Osoba.Grad.Naziv,
+                KorisnikAdresa = k.Adresa,
+                KorisnikBrojracun = k.BrojKreditneKartice,
+                TipoviProdaje = ctx.ProdajaTip.Where(p => p.EventId == e.Id)
+                .Select(p => new KupiKartuVM.TipProdaje {
+                    ProdajaTipId = p.Id,
+                    TipKarte = p.TipKarte.ToString(),
+                    UkupnoKarataTip = p.UkupnoKarataTip,
+                    BrojProdatihKarataTip = p.BrojProdatihKarataTip,
+                    CijenaTip = p.CijenaTip,
+                    PostojeSjedista = p.PostojeSjedista,
+                    BrojPreostalihKarata = p.UkupnoKarataTip - p.BrojProdatihKarataTip,
+                    IsRasprodano = (p.UkupnoKarataTip - p.BrojProdatihKarataTip) == 0 ? true : false
+                }).ToList()
+            };
+            return PartialView(model); 
+        }
+        public IActionResult KupovinaSnimi(KupiKartuVM model)
+        {
+            ProdajaTip pt = ctx.ProdajaTip.Where(p => p.Id == model.OdabraniTipProdajeId).SingleOrDefault();
+            Event ev = ctx.Event.Find(model.EventId);
+            Korisnik kor = ctx.Korisnik.Find(model.KorisnikId);
+            if(pt==null || ev==null|| kor==null|| model.KorisnikId==0 || model.EventId == 0)
+            {
+                return PartialView("NemKupovina");
+            }
+
+            // provjera da li ima toliko karata
+            int zeljeniBrojKarata = model.OdabranBrKarata;
+            if(zeljeniBrojKarata> (pt.UkupnoKarataTip - pt.BrojProdatihKarataTip))
+            {
+                TempData["error_Msg"] = "Nema toliko karata u ponudi, broj " +
+                    "preostalih karata je "+ (pt.UkupnoKarataTip - pt.BrojProdatihKarataTip);
+                return Redirect("/ModulKorisnik/Korisnik/KupiKartu?eId=" + model.EventId + "&kId=" + model.KorisnikId);
+            }
+            Kupovina k = ctx.Kupovina.Where(k => k.EventId == model.EventId && k.KorisnikId == model.KorisnikId).SingleOrDefault();
+            if (k == null)
+            {
+                k = new Kupovina {
+                    KorisnikId = model.KorisnikId,
+                    EventId = model.EventId
+                };
+                ctx.Kupovina.Add(k);
+                ctx.SaveChanges();
+
+                KupovinaTip kt = new KupovinaTip
+                {
+                    KupovinaId = k.Id,
+                    ProdajaTipId = pt.Id,
+                    TipKarte = pt.TipKarte,
+                    BrojKarata = zeljeniBrojKarata,
+                    Cijena = zeljeniBrojKarata * pt.CijenaTip
+                };
+                ctx.KupovinaTip.Add(kt);
+                ctx.SaveChanges();
+
+                for(int i = 0; i < zeljeniBrojKarata; i++)
+                {
+                    Karta karta = new Karta
+                    {
+                        KupovinaTipId = kt.Id,
+                        Cijena = pt.CijenaTip,
+                        Tip = kt.TipKarte
+                    };
+                    ctx.Karta.Add(karta); 
+                    pt.BrojProdatihKarataTip++;
+                    if (pt.PostojeSjedista == true)
+                    {
+                        Sjediste s = new Sjediste {
+                            Karta=karta,
+                            BrojSjedista = pt.BrojProdatihKarataTip
+                        };
+                        ctx.Sjediste.Add(s);
+                    }
+                   
+                }
+                ctx.SaveChanges();
+                return PartialView("UspjesnaKupovina",model);
+            }
+            KupovinaTip kupTip = ctx.KupovinaTip.Where(kt => kt.KupovinaId == k.Id && kt.TipKarte == pt.TipKarte).SingleOrDefault();
+            // trazi se da li postoji KupovinaTip, odnosno da li su vec kupovane karte tog tipa
+            if (kupTip == null)
+            {    // ne postoji
+                kupTip = new KupovinaTip
+                {
+                    KupovinaId = k.Id,
+                    ProdajaTipId = pt.Id,
+                    TipKarte = pt.TipKarte,
+                    BrojKarata = zeljeniBrojKarata,
+                    Cijena = zeljeniBrojKarata * pt.CijenaTip
+                };
+                ctx.KupovinaTip.Add(kupTip);
+                ctx.SaveChanges();  
+            }
+            else
+            {
+                kupTip.BrojKarata += zeljeniBrojKarata;
+                kupTip.Cijena += zeljeniBrojKarata * pt.CijenaTip;
+            }
+            for (int i = 0; i < zeljeniBrojKarata; i++)
+            {
+                Karta karta = new Karta
+                {
+                    KupovinaTipId = kupTip.Id,
+                    Cijena = pt.CijenaTip,
+                    Tip = kupTip.TipKarte
+                };
+                ctx.Karta.Add(karta);
+                pt.BrojProdatihKarataTip++;
+                if (pt.PostojeSjedista == true)
+                {
+                    Sjediste s = new Sjediste
+                    {
+                        Karta = karta,
+                        BrojSjedista = pt.BrojProdatihKarataTip
+                    };
+                    ctx.Sjediste.Add(s);
+                }
+            }
+            ctx.SaveChanges();
+            return PartialView("UspjesnaKupovina", model);
         }
     }
 }

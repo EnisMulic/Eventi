@@ -1,0 +1,23 @@
+﻿
+@{
+   
+}
+
+@model Event_Attender.Web.Areas.ModulKorisnik.Models.KupiKartuVM
+
+
+<div class="alert alert-success alert-dismissible">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    @if(@Model.KorisnikIme!=null && @Model.KorisnikPrezime!=null)
+    {
+    <p>Postovani, @Model.KorisnikIme @Model.KorisnikPrezime </p>
+    }
+    <p><strong>Uspjesno obavljena kupovina</strong></p>
+    <p>Kupljeno @Model.OdabranBrKarata karti/karata</p>
+    @if(@Model.KorisnikAdresa!=null && @Model.KorisnikGrad!=null)
+    {
+    <p>Karte ce biti dostavljene na adresu @Model.KorisnikAdresa, Grad @Model.KorisnikGrad</p>
+    }
+    <p>Hvala na povjerenju!</p>
+    <p>Kliknite na ime eventa kako bi se vratili nazad</p>
+</div>
