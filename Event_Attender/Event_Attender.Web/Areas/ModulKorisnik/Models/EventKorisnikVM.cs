@@ -27,17 +27,6 @@ namespace Event_Attender.Web.Areas.ModulKorisnik.Models
 
         public bool IsLikean { get; set; }
 
-        public List<TipProdaje> TipoviProdaje { get; set; }
-        public class TipProdaje
-        {
-            public int ProdajaTipId { get; set; }
-            public string TipKarte { get; set; }
-            public int UkupnoKarataTip { get; set; }
-            public int BrojProdatihKarataTip { get; set; }
-            public float CijenaTip { get; set; }
-            public bool PostojeSjedista { get; set; }
-            public int BrojPreostalihKarata { get; set; }
-        }
-
+       
     }
 }

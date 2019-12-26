@@ -10,9 +10,11 @@
     #manja, #veca {
         width: 100%; /*100 % roditelja */
     }
-    tr{
-        border:solid 5px white;
+
+    tr {
+        border: solid 5px white;
     }
+
     td {
         width: 50%;
     }
@@ -26,34 +28,44 @@
         /*background-color: #e7e7e7;*/
         width: 50%;
     }
-    #likeTd{
-        text-align:center;
-        background-color: #268c59 ;  /*#cf405a; */
+
+    #likeTd {
+        text-align: center;
+        background-color: #268c59; /*#cf405a; */
     }
-    #kupiKartuTd{
-        text-align:center;
-        background-color: #58ad67;    /*#4bc98a;    /* #b50543  */  /*#5a93b8*/
+
+    #kupiKartuTd {
+        text-align: center;
+        background-color: #58ad67; /*#4bc98a;    /* #b50543  */ /*#5a93b8*/
     }
+
     #likeTd:hover {
-        background-color:#ace6b7;                 /*#b7e8c0 sv zelena*/
-       
+        background-color: #ace6b7; /*#b7e8c0 sv zelena*/
     }
-    #kupiKartuTd:hover{
-         background-color:#ace6b7;     
+
+    #kupiKartuTd:hover {
+        background-color: #ace6b7;
     }
-    a.tdLink{
-        color:white;
+
+    a.tdLink {
+        color: white;
     }
-    a.tdLink:hover{
-       text-decoration:none;
-       color:white;
-     
-    }
-   
+
+        a.tdLink:hover {
+            text-decoration: none;
+            color: white;
+        }
+        #linkNaziv{
+            color:black;
+        }
+        #linkNaziv:hover{
+            color:forestgreen;
+            text-decoration:none;
+        }
 </style>
-<h5><strong> @Model.Naziv</strong></h5>
-<br/>
-<div id="oEventuId">
+<h5><strong> <a id="linkNaziv" href="/ModulKorisnik/Korisnik/OEventu?eId=@Model.EventId&korId=@Model.KorisnikId">@Model.Naziv</a></strong></h5>
+<br />
+<div id="ajaxDiv">
     <table id="veca">
         <tr>
             <td id="prviTd">
@@ -64,7 +76,7 @@
 
                 <table id="manja">
                     <tr>
-                        <td >
+                        <td>
                             <div id="likeTd">
                                 @if (Model.IsLikean == false)
                                 {
@@ -77,17 +89,17 @@
                                 }
                             </div>
                         </td>
-                        <td >
+                        <td>
                             <div id="kupiKartuTd">
-                                <a class="tdLink" href="#">Kupi kartu</a>
+                                <a class="tdLink" href="/ModulKorisnik/Korisnik/KupiKartu?eId=@Model.EventId&kId=@Model.KorisnikId" ajax-poziv="karta" ajax-rezultat="ajaxDiv">Kupi kartu</a>
                             </div>
                         </td>
                     </tr>
                 </table>
-               
+
             </td>
         </tr>
-       
+
         <tr class="bg-light">
 
             <td id="treciTd" colspan="2">
@@ -104,4 +116,22 @@
         </tr>
     </table>
 </div>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+<script src="~/js/KorisnikAjaxSkripta.js"></script>
+<script>
+    $(document).ready(
+        function () {
+            $("a[ajax-poziv='karta']").click(function (event) {
+                $(this).attr("ajax-poziv", "dodan");
+                event.preventDefault();
+                var urlPoziv = $(this).attr("href");
+                var divRezultat = $(this).attr("ajax-rezultat");
+                $.get(urlPoziv, function (data, status) {
+                    $("#ajaxDiv").html(data);
+                })
+            });
+        });
+</script>
 
