@@ -26,12 +26,12 @@
             <th>
                 @Html.DisplayNameFor(model => model.Kategorija)
             </th>
-            <th>
+            @*<th>
                 @Html.DisplayNameFor(model => model.IsOdobren)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.IsOtkazan)
-            </th>
+            </th>*@
             <th></th>
         </tr>
     </thead>
@@ -44,6 +44,18 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Naziv)
+                    @if (item.IsOdobren)
+                    {
+                        <span class="badge badge-success">Odobren</span>
+                    }
+                    else
+                    {
+                        <span class="badge badge-primary">Neodobren</span>
+                    }
+                    @if (item.IsOtkazan)
+                    {
+                        <span class="badge badge-danger">Otkazan</span>
+                    }
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.DatumOdrzavanja)
@@ -54,18 +66,19 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Kategorija)
                 </td>
-                <td>
+                @*<td>
                     @item.IsOdobren
                 </td>
                 <td>
                     @item.IsOtkazan
-                </td>
-                <td>
+                </td>*@
+                <td id="Action-Buttons">
                     <button class="btn btn-primary" id="@item.Id" for="Uredi">Uredi</button>
                     <button class="btn btn-info" id="@item.Id" for="Info">Detalji</button>
-                    <a class="btn btn-danger"
+                    <button class="btn btn-danger" id="@item.Id" for="Ukloni">Ukloni</button>
+                    @*<a class="btn btn-danger"
                        asp-area="Administrator" asp-controller="Home"
-                       asp-action="EventUkloni" asp-route-id="@item.Id">Ukloni</a>
+                       asp-action="EventUkloni" asp-route-id="@item.Id">Ukloni</a>*@
                 </td>
             </tr>
         }
