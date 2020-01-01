@@ -1,4 +1,18 @@
-﻿
+﻿html {
+    height: 100%;
+}
+
+body {
+    min-height: 100%;
+}
+
+main
+{
+    display: grid;
+    grid-template-columns: 100% 100%;
+    grid-template-areas: "Sidebar Main";
+}
+
 #Admin-Container 
 {
     display: flex;
@@ -6,9 +20,11 @@
 
 #Admin-Sidebar 
 {
-    padding: 20px;
+    padding: 50px 20px 170px 20px;
     color: white;
     font-size: 20px;
+    width: 20%;
+    grid-area: Sidebar;
 }
 
 
@@ -33,22 +49,22 @@ a:hover
     text-decoration: none;
 }
 
-#Admin-Sidebar
+button[for="Ukloni"], button[for="Uredi"], button[for="Info"]
 {
-  
-    width: 20%;
+    width: 33%;
 }
 
-#Admin-Searchbar tbody tr td:hover
+td#Action-Buttons 
 {
-    background: #808080;
-    text-decoration: none;
+    display: flex;
 }
+
 
 #Main-Display 
 {
     width: 80%;
     margin: 20px 50px 70px 50px;
+    grid-area: Main;
 }
 
 #Main-Display form
@@ -70,4 +86,8 @@ table.dataTable thead .sorting_desc_disabled:before {
     bottom: .5em;
 }
 
+footer
+{
+    position: initial;
+}
 
