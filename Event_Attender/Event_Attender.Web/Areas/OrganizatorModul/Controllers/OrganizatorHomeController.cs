@@ -7,6 +7,7 @@ using Event_Attender.Data.EF;
 using Event_Attender.Data.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Event_Attender.Web.Controllers
 {
@@ -19,6 +20,7 @@ namespace Event_Attender.Web.Controllers
         {
             ctx = context;
         }
+
         public IActionResult Index()
         {
             //using(var ctx= new MojContext())
@@ -42,42 +44,38 @@ namespace Event_Attender.Web.Controllers
                     ProstorOdrzavanjaNaziv = s.ProstorOdrzavanja.Naziv,
                     IsOdobren=s.IsOdobren,
                     IsOtkazan=s.IsOtkazan
-                    
-
-
-                }).Where(g => g.OrganizatorID == 1).ToList();
+                }).Where(g => g.OrganizatorID == 1 && g.DatumOdrzavanja > DateTime.Today).ToList();
 
                 ViewData["EventiOrganizatora"] = eventi;
-                ViewData["ProstoriOdrzavanja"] = prostoriOdrzavanja;
+                ViewData["ProstoriOdrzavanja"] = ctx.ProstorOdrzavanja.Select(s => new SelectListItem
+                {
+                    Value = s.Id.ToString(),
+                    Text = s.Naziv
+                }).ToList(); ;
                 return View();
             //}
         }
 
-        public IActionResult SnimiEvent(
-            string _nazivEventa,
-            string _opisEventa,
-            string _datumEventa,
-            string _vrijemeEventa,
-            string _optradio,
-            string _optcombo
-            )
+        public IActionResult SnimiEvent(SnimiEventVM data)
         {
-            int optRadio = Int32.Parse(_optradio);
-            int optCombo = Int32.Parse(_optcombo);
-            Event e = new Event();
-            e.Naziv = _nazivEventa;
-            e.Opis = _opisEventa;
-            e.DatumOdrzavanja = DateTime.ParseExact(_datumEventa, "yyyy-MM-dd", null);
-            e.VrijemeOdrzavanja = _vrijemeEventa;
-            e.Kategorija = (Kategorija)(optRadio);
-            e.ProstorOdrzavanjaId = optCombo;
-            e.IsOdobren = false;
-            e.IsOtkazan = false;
-            e.OrganizatorId = 1;
+            int optRadio = Int32.Parse(data._optradio);
+            int optCombo = Int32.Parse(data._optcombo);
+            Event e = new Event
+            {
+                Naziv = data._nazivEventa,
+                Opis = data._opisEventa,
+                DatumOdrzavanja = DateTime.ParseExact(data._datumEventa, "yyyy-MM-dd", null),
+                VrijemeOdrzavanja = data._vrijemeEventa,
+                Kategorija = (Kategorija)(optRadio),
+                ProstorOdrzavanjaId = optCombo,
+                IsOdobren = false,
+                IsOtkazan = false,
+                OrganizatorId = 1
+            };
 
             //using (MojContext ctx=new MojContext())
             //{
-                ctx.Event.Add(e);
+            ctx.Event.Add(e);
                 ctx.SaveChanges();
           //  }
             return Redirect("Index");
@@ -110,6 +108,22 @@ namespace Event_Attender.Web.Controllers
                 return View("EventInfo");
                 
            // }
+        }
+
+        public IActionResult OtkaziEvent(int EventID)
+        {
+            var query =
+                from ev in ctx.Event
+                where ev.Id == EventID
+                select ev;
+            foreach(var _event in query)
+            {
+                _event.IsOtkazan = true;
+            }
+
+            ctx.SaveChanges();
+            
+            return Redirect("Index");
         }
             
     }
