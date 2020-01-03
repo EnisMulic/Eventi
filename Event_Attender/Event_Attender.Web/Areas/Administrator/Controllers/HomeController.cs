@@ -5,12 +5,14 @@ using System.Threading.Tasks;
 using Event_Attender.Data.EF;
 using Event_Attender.Data.Models;
 using Event_Attender.Web.Areas.Administrator.Models;
+using Event_Attender.Web.Helper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace Event_Attender.Web.Areas.Administrator.Controllers
 {
+    [Autorizacija(korisnik: false, organizator: false, administrator: true, radnik: false)]
     [Area("Administrator")]
     public class HomeController : Controller
     {
@@ -22,7 +24,31 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
         }
         public IActionResult Index()
         {
-            return View();
+            LogPodaci user = HttpContext.GetLogiraniUser();
+            AdministratorVM model = new AdministratorVM();
+            if (user != null)
+            {
+                model = ctx.Administrator
+                    .Include(i => i.Osoba)
+                    .Where(i => i.Osoba.LogPodaciId == user.Id)
+                    .Select
+                    (
+                        i => new AdministratorVM
+                        {
+                            Id       = i.Id,
+                            Ime      = i.Osoba.Ime,
+                            Prezime  = i.Osoba.Prezime,
+                            Email    = i.Osoba.LogPodaci.Email,
+                            Username = i.Osoba.LogPodaci.Username,
+                            Password = i.Osoba.LogPodaci.Password,
+                            Telefon  = i.Osoba.Telefon,
+                            Grad     = i.Osoba.Grad.Naziv
+                        }
+                    )
+                    .SingleOrDefault();
+                
+            }
+            return View(model);
         }
 
         public IActionResult _AdminSidebar()
@@ -256,10 +282,10 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
                 (
                     i => new SponzorVM
                     {
-                        Id = i.Id,
-                        Naziv = i.Naziv,
+                        Id      = i.Id,
+                        Naziv   = i.Naziv,
                         Telefon = i.Telefon,
-                        Email = i.Email
+                        Email   = i.Email
                     }
                 )
                 .ToList();
@@ -287,10 +313,10 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
                 (
                     i => new SponzorVM
                     {
-                        Id = i.Id,
-                        Naziv = i.Naziv,
+                        Id      = i.Id,
+                        Naziv   = i.Naziv,
                         Telefon = i.Telefon,
-                        Email = i.Email
+                        Email   = i.Email
                     }
                 )
                 .Where(i => i.Id == Id)
@@ -306,10 +332,10 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
                 (
                     i => new SponzorVM
                     {
-                        Id = i.Id,
-                        Naziv = i.Naziv,
+                        Id      = i.Id,
+                        Naziv   = i.Naziv,
                         Telefon = i.Telefon,
-                        Email = i.Email
+                        Email   = i.Email
                     }
                 )
                 .Where(i => i.Id == Id)
@@ -401,16 +427,16 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
                 (
                     i => new KorisnikVM
                     {
-                        Id = i.Id,
-                        Ime = i.Osoba.Ime,
-                        Prezime = i.Osoba.Prezime,
-                        Telefon = i.Osoba.Telefon,
-                        GradId = i.Osoba.Grad.Id,
+                        Id        = i.Id,
+                        Ime       = i.Osoba.Ime,
+                        Prezime   = i.Osoba.Prezime,
+                        Telefon   = i.Osoba.Telefon,
+                        GradId    = i.Osoba.Grad.Id,
                         GradNaziv = i.Osoba.Grad.Naziv,
-                        Username = i.Osoba.LogPodaci.Username,
-                        Email = i.Osoba.LogPodaci.Email,
-                        Password = i.Osoba.LogPodaci.Password,
-                        Adresa = i.Adresa
+                        Username  = i.Osoba.LogPodaci.Username,
+                        Email     = i.Osoba.LogPodaci.Email,
+                        Password  = i.Osoba.LogPodaci.Password,
+                        Adresa    = i.Adresa
                     }
                 )
                 .Where(i => i.Id == Id)

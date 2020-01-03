@@ -7,6 +7,7 @@
             SetActionsInfo(e.target.id);
             SetActionsUredi(e.target.id);
             SetActionDodaj(e.target.id);
+            SetActionUkloni(e.target.id, response);
         });
     });
 
@@ -36,6 +37,14 @@
         $("button[for=\"Dodaj\"]").on('click', function (e) {
             $.get("../Home/" + type + "Dodaj", function (response) {
                 $("#Main-Display").html(response);
+            });
+        });
+    }
+
+    function SetActionUkloni(type) {
+        $("button[for=\"Ukloni\"]").on('click', function (e) {
+            $.get("../Home/" + type + "Ukloni?id=" + e.target.id, function () {
+                $("#Main-Display").html("");  
             });
         });
     }

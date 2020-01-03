@@ -48,12 +48,13 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.GradNaziv)
                 </td>
-                <td>
+                <td id="Action-Buttons">
                     <button class="btn btn-primary" id="@item.Id" for="Uredi">Uredi</button>
                     <button class="btn btn-info" id="@item.Id" for="Info">Detalji</button>
-                    <a class="btn btn-danger"
+                    <button class="btn btn-danger" id="@item.Id" for="Ukloni">Ukloni</button>
+                    @*<a class="btn btn-danger"
                        asp-area="Administrator" asp-controller="Home"
-                       asp-action="ProstorUkloni" asp-route-id="@item.Id">Ukloni</a>
+                       asp-action="ProstorUkloni" asp-route-id="@item.Id">Ukloni</a>*@
                 </td>
             </tr>
         }
