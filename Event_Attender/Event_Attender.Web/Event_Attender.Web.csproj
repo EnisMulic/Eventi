@@ -24,6 +24,7 @@
     <Folder Include="Areas\ModulKorisnik\Data\" />
     <Folder Include="Areas\OrganizatorModul\Data\" />
     <Folder Include="Views\Organizator\" />
+    <Folder Include="wwwroot\images\items\" />
   </ItemGroup>
 
 </Project>

@@ -10,6 +10,7 @@ namespace Event_Attender.Web.ViewModels
         public int Id { get; set; }
         public string Naziv { get; set; }
         public string Opis { get; set; }
+        public string Slika { get; set; }
         public DateTime DatumOdrzavanja { get; set; }
         public string VrijemeOdrzavanja { get; set; }
         public Kategorija Kategorija { get; set; }
