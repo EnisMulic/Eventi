@@ -2,8 +2,11 @@
 
 @{
     Layout = null;
-    var eventInfo = (OrganizatorEventVM)ViewData["eventInfo"];
+    var eventInfo = (OrganizatorEventVM) ViewData["eventInfo"];
+    var prodajaTipInfo = (List<OrganizatorProdajaTipVM>) ViewData["_prodajaTipInfo"];
 }
+
+@model SnimiProdajaTipVM
 
 <!DOCTYPE html>
 <html lang="en">
@@ -26,44 +29,125 @@
         </div>
 
         <div class="row">
-            <div class="col-lg-12">
-                <h2>Detaljne informacije o eventu <b>@eventInfo.Naziv</b></h2>
+            <div class="col-lg-6">
+                <div>
+                    <h3>Detaljne informacije o eventu <b>@eventInfo.Naziv</b></h3>
+                </div>
+                <div>
+                    <img class="img-responsive" src="@Url.Content("~/images/items/" + eventInfo.Slika)" alt="">
+                </div>
+                <div>
+                    <h4>Naziv : @eventInfo.Naziv</h4>
+                </div>
+                <div>
+                    <h4>Kategorija : @eventInfo.Kategorija.ToString()</h4>
+                </div>
+                <div>
+                    <h4>Opis eventa : @eventInfo.Opis</h4>
+                </div>
+                <div>
+                    <h4>Mjesto odrzavanja : @eventInfo.ProstorOdrzavanjaNaziv</h4>
+                </div>
+                <div>
+                    <h4>Datum odrzavanja :  @eventInfo.DatumOdrzavanja.ToShortDateString()</h4>
+                </div>
+                <div>
+                    <h4>Vrijeme odrzavanja : @eventInfo.VrijemeOdrzavanja</h4>
+                </div>
+                <div>
+                    @if (eventInfo.IsOdobren)
+                    {<h4>Odobren : Da</h4> }
+                    else
+                    { <h4>Odobren : Ne</h4>}
+                </div>
+                <div>
+                    @if (eventInfo.IsOtkazan)
+                    {<h4>Otkazan : Da</h4> }
+                    else
+                    { <h4>Otkazan : Ne</h4>}
+                </div>
             </div>
-            <div class="colo-lg-12">
-                <img class="img-responsive" src="@Url.Content("~/images/items/" + eventInfo.Slika)" alt="">
-            </div>
-            <div class="col-lg-12">
-                <h4>Naziv : @eventInfo.Naziv</h4>
-            </div>
-            <div class="col-lg-12">
-                <h4>Kategorija : @eventInfo.Kategorija.ToString()</h4>
-            </div>
-            <div class="col-lg-12">
-                <h4>Opis eventa : @eventInfo.Opis</h4>
-            </div>
-            <div class="col-lg-12">
-                <h4>Mjesto odrzavanja : @eventInfo.ProstorOdrzavanjaNaziv</h4>
-            </div>
-            <div class="col-lg-12">
-                <h4>Datum odrzavanja :  @eventInfo.DatumOdrzavanja.ToShortDateString()</h4>
-            </div>
-            <div class="col-lg-12">
-                <h4>Vrijeme odrzavanja : @eventInfo.VrijemeOdrzavanja</h4>
-            </div>
-            <div class="col-lg-12">
-                @if (eventInfo.IsOdobren)
-                {<h4>Odobren : Da</h4> }
-                else
-                { <h4>Odobren : Ne</h4>}
-            </div>
-            <div class="col-lg-12">
-                @if (eventInfo.IsOtkazan)
-                {<h4>Otkazan : Da</h4> }
-                else
-                { <h4>Otkazan : Ne</h4>}
+            <div class="col-lg-6">
+                <form asp-action="SnimiProdajaTip" method="post">
+
+                    <input hidden asp-for="_eventID" value="@eventInfo.Id" />
+
+                    <label for="tipKarteCmb">Tip karte : </label>
+                    <select required id="tipKarteCmb" asp-for="_tipKarteCombo">
+                        <option value="" disabled selected>odaberite tip</option>
+                        <option value="0">VIP</option>
+                        <option value="1">Parter</option>
+                        <option value="2">Tribina</option>
+                        <option value="3">Obicna</option>
+                    </select>
+
+
+                    <div class="form-group">
+                        <label for="cijenaTip">Cijena karte : </label>
+                        <input required type="number" class="form-control" id="cijenaTip" asp-for="_cijenaTip">
+                    </div>
+
+                    <label>Postoje sjedista :</label>
+
+                    <div class="radio">
+                        <label><input required type="radio" asp-for="_postojeSjedista" value="1">Da</label>
+                    </div>
+
+                    <div class="radio">
+                        <label><input required type="radio" asp-for="_postojeSjedista" value="0">Ne</label>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ukupnoKarata">Broj karata za izdavanje :</label>
+                        <input required type="number" class="form-control" id="ukupnoKarata" asp-for="_ukupnoKarataTip">
+                    </div>
+
+
+                    <br />
+                    <button type="submit" class="btn btn-default">Submit</button>
+                </form>
             </div>
         </div>
 
+        <div class="row">
+            <div class="col-lg-6">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Tip Karte</th>
+                            <th scope="col">Ukupno karata u prodaji</th>
+                            <th scope="col">Broj prodatih karata</th>
+                            <th scope="col">Cijena karte</th>
+                            <th scope="col">Postoje sjedista</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @foreach (var i in prodajaTipInfo)
+                        {
+
+                            <tr class="danger">
+                                <td>@i._tipKarte</td>
+                                <td>@i._ukupnoKarataTip</td>
+                                <td>@i._brojProdatihKarataTip</td>
+                                <td>@i._cijenaTip</td>
+                                @if(i._postojeSjedista == "True")
+                                {
+                                <td>DA</td>
+                                }
+                                else
+                                {
+                                <td>NE</td>
+                                }
+                            </tr>
+
+
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
     </div>
 
