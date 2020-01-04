@@ -59,6 +59,37 @@ namespace Event_Attender.Web.Controllers
             //}
         }
 
+        public IActionResult SnimiProdajaTip(SnimiProdajaTipVM data)
+        {
+            var provjeraTip = ctx.ProdajaTip.Where(p => p.EventId == data._eventID).ToList();
+            int optCombo = Int32.Parse(data._tipKarteCombo);
+            bool prolaz = true;
+            foreach(var _tip in provjeraTip)
+            {
+                if (_tip.TipKarte == (TipKarte)optCombo)
+                    prolaz = false;
+            }
+
+            if (prolaz)
+            {
+                int optRadio = data._postojeSjedista;
+                ProdajaTip p = new ProdajaTip
+                {
+                    TipKarte = (TipKarte)optCombo,
+                    UkupnoKarataTip = data._ukupnoKarataTip,
+                    PostojeSjedista = optRadio != 0,
+                    CijenaTip = data._cijenaTip,
+                    BrojProdatihKarataTip=0,
+                    EventId = data._eventID,
+                };
+
+                ctx.ProdajaTip.Add(p);
+                ctx.SaveChanges();
+            }
+
+            return Redirect("EventInfoPrikaz?EventID=" + data._eventID.ToString());
+        }
+
         public async Task<IActionResult> SnimiEvent(SnimiEventVM data,IFormFile slika)
         {
             if (slika != null && slika.Length > 0)
@@ -105,6 +136,8 @@ namespace Event_Attender.Web.Controllers
                     .Include(e => e.Organizator)
                     .Include(e => e.ProstorOdrzavanja)
                     .FirstOrDefault();
+
+
                 
                 var eventInfo = new OrganizatorEventVM {
                    Id=e.Id,
@@ -121,6 +154,20 @@ namespace Event_Attender.Web.Controllers
                    ProstorOdrzavanjaNaziv=e.ProstorOdrzavanja.Naziv
                };
 
+            List<OrganizatorProdajaTipVM> prodajaTipInfo = new List<OrganizatorProdajaTipVM>();
+             prodajaTipInfo = ctx.ProdajaTip.Select(p => new OrganizatorProdajaTipVM
+            {
+                _tipKarte = p.TipKarte,
+                _ukupnoKarataTip = p.UkupnoKarataTip.ToString(),
+                _cijenaTip = p.CijenaTip.ToString(),
+                _postojeSjedista = p.PostojeSjedista.ToString(),
+                _brojProdatihKarataTip = p.BrojProdatihKarataTip.ToString(),
+                _eventID = p.EventId
+
+            }).Where(e => e._eventID == EventID).ToList();
+
+
+                ViewData["_prodajaTipInfo"] = prodajaTipInfo;
                 ViewData["eventInfo"] = eventInfo;
                 return View("EventInfo");
                 
