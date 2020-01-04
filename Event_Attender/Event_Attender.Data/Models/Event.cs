@@ -17,7 +17,7 @@ namespace Event_Attender.Data.Models
         public bool IsOdobren { get; set; }
         public bool IsOtkazan { get; set; }
         
-        public byte[] Slika { get; set; }
+        public string Slika { get; set; }
 
         public int OrganizatorId { get; set; }
         public Organizator Organizator { get; set; }

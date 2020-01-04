@@ -31,7 +31,7 @@
         </div>
         <div class="row">
             <div class="col-lg-4">
-                <form asp-action="SnimiEvent"  method="post">
+                <form asp-action="SnimiEvent" method="post" enctype="multipart/form-data">
 
                     <div class="form-group">
                         <label for="nazivEventa">Naziv eventa</label>
@@ -44,6 +44,11 @@
                     </div>
 
                     <div class="form-group">
+                        <input name="slika" type="file" class="form-control" />
+                    </div>
+
+
+                    <div class="form-group">
                         <label for="datumEventa">Datum odrzavanja</label>
                         <input required type="date" class="form-control" id="datumEventa" asp-for="_datumEventa">
                     </div>
@@ -54,7 +59,7 @@
                     </div>
 
                     <label>Kategorija eventa</label>
-                    <div  class="radio">
+                    <div class="radio">
                         <label><input required type="radio" asp-for="_optradio" value="0">Muzika</label>
                     </div>
                     <div class="radio">

@@ -44,7 +44,7 @@ namespace Event_Attender.Web.Areas.ModulGuest.Controllers
                         ProstorOdrzavanjaGrad = e.ProstorOdrzavanja.Grad.Naziv,
                         DatumOdrzavanja = e.DatumOdrzavanja.Day.ToString() + "." + e.DatumOdrzavanja.Month.ToString() + "." + e.DatumOdrzavanja.Year.ToString(),
                         VrijemeOdrzavanja = e.VrijemeOdrzavanja,
-                        Slika = e.Slika
+                       // Slika = e.Slika
                     }).ToList();
             }
           //  ctx.Dispose();
@@ -68,7 +68,7 @@ namespace Event_Attender.Web.Areas.ModulGuest.Controllers
                        ProstorOdrzavanjaGrad = e.ProstorOdrzavanja.Grad.Naziv,
                        DatumOdrzavanja = e.DatumOdrzavanja.Day.ToString() + "." + e.DatumOdrzavanja.Month.ToString() + "." + e.DatumOdrzavanja.Year.ToString(),
                        VrijemeOdrzavanja = e.VrijemeOdrzavanja,
-                       Slika = e.Slika
+                      // Slika = e.Slika
                    }).ToList();
             }
           //  ctx.Dispose();

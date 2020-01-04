@@ -8,6 +8,8 @@ using Event_Attender.Data.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.IO;
+using Microsoft.AspNetCore.Http;
 
 namespace Event_Attender.Web.Controllers
 {
@@ -37,6 +39,7 @@ namespace Event_Attender.Web.Controllers
                     OrganizatorID = s.OrganizatorId,
                     Naziv = s.Naziv,
                     Opis = s.Opis,
+                    Slika=s.Slika,
                     DatumOdrzavanja = s.DatumOdrzavanja,
                     VrijemeOdrzavanja = s.VrijemeOdrzavanja,
                     Kategorija = s.Kategorija,
@@ -56,28 +59,41 @@ namespace Event_Attender.Web.Controllers
             //}
         }
 
-        public IActionResult SnimiEvent(SnimiEventVM data)
+        public async Task<IActionResult> SnimiEvent(SnimiEventVM data,IFormFile slika)
         {
-            int optRadio = Int32.Parse(data._optradio);
-            int optCombo = Int32.Parse(data._optcombo);
-            Event e = new Event
+            if (slika != null && slika.Length > 0)
             {
-                Naziv = data._nazivEventa,
-                Opis = data._opisEventa,
-                DatumOdrzavanja = DateTime.ParseExact(data._datumEventa, "yyyy-MM-dd", null),
-                VrijemeOdrzavanja = data._vrijemeEventa,
-                Kategorija = (Kategorija)(optRadio),
-                ProstorOdrzavanjaId = optCombo,
-                IsOdobren = false,
-                IsOtkazan = false,
-                OrganizatorId = 1
-            };
+                var nazivFajla = Path.GetFileName(slika.FileName);
+                var putanja = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images\\items", nazivFajla);
+                using(var fajlSteam = new FileStream(putanja,FileMode.Create))
+                {
+                    await slika.CopyToAsync(fajlSteam);
+                }
 
-            //using (MojContext ctx=new MojContext())
-            //{
-            ctx.Event.Add(e);
-                ctx.SaveChanges();
-          //  }
+                data._slika = nazivFajla;
+
+                int optRadio = Int32.Parse(data._optradio);
+                int optCombo = Int32.Parse(data._optcombo);
+                Event e = new Event
+                {
+                    Naziv = data._nazivEventa,
+                    Opis = data._opisEventa,
+                    Slika = data._slika,
+                    DatumOdrzavanja = DateTime.ParseExact(data._datumEventa, "yyyy-MM-dd", null),
+                    VrijemeOdrzavanja = data._vrijemeEventa,
+                    Kategorija = (Kategorija)(optRadio),
+                    ProstorOdrzavanjaId = optCombo,
+                    IsOdobren = false,
+                    IsOtkazan = false,
+                    OrganizatorId = 1
+                };
+
+                //using (MojContext ctx=new MojContext())
+                //{
+                ctx.Event.Add(e);
+                await ctx.SaveChangesAsync();
+                //  }
+            }
             return Redirect("Index");
         }
 
@@ -93,6 +109,7 @@ namespace Event_Attender.Web.Controllers
                 var eventInfo = new OrganizatorEventVM {
                    Id=e.Id,
                    Naziv=e.Naziv,
+                   Slika=e.Slika,
                    Opis=e.Opis,
                    DatumOdrzavanja=new DateTime(e.DatumOdrzavanja.Year,e.DatumOdrzavanja.Month,e.DatumOdrzavanja.Day),
                    VrijemeOdrzavanja=e.VrijemeOdrzavanja,
