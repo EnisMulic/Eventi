@@ -25,6 +25,7 @@
     <Folder Include="Areas\OrganizatorModul\Data\" />
     <Folder Include="Views\Organizator\" />
     <Folder Include="wwwroot\images\items\" />
+    <Folder Include="wwwroot\images\korisnicke\" />
   </ItemGroup>
 
 </Project>

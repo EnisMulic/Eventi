@@ -46,8 +46,8 @@ namespace Event_Attender.Web.Areas.ModulGuest.Models
         public string Email { get; set; }
 
         [Required(ErrorMessage = "Obavezno polje")]
-        [Remote(action:"VerifyUserName", controller:"Guest", areaName:"ModulGuest", ErrorMessage ="Ovaj username je vec u upotrebi")]  // probati
-        public string Username { get; set; }  //? da li korisnik unosi ili formirati od Id korisnika pa samo prikazati korisniku
+        [Remote(action:"VerifyUserName", controller:"Guest", areaName:"ModulGuest", ErrorMessage ="Ovaj username je vec u upotrebi")]  
+        public string Username { get; set; }  
 
         [Required(ErrorMessage = "Obavezno polje")]
         [MinLength(8, ErrorMessage = "Minimalno 8 znakova")]
@@ -55,7 +55,6 @@ namespace Event_Attender.Web.Areas.ModulGuest.Models
         public string Password { get; set; }
           
         [Required(ErrorMessage = "Obavezno polje")]     
-       // [CreditCard(ErrorMessage ="format kreditne kartice")]//problem
        [RegularExpression(@"[0-9]{14,19}", ErrorMessage="Neispravan format kartice")]
         public string BrojKreditneKartice{ get; set; }
 
