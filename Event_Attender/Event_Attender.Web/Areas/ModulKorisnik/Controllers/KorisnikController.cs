@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Event_Attender.Data.EF;
 using Event_Attender.Data.Models;
 using Event_Attender.Web.Areas.ModulKorisnik.Models;
 using Event_Attender.Web.Helper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace Event_Attender.Web.Areas.ModulKorisnik.Controllers
@@ -23,14 +26,8 @@ namespace Event_Attender.Web.Areas.ModulKorisnik.Controllers
         }
         public IActionResult Index(string filter)
         {   
-         
-
-            //// v1
-            //int logPodaciId = HttpContext.GetLogiraniUser();
-            //Korisnik k = ctx.Korisnik.Where(k => k.Osoba.LogPodaciId == logPodaciId).Include(k => k.Osoba).SingleOrDefault();
-            //ViewData["k"] = k;
-              PretragaEventaVM model = new PretragaEventaVM();
-            // v2
+            PretragaEventaVM model = new PretragaEventaVM();
+           
             LogPodaci l = HttpContext.GetLogiraniUser();
             if (l != null)
             {
@@ -69,7 +66,7 @@ namespace Event_Attender.Web.Areas.ModulKorisnik.Controllers
         {
             DateTime date = DateTime.Now;
           
-            List<PretragaEventaVM.Rows> lista= ctx.Event/*.Include(e => e.ProstorOdrzavanja).Include(e => e.ProstorOdrzavanja.Grad)*/
+            List<PretragaEventaVM.Rows> lista= ctx.Event
                 .Where(e => e.IsOdobren == true).Where(e => e.IsOtkazan == false).Where(e => e.DatumOdrzavanja.CompareTo(date) == 1)
                 .Select(e => new PretragaEventaVM.Rows
                 {
@@ -90,7 +87,7 @@ namespace Event_Attender.Web.Areas.ModulKorisnik.Controllers
         {
             DateTime date = DateTime.Now;
          
-            List<PretragaEventaVM.Rows> lista = ctx.Event/*.Include(e => e.ProstorOdrzavanja).Include(e => e.ProstorOdrzavanja.Grad)*/
+            List<PretragaEventaVM.Rows> lista = ctx.Event
             .Where(e => e.Kategorija == k).Where(e => e.IsOdobren == true).Where(e => e.IsOtkazan == false).Where(e => e.DatumOdrzavanja.CompareTo(date) == 1)
             .Select(e => new PretragaEventaVM.Rows
             {
@@ -184,7 +181,7 @@ namespace Event_Attender.Web.Areas.ModulKorisnik.Controllers
             Event e = ctx.Event.Where(e => e.Id == eId).Include(e => e.ProstorOdrzavanja)
                 .Include(e => e.ProstorOdrzavanja.Grad).SingleOrDefault();
             Like like = ctx.Like.Where(l => l.EventId == e.Id && l.KorisnikId == k.Id).FirstOrDefault();
-           // List<ProdajaTip> tipoviKarata = ctx.ProdajaTip.Where(p => p.EventId == e.Id).ToList();
+           
             // provjera je li null
             EventKorisnikVM model = new EventKorisnikVM {
                 EventId = e.Id,
@@ -352,6 +349,96 @@ namespace Event_Attender.Web.Areas.ModulKorisnik.Controllers
             ctx.SaveChanges();
             return PartialView("UspjesnaKupovina", model);
         }
+
+        public IActionResult UserPodaci(int drzavaId)
+        {
+            LogPodaci l = HttpContext.GetLogiraniUser();
+            if (l == null)
+            {
+                return Redirect("Index");   // filter null
+            }
+            Korisnik kor = ctx.Korisnik.Where(k => k.Osoba.LogPodaciId == l.Id).Include(k => k.Osoba)
+                .Include(k => k.Osoba.Grad).Include(k=>k.Osoba.LogPodaci)
+                .Include(k => k.Osoba.Grad.Drzava).SingleOrDefault();
+            if (kor == null)
+            {
+                return Redirect("Index");   // filter null
+            }
+            KorisnikPodaciVM model = new KorisnikPodaciVM
+            {
+                Id = kor.Id,
+                Adresa = kor.Adresa,
+                BrojKreditneKartice = kor.BrojKreditneKartice,
+                Email = kor.Osoba.LogPodaci.Email,
+                gradId = kor.Osoba.GradId??0,
+                Ime = kor.Osoba.Ime,
+                PostanskiBroj = kor.PostanskiBroj,
+                Prezime = kor.Osoba.Prezime,
+                Telefon = kor.Osoba.Telefon,
+                DrzavaId=kor.Osoba.Grad.Drzava.Id,
+                Slika=kor.Slika
+            };
+            model.drzave = ctx.Drzava.Select(d=>new SelectListItem { 
+                  Text=d.Naziv,
+                   Value=d.Id.ToString()
+            }).ToList();
+            //if (drzavaId != 0)    // u slucaju ajax poziva na select
+            //{
+            //    model.gradovi = ctx.Grad.Where(g=>g.DrzavaId==drzavaId).ToList();
+            //}
+            //else
+            //{
+            //    model.gradovi = ctx.Grad.Where(g => g.DrzavaId == model.DrzavaId).ToList();
+            //    // ako je drzava 0, onda pripadajuci gradovi vec odabrane drzave
+            //}
+            model.gradovi = ctx.Grad.ToList();
+            return View(model);     // PartialView(model);
+        }
+
+        public async Task<IActionResult> SnimiPodatkeAsync(KorisnikPodaciVM model,int drzavaId,int gradId, IFormFile slika)
+        {
+            if (slika != null && slika.Length > 0)
+            {
+                var nazivSlike = Path.GetFileName(slika.FileName);
+                var putanja = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images\\korisnicke", nazivSlike);
+                using (var fajlSteam = new FileStream(putanja, FileMode.Create))
+                {
+                    await slika.CopyToAsync(fajlSteam);
+                }
+
+                model.Slika = nazivSlike;
+               
+            }
+
+                Korisnik kor = ctx.Korisnik.Where(k => k.Id == model.Id).Include(k => k.Osoba)
+                    .Include(k => k.Osoba.Grad).Include(k => k.Osoba.LogPodaci)
+                    .Include(k => k.Osoba.Grad.Drzava).SingleOrDefault();
+                if (kor == null)
+                {
+                    return Redirect("Index");   // filter null
+                }
+                kor.Osoba.Ime = model.Ime;
+                kor.Osoba.Prezime = model.Prezime;
+                kor.Osoba.Telefon = model.Telefon;
+                kor.Osoba.GradId = model.gradId;
+                kor.Osoba.Grad.DrzavaId=drzavaId;
+                kor.Osoba.LogPodaci.Email = model.Email;
+                kor.PostanskiBroj = model.PostanskiBroj;
+                kor.Adresa = model.Adresa;
+                kor.BrojKreditneKartice = model.BrojKreditneKartice;
+                kor.Slika = model.Slika;
+
+               
+                await ctx.SaveChangesAsync();
+            
+            return Redirect("UserPodaci");
+        }
+       
+        //public IActionResult UserPodaci2  // u sliucaju ajax-a na select
+        //{
+        //    return View();
+        //}
+
     }
 }
 

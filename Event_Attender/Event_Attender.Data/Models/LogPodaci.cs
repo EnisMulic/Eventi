@@ -9,7 +9,7 @@ namespace Event_Attender.Data.Models
         public int Id { get; set; }
         public string Email { get; set; }  
        
-        public string Username { get; set; }  //? da li korisnik unosi ili formirati od Id korisnika pa samo prikazati korisniku
+        public string Username { get; set; } 
         public string Password { get; set; }
 
     }

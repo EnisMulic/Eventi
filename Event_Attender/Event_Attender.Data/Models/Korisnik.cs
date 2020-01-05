@@ -9,12 +9,10 @@ namespace Event_Attender.Data.Models
         public int Id { get; set; }
         public string Adresa { get; set; }
         public string PostanskiBroj { get; set; }
-
-        public string BrojKreditneKartice { get; set; }  // ?
+        public string BrojKreditneKartice { get; set; } 
         public int OsobaId { get; set; }  
         public Osoba Osoba { get; set; }
-
-
+        public string Slika { get; set; }
     
     }
 }
