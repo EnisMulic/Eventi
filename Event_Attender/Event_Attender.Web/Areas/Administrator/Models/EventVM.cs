@@ -21,7 +21,7 @@ namespace Event_Attender.Web.Areas.Administrator.Models
         public Kategorija Kategorija { get; set; }
         public bool IsOdobren { get; set; }
         public bool IsOtkazan { get; set; }
-        public byte[] Slika { get; set; }
+        public string Slika { get; set; }
 
         public int OrganizatorId { get; set; }
 
