@@ -417,11 +417,12 @@ namespace Event_Attender.Web.Areas.ModulKorisnik.Controllers
                 {
                     return Redirect("Index");   // filter null
                 }
+                Grad grad= ctx.Grad.Where(g => g.Id == model.gradId).SingleOrDefault();
                 kor.Osoba.Ime = model.Ime;
                 kor.Osoba.Prezime = model.Prezime;
                 kor.Osoba.Telefon = model.Telefon;
                 kor.Osoba.GradId = model.gradId;
-                kor.Osoba.Grad.DrzavaId=drzavaId;
+                kor.Osoba.Grad.DrzavaId = grad.DrzavaId;  // uzet ce se drzava izabranog grada, jer se moze desiti da korisnik unese neodgovarajucu drzavu i grad
                 kor.Osoba.LogPodaci.Email = model.Email;
                 kor.PostanskiBroj = model.PostanskiBroj;
                 kor.Adresa = model.Adresa;
