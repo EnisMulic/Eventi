@@ -42,7 +42,7 @@ namespace Event_Attender.Web.Controllers
                      EventId=e.Id,
                      Naziv=e.Naziv,
                      Kategorija=e.Kategorija.ToString(),
-                    // Slika=e.Slika
+                     Slika=e.Slika
                 }).ToList();
             //ctx.Dispose();
             return View(model);
