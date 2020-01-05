@@ -88,7 +88,7 @@ namespace Event_Attender.Web.Areas.ModulGuest.Controllers
         public bool VerifyUserName(string username)
         {
             // trebali bi se povuci svi username iz baze, pa provjeravati da li vec postoji isti
-         //   MojContext ctx = new MojContext();
+        
             List<LogPodaci> logPodaci = ctx.LogPodaci.ToList();
             if (logPodaci == null)
             {
@@ -102,13 +102,12 @@ namespace Event_Attender.Web.Areas.ModulGuest.Controllers
                         return false;
                 }
             }
-          //  ctx.Dispose();
+         
             return true;
         }
         public IActionResult RegistracijaSnimi(RegistracijaVM model)
         {
-          //  MojContext ctx = new MojContext();
-
+          
             Korisnik k = new Korisnik();
             k.Osoba = new Osoba
             {
@@ -133,7 +132,7 @@ namespace Event_Attender.Web.Areas.ModulGuest.Controllers
                     break;
                 }
             }
-            if (k.Osoba.Grad == null)  // znaci da nema u bazi, 
+            if (k.Osoba.GradId == 0)  // znaci da nema u bazi, 
             {
                 k.Osoba.Grad = new Grad { Naziv = model.Grad, DrzavaId = model.DrzavaId };
             }
@@ -143,10 +142,10 @@ namespace Event_Attender.Web.Areas.ModulGuest.Controllers
 
             ctx.Korisnik.Add(k);
             ctx.SaveChanges();
-           // ctx.Dispose();
+           
            // treba redirect na Prijava, Prijava na Korisnik Panel
             // return Redirect("nekicontroller/Prijava");
-            return Redirect("/Home");
+            return Redirect("/Prijava/Index");
         }
     }
 }
