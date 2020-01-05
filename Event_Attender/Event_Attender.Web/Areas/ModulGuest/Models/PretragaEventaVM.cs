@@ -18,7 +18,8 @@ namespace Event_Attender.Web.Areas.ModulGuest.Models
             public string ProstorOdrzavanjaGrad { get; set; }
             public string DatumOdrzavanja { get; set; }
             public string VrijemeOdrzavanja { get; set; }
-            public byte[] Slika { get; set; }
+            //public byte[] Slika { get; set; }
+            public string Slika { get; set; }
 
         }
     }

@@ -51,7 +51,15 @@
         @foreach (var e in Model.Eventi)
         {
             <tr>
-                <td>@e.Slika</td>
+                @if (e.Slika != null)
+                {
+                     <td> <img src="~/images/items/@e.Slika" width="350" height="250"/></td>
+                }
+                else
+                {
+                    <td> <img src="~/images/items/events.jpg" width="350" height="250" /></td>
+                }
+                
                 <td>@e.Naziv</td>
             </tr>
         }

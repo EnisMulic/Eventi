@@ -86,13 +86,20 @@
 
                     <td>
                         <div>
-                            @e.Slika
+                            @if (e.Slika != null)
+                            {
+                                <img src="~/images/items/@e.Slika" width="350" height="250" />
+                            }
+                            else
+                            {
+                                <img src="~/images/items/events.jpg" width="350" height="250" />
+                            }
                         </div>
                     </td>
 
-                    <td>
+                    <td style="padding-top:8%">
                         <div>
-                            @e.Naziv <br />
+                            <strong>@e.Naziv</strong> <br />
 
                             @e.ProstorOdrzavanjaNaziv
                             <br />

@@ -82,7 +82,7 @@ namespace Event_Attender.Web.Areas.ModulKorisnik.Controllers
                     ProstorOdrzavanjaGrad = e.ProstorOdrzavanja.Grad.Naziv,
                     DatumOdrzavanja = e.DatumOdrzavanja.Day.ToString() + "." + e.DatumOdrzavanja.Month.ToString() + "." + e.DatumOdrzavanja.Year.ToString(),
                     VrijemeOdrzavanja = e.VrijemeOdrzavanja,
-                    //Slika = e.Slika
+                    Slika = e.Slika
                 }).ToList();
             return lista;
         }
@@ -103,7 +103,7 @@ namespace Event_Attender.Web.Areas.ModulKorisnik.Controllers
                 ProstorOdrzavanjaGrad = e.ProstorOdrzavanja.Grad.Naziv,
                 DatumOdrzavanja = e.DatumOdrzavanja.Day.ToString() + "." + e.DatumOdrzavanja.Month.ToString() + "." + e.DatumOdrzavanja.Year.ToString(),
                 VrijemeOdrzavanja = e.VrijemeOdrzavanja,
-               // Slika = e.Slika
+                Slika = e.Slika
             }).ToList();
             return lista;
         }
@@ -128,7 +128,7 @@ namespace Event_Attender.Web.Areas.ModulKorisnik.Controllers
                           ProstorOdrzavanjaGrad = e.ProstorOdrzavanja.Grad.Naziv,
                           DatumOdrzavanja = e.DatumOdrzavanja.Day.ToString() + "." + e.DatumOdrzavanja.Month.ToString() + "." + e.DatumOdrzavanja.Year.ToString(),
                           VrijemeOdrzavanja = e.VrijemeOdrzavanja,
-                         // Slika = e.Slika
+                          Slika = e.Slika
                       }).ToList();
             return lista;
         }
@@ -196,7 +196,7 @@ namespace Event_Attender.Web.Areas.ModulKorisnik.Controllers
                 ProstorOdrzavanjaAdresa = e.ProstorOdrzavanja.Adresa,
                 DatumOdrzavanja = e.DatumOdrzavanja.Day.ToString() + "." + e.DatumOdrzavanja.Month.ToString() + "." + e.DatumOdrzavanja.Year.ToString(),
                 VrijemeOdrzavanja = e.VrijemeOdrzavanja,
-                //Slika = e.Slika,
+                Slika = e.Slika,
                 KorisnikId = k.Id,
                 KorisnikIme = k.Osoba.Ime,
                 KorisnikPrezime = k.Osoba.Prezime,
