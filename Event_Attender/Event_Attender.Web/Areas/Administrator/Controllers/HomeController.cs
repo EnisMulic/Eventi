@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Event_Attender.Data.EF;
 using Event_Attender.Data.Models;
 using Event_Attender.Web.Areas.Administrator.Models;
 using Event_Attender.Web.Helper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -1110,6 +1112,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
                         Kategorija = e.Kategorija,
                         IsOdobren = e.IsOdobren,
                         IsOtkazan = e.IsOtkazan,
+                        Slika = e.Slika,
                         OrganizatorNaziv = e.Organizator.Naziv,
                         AdministratorIme = e.AdministratorId != null ? "N/A" : e.Administrator.Osoba.Ime,
                         AdministratorPrezime = e.AdministratorId != null ? "N/A" : e.Administrator.Osoba.Prezime,
@@ -1149,6 +1152,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
                         Kategorija = e.Kategorija,
                         IsOdobren = e.IsOdobren,
                         IsOtkazan = e.IsOtkazan,
+                        Slika = e.Slika,
                         OrganizatorNaziv = e.Organizator.Naziv,
                         AdministratorIme = e.AdministratorId != null ? "N/A" : e.Administrator.Osoba.Ime,
                         AdministratorPrezime = e.AdministratorId != null ? "N/A" : e.Administrator.Osoba.Prezime,
@@ -1161,9 +1165,23 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
             return View(model);
         }
 
-        public IActionResult EventSnimi(EventVM model)
+        
+        public async Task<IActionResult> EventSnimi(EventVM model, IFormFile slika)
         {
             var item = ctx.Event.Find(model.Id);
+
+
+            String fajlNaziv = new String("");
+            if (slika != null && slika.Length > 0)
+            {
+                fajlNaziv = Path.GetFileName(slika.FileName);
+                //var mappedPath = HttpContext.GetServerVariable.MapPath("~/Content/Images/");
+                var putanja = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images\\items", fajlNaziv);
+                using (var fajlSteam = new FileStream(putanja, FileMode.Create))
+                {
+                    await slika.CopyToAsync(fajlSteam);
+                }
+            }
 
 
             item.Naziv               = model.Naziv;
@@ -1175,6 +1193,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
             item.VrijemeOdrzavanja   = model.VrijemeOdrzavanja;
             item.IsOdobren           = model.IsOdobren;
             item.IsOtkazan           = model.IsOtkazan;
+            item.Slika               = fajlNaziv;
 
             if (model.AdministratorId != 0)
                 item.AdministratorId = model.AdministratorId;
@@ -1198,6 +1217,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
                         DatumOdrzavanja        = e.DatumOdrzavanja,
                         VrijemeOdrzavanja      = e.VrijemeOdrzavanja,
                         Kategorija             = e.Kategorija,
+                        Slika                  = e.Slika,
                         IsOdobren              = e.IsOdobren,
                         IsOtkazan              = e.IsOtkazan,
                         OrganizatorNaziv       = e.Organizator.Naziv,
@@ -1232,8 +1252,20 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
             return View(model);
         }
 
-        public IActionResult EventDodajSnimi(EventVM model)
+        public async Task<IActionResult> EventDodajSnimi(EventVM model, IFormFile slika)
         {
+            String fajlNaziv = new String("");
+            if (slika != null && slika.Length > 0)
+            {
+                fajlNaziv = Path.GetFileName(slika.FileName);
+                //var mappedPath = HttpContext.GetServerVariable.MapPath("~/Content/Images/");
+                var putanja = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images\\items", fajlNaziv);
+                using (var fajlSteam = new FileStream(putanja, FileMode.Create))
+                {
+                    await slika.CopyToAsync(fajlSteam);
+                }
+            }
+            
             var item = new Event
             {
                 Naziv               = model.Naziv,
@@ -1244,7 +1276,8 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
                 DatumOdrzavanja     = model.DatumOdrzavanja,
                 VrijemeOdrzavanja   = model.VrijemeOdrzavanja,
                 IsOdobren           = model.IsOdobren,
-                IsOtkazan           = model.IsOtkazan
+                IsOtkazan           = model.IsOtkazan,
+                Slika               = fajlNaziv
             };
 
             if (model.AdministratorId != 0)
@@ -1253,7 +1286,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
             try
             {
                 ctx.Event.Add(item);
-                ctx.SaveChanges();
+                await ctx.SaveChangesAsync();
             }
             catch //(Exception e)
             {

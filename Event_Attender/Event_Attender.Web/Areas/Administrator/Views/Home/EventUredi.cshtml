@@ -6,7 +6,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="EventUredi">
+        <form asp-action="EventUredi" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Id" class="control-label"></label>
@@ -22,6 +22,11 @@
                 <label asp-for="Opis" class="control-label"></label>
                 <input asp-for="Opis" class="form-control" />
                 <span asp-validation-for="Opis" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Slika" class="control-label"></label>
+                <input asp-for="Slika" type="file" class="form-control" />
+                <span asp-validation-for="Slika" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="DatumOdrzavanja" class="control-label"></label>
