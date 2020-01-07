@@ -4,12 +4,13 @@
 }
 @model Event_Attender.Web.ViewModels.LoginVM
 <form action="/Prijava/LogIn">
-    <label>Username</label>
-    <input name="username" type="text"/>
+    <label>Username: </label>
+    <input class="form-control" name="username" type="text" size="20"/>
     <br/>
-    <label>Password</label>
-    <input name="password" type="password"/>
-    <input type="submit"/>
+    <label>Password: </label>
+    <input class="form-control" name="password" type="password"size="20" />
+    <br />
+    <input class="btn btn-dark" type="submit"  value="Prijava"/>
 </form>
 @if(error != null)
 {
