@@ -10,12 +10,15 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.IO;
 using Microsoft.AspNetCore.Http;
+using Event_Attender.Web.Helper;
 
 namespace Event_Attender.Web.Controllers
 {
+    [Autorizacija(korisnik: false, organizator: true, administrator: false, radnik: false)]
     [Area("OrganizatorModul")]
     public class OrganizatorHomeController : Controller
     {
+        
         private readonly MojContext ctx;
 
         public OrganizatorHomeController(MojContext context)
@@ -24,7 +27,7 @@ namespace Event_Attender.Web.Controllers
         }
 
 
-        List<OrganizatorEventVM> getListuEvenata()
+        List<OrganizatorEventVM> getListuEvenata(int orgId)
         {
             return ctx.Event.Select(s => new OrganizatorEventVM
             {
@@ -40,14 +43,22 @@ namespace Event_Attender.Web.Controllers
                 ProstorOdrzavanjaNaziv = s.ProstorOdrzavanja.Naziv,
                 IsOdobren = s.IsOdobren,
                 IsOtkazan = s.IsOtkazan
-            }).Where(g => g.OrganizatorID == 1 && g.DatumOdrzavanja > DateTime.Today).ToList();
+            }).Where(g => g.OrganizatorID == orgId && g.DatumOdrzavanja > DateTime.Today).ToList();
         }
 
         public IActionResult Index()
         {
-        
-            List<OrganizatorEventVM> eventi = getListuEvenata();
+            Organizator org = new Organizator();
+            LogPodaci l = HttpContext.GetLogiraniUser();
+            if (l != null)
+            {
+                 org = ctx.Organizator.Where(o => o.LogPodaciId == l.Id).SingleOrDefault();
+                
+            }
 
+            List<OrganizatorEventVM> eventi = getListuEvenata(org.Id);
+
+                ViewData["OrganizatorID"] = org.Id;
                 ViewData["EventiOrganizatora"] = eventi;
                 ViewData["ProstoriOdrzavanja"] = ctx.ProstorOdrzavanja.Select(s => new SelectListItem
                 {
@@ -128,7 +139,7 @@ namespace Event_Attender.Web.Controllers
                     ProstorOdrzavanjaId = optCombo,
                     IsOdobren = false,
                     IsOtkazan = false,
-                    OrganizatorId = 1
+                    OrganizatorId = data._organizatorID
                 };
 
                 ctx.Event.Add(e);
