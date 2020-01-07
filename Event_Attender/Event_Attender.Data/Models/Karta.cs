@@ -12,6 +12,7 @@ namespace Event_Attender.Data.Models
 
         public int KupovinaTipId { get; set; }
         public KupovinaTip KupovinaTip { get; set; }
+        public DateTime? DatumKupovine{ get; set; }
 
 
     }
