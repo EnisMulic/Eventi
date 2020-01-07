@@ -79,7 +79,7 @@
     <table id="veca">
         <tr>
             <td id="prviTd">
-                @if (Model.Slika != null)
+                @if (Model.Slika != null || Model.Slika=="")
                 {
                     <img src="~/images/items/@Model.Slika" width="350" height="250" />
                 }
