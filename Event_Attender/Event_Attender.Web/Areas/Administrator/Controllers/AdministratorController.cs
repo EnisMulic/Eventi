@@ -48,5 +48,17 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
 
             return View(model);
         }
+
+        public bool IsUsernameUnique(string Username)
+        {
+            var user = ctx.LogPodaci.SingleOrDefault(i => i.Username == Username);
+            return user != null;
+        }
+
+        public bool IsEmailUnique(string Email)
+        {
+            var user = ctx.LogPodaci.SingleOrDefault(i => i.Email == Email);
+            return user != null;
+        }
     }
 }

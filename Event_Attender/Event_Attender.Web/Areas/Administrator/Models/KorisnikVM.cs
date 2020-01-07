@@ -20,12 +20,14 @@ namespace Event_Attender.Web.Areas.Administrator.Models
         public string Prezime { get; set; }
 
         [Required(ErrorMessage = "Obavezno polje")]
-        [Remote(action: "VerifyUserName", controller: "Guest", areaName: "ModulGuest",
-            ErrorMessage = "Ovaj username je vec u upotrebi")]  // probati
+        [Remote(action: "IsUsernameUnique", controller: "Administrator", areaName: "Administrator",
+                ErrorMessage = "Username Vec postoji")]
         public string Username { get; set; }
 
         [Required(ErrorMessage = "Obavezno polje")]
         [EmailAddress(ErrorMessage = "Niste unijeli pravilan format")]
+        [Remote(action: "IsEmailUnique", controller: "Administrator", areaName: "Administrator",
+                ErrorMessage = "Email Vec postoji")]
         public string Email { get; set; }
 
         [Required(ErrorMessage = "Obavezno polje")]
