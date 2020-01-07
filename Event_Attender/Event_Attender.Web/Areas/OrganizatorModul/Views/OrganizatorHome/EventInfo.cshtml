@@ -15,59 +15,228 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Oswald|Roboto&display=swap" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <style>
+        body {
+            background: rgb(155,244,164);
+            background: linear-gradient(90deg, rgba(155,244,164,1) 0%, rgba(148,187,233,1) 100%);
+        }
+
+        #navBrand {
+            color: rgb(92,92,92);
+            font-weight: bold;
+        }
+
+            #navBrand:hover {
+                color: white;
+            }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            padding-top: 80px;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .modal-content {
+            background-color: rgb(86, 219, 121);
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            max-width: 460px;
+        }
+
+        .close {
+            color: #aaaaaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+            .close:hover,
+            .close:focus {
+                color: #000;
+                text-decoration: none;
+                cursor: pointer;
+            }
+
+        #modalDugme:hover {
+            color: white;
+        }
+
+        #modalDugme {
+            color: rgb(92,92,92);
+            font-weight: bold;
+        }
+
+        #navBrand {
+            color: rgb(92,92,92);
+            font-weight: bold;
+        }
+
+            #navBrand:hover {
+                color: white;
+            }
+
+        .dugmic:focus,
+        .dugmic:hover {
+            cursor: pointer;
+        }
+
+        #mojWell {
+            -webkit-box-shadow: inset -14px -13px 19px -9px rgba(0,0,0,0.75);
+            -moz-box-shadow: inset -14px -13px 19px -9px rgba(0,0,0,0.75);
+            box-shadow: inset -14px -13px 19px -9px rgba(0,0,0,0.75);
+            border: none;
+            border-radius: 0px;
+            background-color: rgb(131, 222, 154);
+        }
+
+        .naslovEventa {
+            text-align: center;
+            margin-top: 0px;
+            margin-bottom: 30px;
+font-family: 'Roboto', sans-serif;
+        }
+
+        .textEventa {
+            text-align: center;
+font-family: 'Roboto', sans-serif;
+        }
+
+        .imageCenter {
+            margin-left: auto;
+            margin-right: auto;
+            width: 50%;
+        }
+
+        .mojeDugme {
+            margin-left: auto;
+            margin-right: auto;
+            width: 40%;
+            padding: 10px;
+            background-color: cornsilk;
+            border-radius: 4px;
+            text-align: center;
+        }
+        .slikaEventa
+        {
+            border:6px solid black;
+        }
+    </style>
 </head>
 <body>
     <div class="container-fluid">
         <div class="row">
-            <nav class="navbar navbar-default">
-                <div class="navbar-header">
-                    <a class="navbar-brand" href="Index">Organizator panel</a>
+            <nav style="border-radius: 0px; box-shadow: 0px 5px 9px 0px rgba(0,0,0,0.48);
+                 background-color:rgb(141, 242, 167);" class="navbar navbar-inverse">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <a id="navBrand" class="navbar-brand" href="Index">Organizator panel</a>
+                    </div>
+                    <ul class="nav navbar-nav">
+                        <li class="dugmic"><a id="modalDugme">Generisi kartu</a></li>
+                    </ul>
                 </div>
             </nav>
         </div>
 
         <div class="row">
-            <div class="col-lg-6">
-                <div>
-                    <h3>Detaljne informacije o eventu <b>@eventInfo.Naziv</b></h3>
+            <div id="mojWell" class="col-md-6 well">
+
+                <div class="naslovEventa">
+                    <h3>Detaljne informacije o eventu</h3>
                 </div>
-                <div>
-                    <img class="img-responsive" src="@Url.Content("~/images/items/" + eventInfo.Slika)" alt="">
+                <div class="imageCenter">
+                    <img class="img-responsive slikaEventa" style="width: 500px; height: 150px;" src="@Url.Content("~/images/items/" + eventInfo.Slika)" alt="">
                 </div>
-                <div>
+                <br />
+                <div class="textEventa">
                     <h4>Naziv : @eventInfo.Naziv</h4>
                 </div>
-                <div>
+                <div class="textEventa">
                     <h4>Kategorija : @eventInfo.Kategorija.ToString()</h4>
                 </div>
-                <div>
+                <div class="textEventa">
                     <h4>Opis eventa : @eventInfo.Opis</h4>
                 </div>
-                <div>
+                <div class="textEventa">
                     <h4>Mjesto odrzavanja : @eventInfo.ProstorOdrzavanjaNaziv</h4>
                 </div>
-                <div>
+                <div class="textEventa">
                     <h4>Datum odrzavanja :  @eventInfo.DatumOdrzavanja.ToShortDateString()</h4>
                 </div>
-                <div>
+                <div class="textEventa">
                     <h4>Vrijeme odrzavanja : @eventInfo.VrijemeOdrzavanja</h4>
                 </div>
-                <div>
+                <div class="textEventa">
                     @if (eventInfo.IsOdobren)
                     {<h4>Odobren : Da</h4> }
                     else
                     { <h4>Odobren : Ne</h4>}
                 </div>
-                <div>
+                <div class="textEventa">
                     @if (eventInfo.IsOtkazan)
                     {<h4>Otkazan : Da</h4> }
                     else
                     { <h4>Otkazan : Ne</h4>}
                 </div>
+                <div class="textEventa mojeDugme">
+                    @if (eventInfo.IsOtkazan)
+                    { <a href="OdobriEvent?EventID=@eventInfo.Id">Ukini otkazivanje</a> }
+                    else
+                    { <a href="OtkaziEvent?EventID=@eventInfo.Id">Otkazi event</a>}
+                </div>
             </div>
-            <div class="col-lg-6">
+    
+            <div class="col-md-6">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr class="active">
+                            <th  scope="col">Tip Karte</th>
+                            <th scope="col">Ukupno karata u prodaji</th>
+                            <th scope="col">Broj prodatih karata</th>
+                            <th scope="col">Cijena karte</th>
+                            <th scope="col">Postoje sjedista</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var i in prodajaTipInfo)
+                        {
+
+                            <tr class="info">
+                                <td>@i._tipKarte</td>
+                                <td>@i._ukupnoKarataTip</td>
+                                <td>@i._brojProdatihKarataTip</td>
+                                <td>@i._cijenaTip</td>
+                                @if (i._postojeSjedista == "True")
+                                {
+                                    <td>DA</td>
+                                }
+                                else
+                                {
+                                    <td>NE</td>
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="modalForma" class="modal">
+
+            <div class="modal-content">
+                <span class="close">&times;</span>
                 <form asp-action="SnimiProdajaTip" method="post">
 
                     <input hidden asp-for="_eventID" value="@eventInfo.Id" />
@@ -107,48 +276,27 @@
                     <button type="submit" class="btn btn-default">Submit</button>
                 </form>
             </div>
+
         </div>
 
-        <div class="row">
-            <div class="col-lg-6">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th scope="col">Tip Karte</th>
-                            <th scope="col">Ukupno karata u prodaji</th>
-                            <th scope="col">Broj prodatih karata</th>
-                            <th scope="col">Cijena karte</th>
-                            <th scope="col">Postoje sjedista</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+        <script>
+            var modal = document.getElementById("modalForma");
+            var dugme = document.getElementById("modalDugme");
+            var span = document.getElementsByClassName("close")[0];
 
-                        @foreach (var i in prodajaTipInfo)
-                        {
+            dugme.onclick = function () {
+                modal.style.display = "block";
+            }
 
-                            <tr class="danger">
-                                <td>@i._tipKarte</td>
-                                <td>@i._ukupnoKarataTip</td>
-                                <td>@i._brojProdatihKarataTip</td>
-                                <td>@i._cijenaTip</td>
-                                @if(i._postojeSjedista == "True")
-                                {
-                                <td>DA</td>
-                                }
-                                else
-                                {
-                                <td>NE</td>
-                                }
-                            </tr>
-
-
-                        }
-
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
+            span.onclick = function () {
+                modal.style.display = "none";
+            }
+            window.onclick = function (event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
+        </script>
     </div>
 
 

@@ -23,54 +23,66 @@ namespace Event_Attender.Web.Controllers
             ctx = context;
         }
 
+
+        List<OrganizatorEventVM> getListuEvenata()
+        {
+            return ctx.Event.Select(s => new OrganizatorEventVM
+            {
+                Id = s.Id,
+                OrganizatorID = s.OrganizatorId,
+                Naziv = s.Naziv,
+                Opis = s.Opis,
+                Slika = s.Slika,
+                DatumOdrzavanja = s.DatumOdrzavanja,
+                VrijemeOdrzavanja = s.VrijemeOdrzavanja,
+                Kategorija = s.Kategorija,
+                OrganizatorNaziv = s.Organizator.Naziv,
+                ProstorOdrzavanjaNaziv = s.ProstorOdrzavanja.Naziv,
+                IsOdobren = s.IsOdobren,
+                IsOtkazan = s.IsOtkazan
+            }).Where(g => g.OrganizatorID == 1 && g.DatumOdrzavanja > DateTime.Today).ToList();
+        }
+
         public IActionResult Index()
         {
-            //using(var ctx= new MojContext())
-            //{
-                List<ProstorOdrzavanjaVM> prostoriOdrzavanja = ctx.ProstorOdrzavanja.Select(s => new ProstorOdrzavanjaVM
-                {
-                    ProstorOdrzavanjaID = s.Id,
-                    Naziv = s.Naziv
-                }).ToList();
-
-                List<OrganizatorEventVM> eventi = ctx.Event.Select(s => new OrganizatorEventVM
-                {
-                    Id = s.Id,
-                    OrganizatorID = s.OrganizatorId,
-                    Naziv = s.Naziv,
-                    Opis = s.Opis,
-                    Slika=s.Slika,
-                    DatumOdrzavanja = s.DatumOdrzavanja,
-                    VrijemeOdrzavanja = s.VrijemeOdrzavanja,
-                    Kategorija = s.Kategorija,
-                    OrganizatorNaziv = s.Organizator.Naziv,
-                    ProstorOdrzavanjaNaziv = s.ProstorOdrzavanja.Naziv,
-                    IsOdobren=s.IsOdobren,
-                    IsOtkazan=s.IsOtkazan
-                }).Where(g => g.OrganizatorID == 1 && g.DatumOdrzavanja > DateTime.Today).ToList();
+        
+            List<OrganizatorEventVM> eventi = getListuEvenata();
 
                 ViewData["EventiOrganizatora"] = eventi;
                 ViewData["ProstoriOdrzavanja"] = ctx.ProstorOdrzavanja.Select(s => new SelectListItem
                 {
                     Value = s.Id.ToString(),
                     Text = s.Naziv
-                }).ToList(); ;
+                }).ToList(); 
                 return View();
-            //}
+            
+        }
+
+        bool provjeraTipKarte(int eventID,TipKarte tip)
+        {
+            var provjeraTip = ctx.ProdajaTip.Where(p => p.EventId == eventID).Include(e => e.Event).ToList();
+
+            if (provjeraTip.Count() == 0)
+            {
+                return true;
+            }
+            else
+            {
+                foreach (var x in provjeraTip)
+                {
+                    if (x.TipKarte == tip)
+                        return false;
+                }
+            }
+
+            return true;
         }
 
         public IActionResult SnimiProdajaTip(SnimiProdajaTipVM data)
         {
-            var provjeraTip = ctx.ProdajaTip.Where(p => p.EventId == data._eventID).ToList();
             int optCombo = Int32.Parse(data._tipKarteCombo);
-            bool prolaz = true;
-            foreach(var _tip in provjeraTip)
-            {
-                if (_tip.TipKarte == (TipKarte)optCombo)
-                    prolaz = false;
-            }
-
-            if (prolaz)
+                       
+            if (provjeraTipKarte(data._eventID,(TipKarte)optCombo))
             {
                 int optRadio = data._postojeSjedista;
                 ProdajaTip p = new ProdajaTip
@@ -119,26 +131,19 @@ namespace Event_Attender.Web.Controllers
                     OrganizatorId = 1
                 };
 
-                //using (MojContext ctx=new MojContext())
-                //{
                 ctx.Event.Add(e);
                 await ctx.SaveChangesAsync();
-                //  }
             }
             return Redirect("Index");
         }
 
         public IActionResult EventInfoPrikaz(int EventID)    
         {
-            //using(var ctx = new MojContext())
-            //{
                 var e = ctx.Event.Where(e => e.Id == EventID)
                     .Include(e => e.Organizator)
                     .Include(e => e.ProstorOdrzavanja)
                     .FirstOrDefault();
 
-
-                
                 var eventInfo = new OrganizatorEventVM {
                    Id=e.Id,
                    Naziv=e.Naziv,
@@ -169,9 +174,7 @@ namespace Event_Attender.Web.Controllers
 
                 ViewData["_prodajaTipInfo"] = prodajaTipInfo;
                 ViewData["eventInfo"] = eventInfo;
-                return View("EventInfo");
-                
-           // }
+                return View("EventInfo");                
         }
 
         public IActionResult OtkaziEvent(int EventID)
@@ -187,9 +190,25 @@ namespace Event_Attender.Web.Controllers
 
             ctx.SaveChanges();
             
-            return Redirect("Index");
+            return Redirect("EventInfoPrikaz?EventID=" + EventID.ToString());
         }
-            
+
+        public IActionResult OdobriEvent(int EventID)
+        {
+            var query =
+                from ev in ctx.Event
+                where ev.Id == EventID
+                select ev;
+            foreach (var _event in query)
+            {
+                _event.IsOtkazan = false;
+            }
+
+            ctx.SaveChanges();
+
+            return Redirect("EventInfoPrikaz?EventID=" + EventID.ToString());
+        }
+
     }
 
 }
