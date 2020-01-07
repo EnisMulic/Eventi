@@ -730,9 +730,10 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
         public IActionResult OrganizatorUkloni(int Id)
         {
             var item = ctx.Organizator.Find(Id);
-
+            
             if (item != null)
             {
+                
                 ctx.Remove(item);
                 ctx.SaveChanges();
             }
@@ -822,37 +823,42 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
             return View(model);
         }
 
+        
+
         public IActionResult OrganizatorDodajSnimi(OrganizatorVM model)
         {
-            var log = new LogPodaci
-            {
-                Username = model.Username,
-                Email = model.Email,
-                Password = model.Password
-            };
+            
+                var log = new LogPodaci
+                {
+                    Username = model.Username,
+                    Email = model.Email,
+                    Password = model.Password
+                };
 
-            ctx.LogPodaci.Add(log);
-
-
-            var item = new Organizator
-            {
-                Naziv = model.Naziv,
-                Telefon = model.Telefon,
-                GradId = model.GradId,
-                LogPodaci = log
-            };
-
-            try
-            {
-                ctx.Organizator.Add(item);
-                ctx.SaveChanges();
-            }
-            catch //(Exception e)
-            {
-                //Console.WriteLine("{0} Exception caught.", e);
-            }
+                ctx.LogPodaci.Add(log);
 
 
+                var item = new Organizator
+                {
+                    Naziv = model.Naziv,
+                    Telefon = model.Telefon,
+                    GradId = model.GradId,
+                    LogPodaci = log
+                };
+
+                try
+                {
+                    ctx.Organizator.Add(item);
+                    ctx.SaveChanges();
+                }
+                catch //(Exception e)
+                {
+                    //Console.WriteLine("{0} Exception caught.", e);
+                }
+
+
+                
+            
             return Redirect("Index");
         }
         #endregion
@@ -1193,7 +1199,9 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
             item.VrijemeOdrzavanja   = model.VrijemeOdrzavanja;
             item.IsOdobren           = model.IsOdobren;
             item.IsOtkazan           = model.IsOtkazan;
-            item.Slika               = fajlNaziv;
+
+            if(fajlNaziv != "")
+                item.Slika = fajlNaziv;
 
             if (model.AdministratorId != 0)
                 item.AdministratorId = model.AdministratorId;
@@ -1297,5 +1305,15 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
             return Redirect("Index");
         }
         #endregion
+
+        public IActionResult EmailPostoji(string Email)
+        {
+            var email = ctx.LogPodaci
+                .SingleOrDefault(i => i.Email == Email);
+
+            return Json(email != null);
+        }
     }
+
+    
 }

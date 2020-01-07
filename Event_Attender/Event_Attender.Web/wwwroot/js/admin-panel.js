@@ -1,4 +1,5 @@
 ﻿$(document).ready(function () {
+    
 
     $("div.ea-navbar").on('click', function (e) {
         $.get("../Home/" + e.target.id + "List", function (response) {
@@ -29,6 +30,7 @@
         $("button[for=\"Uredi\"]").on('click', function (e) {
             $.get("../Home/" + type + "Uredi?id=" + e.target.id, function (response) {
                 $("#Main-Display").html(response);
+                $.validator.unobtrusive.parse(".ea-form");
             });
         });
     }
@@ -37,6 +39,7 @@
         $("button[for=\"Dodaj\"]").on('click', function (e) {
             $.get("../Home/" + type + "Dodaj", function (response) {
                 $("#Main-Display").html(response);
+                $.validator.unobtrusive.parse(".ea-form");
             });
         });
     }
