@@ -21,7 +21,7 @@ namespace Event_Attender.Web.Areas.ModulGuest.Models
 
         [Required(ErrorMessage = "Obavezno polje")]   
        // [Phone (ErrorMessage = "Niste unijeli pravilan format broja telefona")]// problem
-       [RegularExpression(@"\+[0-9]{3}[\s][0-9]{3}[\s][0-9]{3}[\s][0-9]{3}", ErrorMessage ="U formatu +387 xxx xxx xxx")]
+       [RegularExpression(@"\+[0-9]{3}[\s][0-9]{2}[\s][0-9]{3}[\s][0-9]{3}", ErrorMessage ="U formatu +387 xx xxx xxx")]
         public string Telefon { get; set; }
 
         [Required]
@@ -46,6 +46,7 @@ namespace Event_Attender.Web.Areas.ModulGuest.Models
         public string Email { get; set; }
 
         [Required(ErrorMessage = "Obavezno polje")]
+        [MaxLength(40)]
         [Remote(action:"VerifyUserName", controller:"Guest", areaName:"ModulGuest", ErrorMessage ="Ovaj username je vec u upotrebi")]  
         public string Username { get; set; }  
 
