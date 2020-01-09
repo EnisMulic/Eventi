@@ -1,69 +1,46 @@
-﻿@*@{  
-        ViewData["Title"] = "Home Page";
-    }
-    <style>
-        a
-        {
-            text-decoration: none;
-            color: white;
-            font-size: 20px;
-        }
-    </style>
-
-
-    <div class="text-center">
-        <h1 class="display-4">Sprint 1</h1>
-        <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-        <div class="container">
-            <div class="p-3 mb-2 bg-info text-white border border-success">
-                <a href="/Administrator">Administrator</a>
-            </div>
-            <div class="p-3 mb-2 bg-info text-white border border-success">
-                <a href="/Drzava">Drzava</a>
-            </div>
-            <div class="p-3 mb-2 bg-info text-white border border-success">
-                <a href="/Grad">Grad</a>
-            </div>
-            <div class="p-3 mb-2 bg-info text-white border border-success">
-                <a href="/Sponzor">Sponzor</a>
-            </div>
-        </div>
-    </div>*@
+﻿
 @using Event_Attender.Data.Models;
 @model Event_Attender.Web.ViewModels.PretragaEventaVM
 @{
     ViewData["Title"] = "Prikazi";
 }
-<a class="btn btn-info" href="ModulGuest/Guest/PretraziPoNazivu">Pretraga po nazivu</a>
-<a class="btn btn-info" href="ModulGuest/Guest/PretraziPoLokaciji">Pretraga po lokaciji</a>
-<a class="btn btn-info" href="ModulGuest/Guest/RegistracijaForma">Registruj se</a>
-<a class="btn btn-info" href="Prijava/Index">Prijavi se</a> 
+
 <br />
+
+<div id="opcijeDiv">
+
+    <div id="izborDiv">
+        <a asp-area="ModulGuest" asp-controller="Guest" asp-action="PretraziPoNazivu" class="btn btn-light">Pretraga po nazivu</a>
+        <a asp-area="ModulGest" asp-controller="Guest" asp-action="PretraziPoLokaciji"  class="btn btn-light">Pretraga po lokaciji</a>
+    </div>
+</div>
 @*@<form >
         <input type="text" name="filter" />
         <input type="submit" value="Pretraga" />
     </form> v2 - pretaraga i naziva i lokacije ujedno  *@
 
 
-@*umjesto ovoga ce biti template*@ 
-<table class="table">
-    <tbody>
-        @foreach (var e in Model.Eventi)
-        {
-            <tr>
-                @if (e.Slika != null)
-                {
-                     <td> <img src="~/images/items/@e.Slika" width="350" height="250"/></td>
+<br />
+<div id="eventiDiv" class="row text-center">
+
+    @foreach (var e in Model.Eventi)
+    {
+    <div class="col-sm-4">
+        <div id="unutrasnji" class="thumbnail">
+            @if (e.Slika == null)
+                {                                                      
+            <img src="~/images/items/events.jpg" width="350" height="250">
                 }
                 else
                 {
-                    <td> <img src="~/images/items/events.jpg" width="350" height="250" /></td>
+            <img src="~/images/items/@e.Slika" width="350" height="250">
                 }
-                
-                <td>@e.Naziv</td>
-            </tr>
-        }
+            <p><string>@e.Naziv</string></p>
 
 
-    </tbody>
-</table>
+            <br /><br />
+        </div>
+    </div>
+    }
+
+</div>
