@@ -38,27 +38,32 @@
 
         @*Tamna verzija*@
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm bg-dark border-bottom box-shadow mb-3 navbar-dark">
-                <div class="container">
-                    <a class="navbar-brand" asp-area="ModulKorisnik" asp-controller="Korisnik" asp-action="Index">Početna</a>
-                    <ul class="nav navbar-nav navbar-right">
-                        <li> <a class="navbar-brand" asp-area="ModulKorisnik" asp-controller="Korisnik" asp-action="UserPodaci">@logPodaci.Username</a></li>
-                        <li> <a class="navbar-brand" asp-area="" asp-controller="Prijava" asp-action="LogOut"> Odjava</a></li>
-                    </ul>
-                </div>
-            </nav>
-
-        @*Siva verzija*@
-        @*<nav class="navbar navbar-expand-sm navbar-toggleable-sm bg-secondary border-bottom box-shadow mb-3 navbar-dark">
             <div class="container">
                 <a class="navbar-brand" asp-area="ModulKorisnik" asp-controller="Korisnik" asp-action="Index">Početna</a>
                 <ul class="nav navbar-nav navbar-right">
-                    <li> <a class="navbar-brand" asp-area="" asp-controller="Prijava" asp-action="LogOut">@logPodaci.Username</a></li>
+                    <li> <a class="navbar-brand" asp-area="ModulKorisnik" asp-controller="Korisnik" asp-action="UserPodaci">@logPodaci.Username</a></li>
                     <li> <a class="navbar-brand" asp-area="" asp-controller="Prijava" asp-action="LogOut"> Odjava</a></li>
                 </ul>
             </div>
-        </nav>*@
+        </nav>
+
+        @*Siva verzija*@
+        @*<nav class="navbar navbar-expand-sm navbar-toggleable-sm bg-secondary border-bottom box-shadow mb-3 navbar-dark">
+                <div class="container">
+                    <a class="navbar-brand" asp-area="ModulKorisnik" asp-controller="Korisnik" asp-action="Index">Početna</a>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li> <a class="navbar-brand" asp-area="" asp-controller="Prijava" asp-action="LogOut">@logPodaci.Username</a></li>
+                        <li> <a class="navbar-brand" asp-area="" asp-controller="Prijava" asp-action="LogOut"> Odjava</a></li>
+                    </ul>
+                </div>
+            </nav>*@
 
     </header>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/KorisnikAjaxSkripta.js"></script>
+    <script src="~/js/JavaScript.js"></script>
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
@@ -79,16 +84,16 @@
     </footer>
     @*Siva verzija*@
     @*<footer class="border-top footer text-muted bg-secondary ">
-        <div class="container" style="color:white">
-            &copy; 2019 - Event Attender - <a style="color:white" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>*@
+            <div class="container" style="color:white">
+                &copy; 2019 - Event Attender - <a style="color:white" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            </div>
+        </footer>*@
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    <script src="~/js/KorisnikAjaxSkripta.js"></script>
-    @*? provjeriti*@
+    @*<script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+        <script src="~/js/KorisnikAjaxSkripta.js"></script>*@
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.11/jquery.validate.unobtrusive.min.js"></script>
 
