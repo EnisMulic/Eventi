@@ -1,10 +1,6 @@
 ﻿
 @{
-    // Index Registrovani Korisnik
-
-    // ViewData["Title"] = "Index";
-    //Korisnik k = (Korisnik)ViewData["k"];
-    //string poruka =(string) ViewData["poruka"];
+   
 }
 @using Event_Attender.Data.Models;
 @model Event_Attender.Web.Areas.ModulKorisnik.Models.PretragaEventaVM
@@ -54,7 +50,7 @@
         <a asp-area="ModulKorisnik" asp-controller="Korisnik" asp-action="Index" asp-route-filter="Muzika" class="btn btn-light">Muzika </a>
         <a asp-area="ModulKorisnik" asp-controller="Korisnik" asp-action="Index" asp-route-filter="Kultura" class="btn btn-light">Kultura</a>
         <a asp-area="ModulKorisnik" asp-controller="Korisnik" asp-action="Index" asp-route-filter="Sport" class="btn btn-light">Sport </a>
-        <a class="btn btn-light">Posjeceni eventi</a>
+        <a asp-area="ModulKorisnik" asp-controller="PosjeceniEventi" asp-action="Index" class="btn btn-light">Posjeceni eventi</a>
     </div>
 </div>
 
