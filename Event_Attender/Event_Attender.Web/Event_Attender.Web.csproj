@@ -23,6 +23,9 @@
   <ItemGroup>
     <Folder Include="Areas\ModulGuest\Data\" />
     <Folder Include="Areas\ModulKorisnik\Data\" />
+    <Folder Include="Areas\ModulRadnik\Data\" />
+    <Folder Include="Areas\ModulRadnik\Models\" />
+    <Folder Include="Areas\ModulRadnik\Views\" />
     <Folder Include="Areas\OrganizatorModul\Data\" />
     <Folder Include="Views\Organizator\" />
     <Folder Include="wwwroot\images\items\" />
