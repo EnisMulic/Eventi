@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Event_Attender.Data.EF;
+using Event_Attender.Data.Models;
+using Event_Attender.Data.Repository;
 using Event_Attender.Web.Areas.Administrator.Models;
 using Event_Attender.Web.Helper;
 using Microsoft.AspNetCore.Mvc;
@@ -14,10 +16,11 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
     public class AdministratorController : Controller
     {
         private readonly MojContext ctx;
-
+        private readonly EventAttenderUnitOfWork uow;
         public AdministratorController(MojContext context)
         {
             ctx = context;
+            uow = new EventAttenderUnitOfWork(ctx);
         }
         //public IActionResult Index()
         //{
@@ -26,7 +29,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
 
         public IActionResult AdminProfil(int Id)
         {
-            AdministratorVM model = ctx.Administrator
+            AdministratorVM model = uow.AdministratorRepository.GetAll()
                 .Select
                 (
                     i => new AdministratorVM
@@ -51,14 +54,22 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
 
         public bool IsUsernameUnique(string Username)
         {
-            var user = ctx.LogPodaci.SingleOrDefault(i => i.Username == Username);
-            return user != null;
+            List<LogPodaci> logPodaci = uow.LogPodaciRepository.GetAll().ToList();
+            foreach (LogPodaci l in logPodaci)
+                if (l.Username == Username)
+                    return false;
+
+            return true;
         }
 
         public bool IsEmailUnique(string Email)
         {
-            var user = ctx.LogPodaci.SingleOrDefault(i => i.Email == Email);
-            return user != null;
+            List<LogPodaci> logPodaci = uow.LogPodaciRepository.GetAll().ToList();
+            foreach (LogPodaci l in logPodaci)
+                if (l.Email == Email)
+                    return false;
+
+            return true;
         }
     }
 }
