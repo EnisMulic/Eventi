@@ -51,8 +51,8 @@ namespace Event_Attender.Web.Controllers
             if (r != null)
             {
                 HttpContext.SetLogiraniUser(r.Osoba.LogPodaci);
-                
                 return Redirect("/ModulRadnik/Radnik/Index");
+                
             }
 
             Organizator o = ctx.Organizator.Include(o => o.LogPodaci).Where(o => o.LogPodaci.Username == input.username && o.LogPodaci.Password == input.password).SingleOrDefault();
