@@ -39,9 +39,9 @@
         @*Tamna verzija*@
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm bg-dark border-bottom box-shadow mb-3 navbar-dark">
             <div class="container">
-                <a class="navbar-brand" asp-area="ModulKorisnik" asp-controller="Korisnik" asp-action="Index">Početna</a>
+                <a class="navbar-brand" @*asp-area="ModulKorisnik" asp-controller="Korisnik" asp-action="Index"*@>Početna</a>
                 <ul class="nav navbar-nav navbar-right">
-                    <li> <a class="navbar-brand" asp-area="ModulKorisnik" asp-controller="Korisnik" asp-action="UserPodaci">@logPodaci.Username</a></li>
+                    <li> <a class="navbar-brand" @*asp-area="ModulKorisnik" asp-controller="Korisnik" asp-action="UserPodaci"*@>@logPodaci.Username</a></li>
                     <li> <a class="navbar-brand" asp-area="" asp-controller="Prijava" asp-action="LogOut"> Odjava</a></li>
                 </ul>
             </div>
