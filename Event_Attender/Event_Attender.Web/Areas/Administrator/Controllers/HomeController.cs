@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Event_Attender.Data.EF;
 using Event_Attender.Data.Models;
+using Event_Attender.Data.Repository;
 using Event_Attender.Web.Areas.Administrator.Models;
 using Event_Attender.Web.Helper;
 using Microsoft.AspNetCore.Http;
@@ -19,18 +20,20 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
     public class HomeController : Controller
     {
         private readonly MojContext ctx;
-
+        private readonly EventAttenderUnitOfWork uow;
         public HomeController(MojContext context)
         {
             ctx = context;
+            uow = new EventAttenderUnitOfWork(ctx);
         }
+
         public IActionResult Index()
         {
             LogPodaci user = HttpContext.GetLogiraniUser();
             AdministratorVM model = new AdministratorVM();
             if (user != null)
             {
-                model = ctx.Administrator
+                model = uow.AdministratorRepository.GetAll()
                     .Include(i => i.Osoba)
                     .Where(i => i.Osoba.LogPodaciId == user.Id)
                     .Select
@@ -61,7 +64,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
         #region Drzava
         public IActionResult DrzavaList()
         {
-            var model = ctx.Drzava
+            var model = uow.DrzavaRepository.GetAll()
                 .Select
                 (
                     i => new DrzavaVM
@@ -77,12 +80,11 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
 
         public IActionResult DrzavaUkloni(int Id)
         {
-            var item = ctx.Drzava.Find(Id);
+            var item = uow.DrzavaRepository.Get(Id);
 
             if (item != null)
             {
-                ctx.Remove(item);
-                ctx.SaveChanges();
+                uow.DrzavaRepository.Remove(Id);
             }
 
             return Redirect("Index");
@@ -90,7 +92,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
 
         public IActionResult DrzavaInfo(int Id)
         {
-            var model = ctx.Drzava
+            var model = uow.DrzavaRepository.GetAll()
                 .Select
                 (
                     i => new DrzavaVM
@@ -107,24 +109,20 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
 
         public IActionResult DrzavaUredi(int Id)
         {
-            var model = ctx.Drzava
-                .Select
-                (
-                    i => new DrzavaVM
-                    {
-                        Id = i.Id,
-                        Naziv = i.Naziv
-                    }
-                )
-                .Where(i => i.Id == Id)
-                .FirstOrDefault();
+            var Drzava = uow.DrzavaRepository.Get(Id);
+            var model = new DrzavaVM
+            {
+                Id = Drzava.Id,
+                Naziv = Drzava.Naziv
+            };
+            
 
             return View(model);
         }
 
         public IActionResult DrzavaSnimi(DrzavaVM model)
         {
-            var item = ctx.Drzava.Find(model.Id);
+            var item = uow.DrzavaRepository.Get(model.Id);
             item.Naziv = model.Naziv;
 
             ctx.SaveChanges();
@@ -143,8 +141,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
 
             try
             {
-                ctx.Drzava.Add(item);
-                ctx.SaveChanges();
+                uow.DrzavaRepository.Add(item);
             }
             catch //(Exception e)
             {
@@ -159,7 +156,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
         #region Grad
         public IActionResult GradList()
         {
-            var model = ctx.Grad
+            var model = uow.GradRepository.GetAll()
                 .Select
                 (
                     i => new GradVM
@@ -176,12 +173,11 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
 
         public IActionResult GradUkloni(int Id)
         {
-            var item = ctx.Grad.Find(Id);
+            var item = uow.GradRepository.Get(Id);
 
             if (item != null)
             {
-                ctx.Remove(item);
-                ctx.SaveChanges();
+                uow.GradRepository.Remove(Id);
             }
 
             return Redirect("Index");
@@ -189,50 +185,37 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
 
         public IActionResult GradInfo(int Id)
         {
-            var model = ctx.Grad
-                .Select
-                (
-                    i => new GradVM
-                    {
-                        Id = i.Id,
-                        Naziv = i.Naziv,
-                        DrzavaId = i.DrzavaId,
-                        DrzavaNaziv = i.Drzava.Naziv
-                    }
-                )
-                .Where(i => i.Id == Id)
-                .FirstOrDefault();
-
-            model.Drzave = ctx.Drzava.Select(
-                i => new SelectListItem(i.Naziv, i.Id.ToString())).ToList();
+            var Grad = uow.GradRepository.Get(Id);
+            var model = new GradVM
+            {
+                Id = Grad.Id,
+                Naziv = Grad.Naziv,
+                DrzavaId = Grad.DrzavaId,
+                Drzave = uow.DrzavaRepository.GetAll().Select(
+                    i => new SelectListItem(i.Naziv, i.Id.ToString())).ToList()
+            };
 
             return View(model);
         }
 
         public IActionResult GradUredi(int Id)
         {
-            var model = ctx.Grad
-                .Select
-                (
-                    i => new GradVM
-                    {
-                        Id = i.Id,
-                        Naziv = i.Naziv,
-                        DrzavaId = i.DrzavaId
-                    }
-                )
-                .Where(i => i.Id == Id)
-                .FirstOrDefault();
-
-            model.Drzave = ctx.Drzava.Select(
-                i => new SelectListItem(i.Naziv, i.Id.ToString())).ToList();
+            var Grad = uow.GradRepository.Get(Id);
+            var model = new GradVM
+            {
+                Id = Grad.Id,
+                Naziv = Grad.Naziv,
+                DrzavaId = Grad.DrzavaId,
+                Drzave = uow.DrzavaRepository.GetAll().Select(
+                    i => new SelectListItem(i.Naziv, i.Id.ToString())).ToList()
+            };
 
             return View(model);
         }
 
         public IActionResult GradSnimi(GradVM model)
         {
-            var item = ctx.Grad.Find(model.Id);
+            var item = uow.GradRepository.Get(model.Id);
             item.Naziv = model.Naziv;
             item.DrzavaId = model.DrzavaId;
             
@@ -244,9 +227,11 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
 
         public IActionResult GradDodaj()
         {
-            var model = new GradVM();
-            model.Drzave = ctx.Drzava.Select(
-                i => new SelectListItem(i.Naziv, i.Id.ToString())).ToList();
+            var model = new GradVM
+            {
+                Drzave = uow.DrzavaRepository.GetAll().Select(
+                    i => new SelectListItem(i.Naziv, i.Id.ToString())).ToList()
+            };
 
             return View(model);
         }
@@ -261,8 +246,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
 
             try
             {
-                ctx.Grad.Add(item);
-                ctx.SaveChanges();
+                uow.GradRepository.Add(item);
             }
             catch //(Exception e)
             {
@@ -279,7 +263,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
         #region Sponzor
         public IActionResult SponzorList()
         {
-            var model = ctx.Sponzor
+            var model = uow.SponzorRepository.GetAll()
                 .Select
                 (
                     i => new SponzorVM
@@ -297,12 +281,11 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
 
         public IActionResult SponzorUkloni(int Id)
         {
-            var item = ctx.Sponzor.Find(Id);
+            var item = uow.SponzorRepository.Get(Id);
 
             if (item != null)
             {
-                ctx.Remove(item);
-                ctx.SaveChanges();
+                uow.SponzorRepository.Remove(Id);
             }
 
             return Redirect("Index");
@@ -310,45 +293,35 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
 
         public IActionResult SponzorInfo(int Id)
         {
-            var model = ctx.Sponzor
-                .Select
-                (
-                    i => new SponzorVM
-                    {
-                        Id      = i.Id,
-                        Naziv   = i.Naziv,
-                        Telefon = i.Telefon,
-                        Email   = i.Email
-                    }
-                )
-                .Where(i => i.Id == Id)
-                .FirstOrDefault();
+            var i = uow.SponzorRepository.Get(Id);
+            var model = new SponzorVM
+            {
+                Id = i.Id,
+                Naziv = i.Naziv,
+                Telefon = i.Telefon,
+                Email = i.Email
+            };
 
             return View(model);
         }
 
         public IActionResult SponzorUredi(int Id)
         {
-            var model = ctx.Sponzor
-                .Select
-                (
-                    i => new SponzorVM
-                    {
-                        Id      = i.Id,
-                        Naziv   = i.Naziv,
-                        Telefon = i.Telefon,
-                        Email   = i.Email
-                    }
-                )
-                .Where(i => i.Id == Id)
-                .FirstOrDefault();
+            var i = uow.SponzorRepository.Get(Id);
+            var model = new SponzorVM
+            {
+                Id = i.Id,
+                Naziv = i.Naziv,
+                Telefon = i.Telefon,
+                Email = i.Email
+            };
 
             return View(model);
         }
 
         public IActionResult SponzorSnimi(SponzorVM model)
         {
-            var item = ctx.Sponzor.Find(model.Id);
+            var item = uow.SponzorRepository.Get(model.Id);
             item.Naziv = model.Naziv;
             item.Telefon = model.Telefon;
             item.Email = model.Email;
@@ -371,8 +344,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
 
             try
             {
-                ctx.Sponzor.Add(item);
-                ctx.SaveChanges();
+                uow.SponzorRepository.Add(item);
             }
             catch //(Exception e)
             {
@@ -387,7 +359,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
         #region Korisnik
         public IActionResult KorisnikList()
         {
-            var model = ctx.Korisnik
+            var model = uow.KorisnikRepository.GetAll()
                 .Select
                 (
                     i => new KorisnikVM
@@ -411,12 +383,11 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
 
         public IActionResult KorisnikUkloni(int Id)
         {
-            var item = ctx.Korisnik.Find(Id);
+            var item = uow.KorisnikRepository.Get(Id);
 
             if (item != null)
             {
-                ctx.Remove(item);
-                ctx.SaveChanges();
+                uow.KorisnikRepository.Remove(Id);
             }
 
             return Redirect("Index");
@@ -424,32 +395,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
 
         public IActionResult KorisnikInfo(int Id)
         {
-            var model = ctx.Korisnik
-                .Select
-                (
-                    i => new KorisnikVM
-                    {
-                        Id        = i.Id,
-                        Ime       = i.Osoba.Ime,
-                        Prezime   = i.Osoba.Prezime,
-                        Telefon   = i.Osoba.Telefon,
-                        GradId    = i.Osoba.Grad.Id,
-                        GradNaziv = i.Osoba.Grad.Naziv,
-                        Username  = i.Osoba.LogPodaci.Username,
-                        Email     = i.Osoba.LogPodaci.Email,
-                        Password  = i.Osoba.LogPodaci.Password,
-                        Adresa    = i.Adresa
-                    }
-                )
-                .Where(i => i.Id == Id)
-                .FirstOrDefault();
-
-            return View(model);
-        }
-
-        public IActionResult KorisnikUredi(int Id)
-        {
-            var model = ctx.Korisnik
+            var model = uow.KorisnikRepository.GetAll()
                 .Select
                 (
                     i => new KorisnikVM
@@ -464,12 +410,38 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
                         Email = i.Osoba.LogPodaci.Email,
                         Password = i.Osoba.LogPodaci.Password,
                         Adresa = i.Adresa
-                        
+
                     }
                 )
                 .Where(i => i.Id == Id)
-                .FirstOrDefault();
-            model.Gradovi = ctx.Grad.Select(
+                .SingleOrDefault();
+
+            return View(model);
+        }
+
+        public IActionResult KorisnikUredi(int Id)
+        {
+            var model = uow.KorisnikRepository.GetAll()
+                .Select
+                (
+                    i => new KorisnikVM
+                    {
+                        Id = i.Id,
+                        Ime = i.Osoba.Ime,
+                        Prezime = i.Osoba.Prezime,
+                        Telefon = i.Osoba.Telefon,
+                        GradId = i.Osoba.Grad.Id,
+                        GradNaziv = i.Osoba.Grad.Naziv,
+                        Username = i.Osoba.LogPodaci.Username,
+                        Email = i.Osoba.LogPodaci.Email,
+                        Password = i.Osoba.LogPodaci.Password,
+                        Adresa = i.Adresa
+
+                    }
+                )
+                .Where(i => i.Id == Id)
+                .SingleOrDefault();
+            model.Gradovi = uow.GradRepository.GetAll().Select(
                 i => new SelectListItem(i.Naziv, i.Id.ToString())).ToList();
 
             return View(model);
@@ -477,11 +449,11 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
 
         public IActionResult KorisnikSnimi(KorisnikVM model)
         {
-            var item = ctx.Korisnik
+            var item = uow.KorisnikRepository.GetAll()
                 .Include(i => i.Osoba)
                     .ThenInclude(i => i.LogPodaci)
                 .Where(i => i.Id == model.Id)
-                .FirstOrDefault();
+                .SingleOrDefault();
 
             item.Osoba.Ime = model.Ime;
             item.Osoba.Prezime = model.Prezime;
@@ -500,9 +472,11 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
 
         public IActionResult KorisnikDodaj()
         {
-            var model = new KorisnikVM();
-            model.Gradovi = ctx.Grad.Select(
-                i => new SelectListItem(i.Naziv, i.Id.ToString())).ToList();
+            var model = new KorisnikVM
+            {
+                Gradovi = uow.GradRepository.GetAll().Select(
+                    i => new SelectListItem(i.Naziv, i.Id.ToString())).ToList()
+            };
 
             return View(model);
         }
@@ -516,7 +490,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
                 Password = model.Password
             };
 
-            ctx.LogPodaci.Add(log);
+            uow.LogPodaciRepository.Add(log);
 
             var o = new Osoba
             {
@@ -527,7 +501,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
                 LogPodaci = log
             };
 
-            ctx.Osoba.Add(o);
+            uow.OsobaRepository.Add(o);
 
             var item = new Korisnik
             {
@@ -536,8 +510,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
 
             try
             {
-                ctx.Korisnik.Add(item);
-                ctx.SaveChanges();
+                uow.KorisnikRepository.Add(item);
             }
             catch //(Exception e)
             {
@@ -552,7 +525,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
         #region Radnik
         public IActionResult RadnikList()
         {
-            var model = ctx.Radnik
+            var model = uow.RadnikRepository.GetAll()
                 .Select
                 (
                     i => new RadnikVM
@@ -572,12 +545,11 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
 
         public IActionResult RadnikUkloni(int Id)
         {
-            var item = ctx.Radnik.Find(Id);
+            var item = uow.RadnikRepository.Get(Id);
 
             if (item != null)
             {
-                ctx.Remove(item);
-                ctx.SaveChanges();
+                uow.RadnikRepository.Remove(Id);
             }
 
             return Redirect("Index");
@@ -585,31 +557,31 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
 
         public IActionResult RadnikInfo(int Id)
         {
-            var model = ctx.Radnik
-                .Select
-                (
-                    i => new RadnikVM
-                    {
-                        Id = i.Id,
-                        Ime = i.Osoba.Ime,
-                        Prezime = i.Osoba.Prezime,
-                        Telefon = i.Osoba.Telefon,
-                        GradId = i.Osoba.Grad.Id,
-                        GradNaziv = i.Osoba.Grad.Naziv,
-                        Username = i.Osoba.LogPodaci.Username,
-                        Email = i.Osoba.LogPodaci.Email,
-                        Password = i.Osoba.LogPodaci.Password
-                    }
-                )
-                .Where(i => i.Id == Id)
-                .FirstOrDefault();
+            var model = uow.RadnikRepository.GetAll()
+                 .Select
+                 (
+                     i => new RadnikVM
+                     {
+                         Id = i.Id,
+                         Ime = i.Osoba.Ime,
+                         Prezime = i.Osoba.Prezime,
+                         Telefon = i.Osoba.Telefon,
+                         GradId = i.Osoba.Grad.Id,
+                         GradNaziv = i.Osoba.Grad.Naziv,
+                         Username = i.Osoba.LogPodaci.Username,
+                         Email = i.Osoba.LogPodaci.Email,
+                         Password = i.Osoba.LogPodaci.Password
+                     }
+                 )
+                 .Where(i => i.Id == Id)
+                 .FirstOrDefault();
 
             return View(model);
         }
 
         public IActionResult RadnikUredi(int Id)
         {
-            var model = ctx.Radnik
+            var model = uow.RadnikRepository.GetAll()
                 .Select
                 (
                     i => new RadnikVM
@@ -627,15 +599,16 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
                 )
                 .Where(i => i.Id == Id)
                 .FirstOrDefault();
-            model.Gradovi = ctx.Grad.Select(
+            model.Gradovi = uow.GradRepository.GetAll().Select(
                 i => new SelectListItem(i.Naziv, i.Id.ToString())).ToList();
+
 
             return View(model);
         }
 
         public IActionResult RadnikSnimi(RadnikVM model)
         {
-            var item = ctx.Radnik
+            var item = uow.RadnikRepository.GetAll()
                 .Include(i => i.Osoba)
                     .ThenInclude(i => i.LogPodaci)
                 .Where(i => i.Id == model.Id)
@@ -657,9 +630,11 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
 
         public IActionResult RadnikDodaj()
         {
-            var model = new RadnikVM();
-            model.Gradovi = ctx.Grad.Select(
-                i => new SelectListItem(i.Naziv, i.Id.ToString())).ToList();
+            var model = new RadnikVM
+            {
+                Gradovi = uow.GradRepository.GetAll().Select(
+                    i => new SelectListItem(i.Naziv, i.Id.ToString())).ToList()
+            };
 
             return View(model);
         }
@@ -673,7 +648,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
                 Password = model.Password
             };
 
-            ctx.LogPodaci.Add(log);
+            uow.LogPodaciRepository.Add(log);
 
             var o = new Osoba
             {
@@ -684,7 +659,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
                 LogPodaci = log
             };
 
-            ctx.Osoba.Add(o);
+            uow.OsobaRepository.Add(o);
 
             var item = new Radnik
             {
@@ -693,8 +668,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
 
             try
             {
-                ctx.Radnik.Add(item);
-                ctx.SaveChanges();
+                uow.RadnikRepository.Add(item);
             }
             catch //(Exception e)
             {
@@ -709,7 +683,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
         #region Organizator
         public IActionResult OrganizatorList()
         {
-            var model = ctx.Organizator
+            var model = uow.OrganizatorRepository.GetAll()
                 .Select
                 (
                     i => new OrganizatorVM
@@ -729,13 +703,12 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
 
         public IActionResult OrganizatorUkloni(int Id)
         {
-            var item = ctx.Organizator.Find(Id);
+            var item = uow.OrganizatorRepository.Get(Id);
             
             if (item != null)
             {
-                
-                ctx.Remove(item);
-                ctx.SaveChanges();
+
+                uow.OrganizatorRepository.Remove(Id);
             }
 
             return Redirect("Index");
@@ -743,7 +716,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
 
         public IActionResult OrganizatorInfo(int Id)
         {
-            var model = ctx.Organizator
+            var model = uow.OrganizatorRepository.GetAll()
                 .Select
                 (
                     i => new OrganizatorVM
@@ -759,14 +732,14 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
                     }
                 )
                 .Where(i => i.Id == Id)
-                .FirstOrDefault();
+                .SingleOrDefault();
 
             return View(model);
         }
 
         public IActionResult OrganizatorUredi(int Id)
         {
-            var model = ctx.Organizator
+            var model = uow.OrganizatorRepository.GetAll()
                 .Select
                 (
                     i => new OrganizatorVM
@@ -782,16 +755,19 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
                     }
                 )
                 .Where(i => i.Id == Id)
-                .FirstOrDefault();
-            model.Gradovi = ctx.Grad.Select(
+                .SingleOrDefault();
+
+            model.Gradovi = uow.GradRepository.GetAll().Select(
                 i => new SelectListItem(i.Naziv, i.Id.ToString())).ToList();
 
             return View(model);
+
+            
         }
 
         public IActionResult OrganizatorSnimi(OrganizatorVM model)
         {
-            var item = ctx.Organizator
+            var item = uow.OrganizatorRepository.GetAll()
                 .Include(i => i.LogPodaci)
                 .Where(i => i.Id == model.Id)
                 .FirstOrDefault();
@@ -816,9 +792,11 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
 
         public IActionResult OrganizatorDodaj()
         {
-            var model = new OrganizatorVM();
-            model.Gradovi = ctx.Grad.Select(
-                i => new SelectListItem(i.Naziv, i.Id.ToString())).ToList();
+            var model = new OrganizatorVM
+            {
+                Gradovi = uow.GradRepository.GetAll().Select(
+                    i => new SelectListItem(i.Naziv, i.Id.ToString())).ToList()
+            };
 
             return View(model);
         }
@@ -835,7 +813,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
                     Password = model.Password
                 };
 
-                ctx.LogPodaci.Add(log);
+                uow.LogPodaciRepository.Add(log);
 
 
                 var item = new Organizator
@@ -848,8 +826,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
 
                 try
                 {
-                    ctx.Organizator.Add(item);
-                    ctx.SaveChanges();
+                    uow.OrganizatorRepository.Add(item);
                 }
                 catch //(Exception e)
                 {
@@ -866,7 +843,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
         #region Izvodjac
         public IActionResult IzvodjacList()
         {
-            var model = ctx.Izvodjac
+            var model = uow.IzvodjacRepository.GetAll()
                 .Select
                 (
                     i => new IzvodjacVM
@@ -883,12 +860,11 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
 
         public IActionResult IzvodjacUkloni(int Id)
         {
-            var item = ctx.Izvodjac.Find(Id);
+            var item = uow.IzvodjacRepository.Get(Id);
 
             if (item != null)
             {
-                ctx.Remove(item);
-                ctx.SaveChanges();
+                uow.IzvodjacRepository.Remove(Id);
             }
 
             return Redirect("Index");
@@ -896,44 +872,34 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
 
         public IActionResult IzvodjacInfo(int Id)
         {
-            var model = ctx.Izvodjac
-                .Select
-                (
-                    i => new IzvodjacVM
-                    {
-                        Id = i.Id,
-                        Naziv = i.Naziv,
-                        TipIzvodjaca = i.TipIzvodjaca
-                    }
-                )
-                .Where(i => i.Id == Id)
-                .FirstOrDefault();
+            var i = uow.IzvodjacRepository.Get(Id);
+            var model = new IzvodjacVM
+            {
+                Id = i.Id,
+                Naziv = i.Naziv,
+                TipIzvodjaca = i.TipIzvodjaca
+            };
 
             return View(model);
         }
 
         public IActionResult IzvodjacUredi(int Id)
         {
-            var model = ctx.Izvodjac
-                .Select
-                (
-                    i => new IzvodjacVM
-                    {
-                        Id = i.Id,
-                        Naziv = i.Naziv,
-                        TipIzvodjaca = i.TipIzvodjaca
-                    }
-                )
-                .Where(i => i.Id == Id)
-                .FirstOrDefault();
-            
+            var i = uow.IzvodjacRepository.Get(Id);
+            var model = new IzvodjacVM
+            {
+                Id = i.Id,
+                Naziv = i.Naziv,
+                TipIzvodjaca = i.TipIzvodjaca
+            };
+
 
             return View(model);
         }
 
         public IActionResult IzvodjacSnimi(IzvodjacVM model)
         {
-            var item = ctx.Izvodjac.Find(model.Id);
+            var item = uow.IzvodjacRepository.Get(model.Id);
     
 
             item.Naziv = model.Naziv;
@@ -962,8 +928,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
 
             try
             {
-                ctx.Izvodjac.Add(item);
-                ctx.SaveChanges();
+                uow.IzvodjacRepository.Add(item);
             }
             catch //(Exception e)
             {
@@ -978,7 +943,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
         #region Prostor
         public IActionResult ProstorList()
         {
-            var model = ctx.ProstorOdrzavanja
+            var model = uow.ProstorOdrzavanjaRepository.GetAll()
                 .Select
                 (
                     i => new ProstorOdrzavanjaVM
@@ -998,12 +963,11 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
 
         public IActionResult ProstorUkloni(int Id)
         {
-            var item = ctx.ProstorOdrzavanja.Find(Id);
+            var item = uow.ProstorOdrzavanjaRepository.Get(Id);
 
             if (item != null)
             {
-                ctx.Remove(item);
-                ctx.SaveChanges();
+                uow.ProstorOdrzavanjaRepository.Remove(Id);
             }
 
             return Redirect("Index");
@@ -1011,7 +975,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
 
         public IActionResult ProstorInfo(int Id)
         {
-            var model = ctx.ProstorOdrzavanja
+            var model = uow.ProstorOdrzavanjaRepository.GetAll()
                 .Select
                 (
                     i => new ProstorOdrzavanjaVM
@@ -1025,14 +989,14 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
                     }
                 )
                 .Where(i => i.Id == Id)
-                .FirstOrDefault();
+                .SingleOrDefault();
 
             return View(model);
         }
 
         public IActionResult ProstorUredi(int Id)
         {
-            var model = ctx.ProstorOdrzavanja
+            var model = uow.ProstorOdrzavanjaRepository.GetAll()
                 .Select
                 (
                     i => new ProstorOdrzavanjaVM
@@ -1046,8 +1010,8 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
                     }
                 )
                 .Where(i => i.Id == Id)
-                .FirstOrDefault();
-            model.Gradovi = ctx.Grad.Select(
+                .SingleOrDefault();
+            model.Gradovi = uow.GradRepository.GetAll().Select(
                 i => new SelectListItem(i.Naziv, i.Id.ToString())).ToList();
 
             return View(model);
@@ -1055,7 +1019,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
 
         public IActionResult ProstorSnimi(ProstorOdrzavanjaVM model)
         {
-            var item = ctx.ProstorOdrzavanja.Find(model.Id);
+            var item = uow.ProstorOdrzavanjaRepository.Get(model.Id);
 
 
             item.Naziv = model.Naziv;
@@ -1071,9 +1035,11 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
 
         public IActionResult ProstorDodaj()
         {
-            var model = new ProstorOdrzavanjaVM();
-            model.Gradovi = ctx.Grad.Select(
-                i => new SelectListItem(i.Naziv, i.Id.ToString())).ToList();
+            var model = new ProstorOdrzavanjaVM
+            {
+                Gradovi = uow.GradRepository.GetAll().Select(
+                    i => new SelectListItem(i.Naziv, i.Id.ToString())).ToList()
+            };
             return View(model);
         }
 
@@ -1089,8 +1055,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
 
             try
             {
-                ctx.ProstorOdrzavanja.Add(item);
-                ctx.SaveChanges();
+                uow.ProstorOdrzavanjaRepository.Add(item);
             }
             catch //(Exception e)
             {
@@ -1105,7 +1070,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
         #region Event
         public IActionResult EventList()
         {
-            var model = ctx.Event
+            var model = uow.EventRepository.GetAll()
                 .Select
                 (
                     e => new EventVM
@@ -1132,12 +1097,11 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
 
         public IActionResult EventUkloni(int Id)
         {
-            var item = ctx.Event.Find(Id);
+            var item = uow.EventRepository.Get(Id);
 
             if (item != null)
             {
-                ctx.Remove(item);
-                ctx.SaveChanges();
+                uow.EventRepository.Remove(Id);
             }
 
             return Redirect("Index");
@@ -1145,7 +1109,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
 
         public IActionResult EventInfo(int Id)
         {
-            var model = ctx.Event
+            var model = uow.EventRepository.GetAll()
                 .Select
                 (
                     e => new EventVM
@@ -1156,9 +1120,9 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
                         DatumOdrzavanja = e.DatumOdrzavanja,
                         VrijemeOdrzavanja = e.VrijemeOdrzavanja,
                         Kategorija = e.Kategorija,
+                        Slika = e.Slika,
                         IsOdobren = e.IsOdobren,
                         IsOtkazan = e.IsOtkazan,
-                        Slika = e.Slika,
                         OrganizatorNaziv = e.Organizator.Naziv,
                         AdministratorIme = e.AdministratorId != null ? "N/A" : e.Administrator.Osoba.Ime,
                         AdministratorPrezime = e.AdministratorId != null ? "N/A" : e.Administrator.Osoba.Prezime,
@@ -1214,48 +1178,52 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
 
         public IActionResult EventUredi(int Id)
         {
-            var model = ctx.Event
+            var model = uow.EventRepository.GetAll()
                 .Select
                 (
                     e => new EventVM
                     {
-                        Id                     = e.Id,
-                        Naziv                  = e.Naziv,
-                        Opis                   = e.Opis,
-                        DatumOdrzavanja        = e.DatumOdrzavanja,
-                        VrijemeOdrzavanja      = e.VrijemeOdrzavanja,
-                        Kategorija             = e.Kategorija,
-                        Slika                  = e.Slika,
-                        IsOdobren              = e.IsOdobren,
-                        IsOtkazan              = e.IsOtkazan,
-                        OrganizatorNaziv       = e.Organizator.Naziv,
-                        AdministratorIme       = e.AdministratorId != null ? "N/A" : e.Administrator.Osoba.Ime,
-                        AdministratorPrezime   = e.AdministratorId != null ? "N/A" : e.Administrator.Osoba.Prezime,
+                        Id = e.Id,
+                        Naziv = e.Naziv,
+                        Opis = e.Opis,
+                        DatumOdrzavanja = e.DatumOdrzavanja,
+                        VrijemeOdrzavanja = e.VrijemeOdrzavanja,
+                        Kategorija = e.Kategorija,
+                        Slika = e.Slika,
+                        IsOdobren = e.IsOdobren,
+                        IsOtkazan = e.IsOtkazan,
+                        OrganizatorNaziv = e.Organizator.Naziv,
+                        AdministratorIme = e.AdministratorId != null ? "N/A" : e.Administrator.Osoba.Ime,
+                        AdministratorPrezime = e.AdministratorId != null ? "N/A" : e.Administrator.Osoba.Prezime,
                         ProstorOdrzavanjaNaziv = e.ProstorOdrzavanja.Naziv
                     }
                 )
                 .Where(i => i.Id == Id)
                 .FirstOrDefault();
 
-            model.Organizatori = ctx.Organizator.Select(
+            model.Organizatori = uow.OrganizatorRepository.GetAll().Select(
                 d => new SelectListItem(d.Naziv, d.Id.ToString())).ToList();
-            model.Administratori = ctx.Administrator.Select(
+            model.Administratori = uow.AdministratorRepository.GetAll().Select(
                 d => new SelectListItem(d.Osoba.Ime + " " + d.Osoba.Prezime, d.Id.ToString())).ToList();
-            model.Prostori = ctx.ProstorOdrzavanja.Select(
+            model.Prostori = uow.ProstorOdrzavanjaRepository.GetAll().Select(
                 d => new SelectListItem(d.Naziv, d.Id.ToString())).ToList();
+
+
 
             return View(model);
         }
 
         public IActionResult EventDodaj()
         {
-            var model = new EventVM();
-            model.Organizatori = ctx.Organizator.Select(
-                d => new SelectListItem(d.Naziv, d.Id.ToString())).ToList();
-            model.Administratori = ctx.Administrator.Select(
-                d => new SelectListItem(d.Osoba.Ime + " " + d.Osoba.Prezime, d.Id.ToString())).ToList();
-            model.Prostori = ctx.ProstorOdrzavanja.Select(
-                d => new SelectListItem(d.Naziv, d.Id.ToString())).ToList();
+            var model = new EventVM
+            {
+                Organizatori = uow.OrganizatorRepository.GetAll().Select(
+                    d => new SelectListItem(d.Naziv, d.Id.ToString())).ToList(),
+                Administratori = uow.AdministratorRepository.GetAll().Select(
+                    d => new SelectListItem(d.Osoba.Ime + " " + d.Osoba.Prezime, d.Id.ToString())).ToList(),
+                Prostori = uow.ProstorOdrzavanjaRepository.GetAll().Select(
+                    d => new SelectListItem(d.Naziv, d.Id.ToString())).ToList()
+            };
 
             return View(model);
         }
@@ -1309,7 +1277,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
 
         public IActionResult EmailPostoji(string Email)
         {
-            var email = ctx.LogPodaci
+            var email = uow.LogPodaciRepository.GetAll()
                 .SingleOrDefault(i => i.Email == Email);
 
             return Json(email != null);
