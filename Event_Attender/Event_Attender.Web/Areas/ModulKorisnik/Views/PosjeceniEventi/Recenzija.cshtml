@@ -1,0 +1,24 @@
+﻿
+@{
+    ViewData["Title"] = "Recenzija";
+}
+
+@model Event_Attender.Web.Areas.ModulKorisnik.Models.RecenzijaVM
+
+    <form action="/ModulKorisnik/PosjeceniEventi/SnimiRecenziju">
+        <strong>Recenzija za event @Model.NazivEventa </strong><br />
+        <input type="hidden" asp-for="RecenzijaId" value="@Model.RecenzijaId" />
+        <input type="hidden" asp-for="KupovinaId" value="@Model.KupovinaId" />
+        <input type="hidden" asp-for="page" value="@Model.page" />
+        <label>Komentar</label>
+        <textarea class="form-control" asp-for="Komentar" value="@Model.Komentar"></textarea>
+        <br />
+        <label>Ocjena</label>
+        <input type="radio" asp-for="Ocjena" value="1" />1
+        <input type="radio" asp-for="Ocjena" value="2" />2
+        <input type="radio" asp-for="Ocjena" value="3" />3
+        <input type="radio" asp-for="Ocjena" value="4" />4
+        <input type="radio" asp-for="Ocjena" value="5" />5 <br />
+        <input type="submit" class="btn btn-primary" value="Snimi recenziju" />
+
+    </form>

@@ -1,0 +1,64 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+}
+<style>
+    .table td {
+        vertical-align: middle;
+        border-top: unset
+    }
+</style>
+
+@model ReflectionIT.Mvc.Paging.PagingList<Event_Attender.Web.Areas.ModulKorisnik.Models.PrikazPosjeceniEventiVM>
+@using ReflectionIT.Mvc.Paging
+@addTagHelper *,ReflectionIT.Mvc.Paging
+
+<nav class="nav pagination">
+    @await this.Component.InvokeAsync("Pager",new { pagingList=this.Model})
+</nav>
+<div id="ajaxRecenzija">
+
+</div>
+<br />
+<table class="table table-dark">
+    <tbody>
+        @foreach(var p in Model)
+       {
+        <tr>
+            <td style="width:230px; vertical-align:bottom">
+                @if (p.Slika == null)
+                        {
+                <img src="~/images/items/events.jpg" width="290" height="190">
+                        }
+                        else
+                        {
+                <img src="~/images/items/@p.Slika" width="290" height="190">
+                        }
+            </td>
+            <td>
+                <p><strong>@p.Naziv</strong></p>
+
+                <p>@p.Kategorija</p>
+                <p>@p.DatumOdrzavanja @p.VrijemeOdrzavanja</p>
+                <p>@p.ProstorOdrzavanjaGrad</p>
+            </td>
+            <td>
+                <p>Cijena svih kupljenih karata:</p>
+                <p>@p.UkupnoPlaceno  KM</p>
+            </td>
+            <td>
+                <a ajax-poziv="da" ajax-rezultat="ajaxRecenzija" href="/ModulKorisnik/PosjeceniEventi/Recenzija?id=@p.KupovinaId&page=@p.page" class="btn btn-primary">Recenzija</a>
+            </td>
+        </tr>
+
+       }
+    </tbody>
+</table>
+
+
+
+<nav>
+    <vc:pager paging-list="@Model" />
+</nav>
+
+
