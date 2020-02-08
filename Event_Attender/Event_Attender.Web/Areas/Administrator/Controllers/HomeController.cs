@@ -1285,11 +1285,10 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
                 VrijemeOdrzavanja   = model.VrijemeOdrzavanja,
                 IsOdobren           = model.IsOdobren,
                 IsOtkazan           = model.IsOtkazan,
+                Slika               = fajlNaziv != "" ? fajlNaziv : null 
             };
 
-            if (fajlNaziv != "")
-                item.Slika = fajlNaziv;
-
+            
             if (model.AdministratorId != 0)
                 item.AdministratorId = model.AdministratorId;
 
