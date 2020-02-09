@@ -6,7 +6,8 @@
 @*// Odavde pozivati akciju koja vraca Json 
 // onda dodavati evente u tabelu*@
 
-
+<a href="/ModulRadnik/Radnik/ExportToExcel" class="btn btn-success">Exportuj u excel</a>
+<br />
 <table id="tabela" class="table table-bordered">
     <thead>
         <tr>
@@ -15,7 +16,7 @@
             <th>Vrijeme</th>
             <th>Grad</th>
             <th>Prostor odrzavanja - Adresa</th>
-            @*<th>Ukupno zarada od eventa</th>*@
+            <th>Ukupno zarada od eventa</th>
             <th></th>
         </tr>
     </thead>
@@ -50,14 +51,14 @@
             var td3 = document.createElement('td');
             var td4 = document.createElement('td');
             var td5 = document.createElement('td');
-           // var td6 = document.createElement('td');
+            var td6 = document.createElement('td');
             var td7  = document.createElement('td');
             tr.appendChild(td1);
             tr.appendChild(td2);
             tr.appendChild(td3);
             tr.appendChild(td4);
             tr.appendChild(td5);
-           // tr.appendChild(td6);
+            tr.appendChild(td6);
             tr.appendChild(td7);
 
             td1.innerText = ev.NazivEventa;
@@ -65,7 +66,7 @@
             td3.innerText = ev.Vrijeme;
             td4.innerText = ev.Grad;
             td5.innerText = ev.ProstorOdrzavanjaIAdresa;
-           // td6.innerText = ev.UkupnoZaradaOdEventa;
+            td6.innerText = ev.UkupnoZaradaOdEventa;
 
             var a = document.createElement('a');
             a.setAttribute("href", "/ModulRadnik/Radnik/Detalji?id=" + ev.EventId);
@@ -77,8 +78,7 @@
     }
 
     function GetAllEventi() {
-        //var adresaServera = 'p1860.app.fit.ba';
-        // //var adresaServera = 'http://localhost:59867';
+         //var adresaServera = 'http://localhost:59867';
         //var mojUrl = adresaServera + '/ModulRadnik/Radnik/GetProizvodi';
          var mojUrl = '/ModulRadnik/Radnik/GetProizvodi';
 
