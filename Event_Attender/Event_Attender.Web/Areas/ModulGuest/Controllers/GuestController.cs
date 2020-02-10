@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Event_Attender.Data.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-//using Event_Attender.Web.ViewModels;
+
 
 namespace Event_Attender.Web.Areas.ModulGuest.Controllers
 {   
@@ -103,6 +103,11 @@ namespace Event_Attender.Web.Areas.ModulGuest.Controllers
         }
         public IActionResult RegistracijaSnimi(RegistracijaVM model)
         {
+            if (!ModelState.IsValid)
+            {
+                model.Drzave = ctx.Drzava.Select(d => new SelectListItem(d.Naziv, d.Id.ToString())).ToList();
+                return View("RegistracijaForma", model);
+            }
           
             Korisnik k = new Korisnik();
             k.Osoba = new Osoba
