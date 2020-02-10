@@ -11,6 +11,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using MailKit.Net.Smtp;
+using MailKit;
+using MimeKit;
 
 namespace Event_Attender.Web.Areas.ModulKorisnik.Controllers
 {   
@@ -181,8 +184,12 @@ namespace Event_Attender.Web.Areas.ModulKorisnik.Controllers
             Event e = ctx.Event.Where(e => e.Id == eId).Include(e => e.ProstorOdrzavanja)
                 .Include(e => e.ProstorOdrzavanja.Grad).SingleOrDefault();
             Like like = ctx.Like.Where(l => l.EventId == e.Id && l.KorisnikId == k.Id).FirstOrDefault();
-           
-            // provjera je li null
+
+            if (k == null)
+            {
+                return RedirectToAction("Index");
+            }
+
             EventKorisnikVM model = new EventKorisnikVM {
                 EventId = e.Id,
                 Naziv = e.Naziv,
@@ -220,7 +227,7 @@ namespace Event_Attender.Web.Areas.ModulKorisnik.Controllers
             if (k == null || e == null)
                 return PartialView("NemKupovina");
               
-            //List<ProdajaTip> prodaja = ctx.ProdajaTip.Where(p => p.EventId == e.Id).ToList();
+            
             KupiKartuVM model = new KupiKartuVM
             {
                 EventId = e.Id,
@@ -253,7 +260,7 @@ namespace Event_Attender.Web.Areas.ModulKorisnik.Controllers
             {
                 return PartialView("NemKupovina");
             }
-
+            float CijenaTrenutneKupovine = 0;
             // provjera da li ima toliko karata
             int zeljeniBrojKarata = model.OdabranBrKarata;
             if(zeljeniBrojKarata> (pt.UkupnoKarataTip - pt.BrojProdatihKarataTip))
@@ -291,6 +298,7 @@ namespace Event_Attender.Web.Areas.ModulKorisnik.Controllers
                         Cijena = pt.CijenaTip,
                         Tip = kt.TipKarte
                     };
+                    CijenaTrenutneKupovine += karta.Cijena;
                     ctx.Karta.Add(karta); 
                     pt.BrojProdatihKarataTip++;
                     if (pt.PostojeSjedista == true)
@@ -334,6 +342,7 @@ namespace Event_Attender.Web.Areas.ModulKorisnik.Controllers
                     Cijena = pt.CijenaTip,
                     Tip = kupTip.TipKarte
                 };
+                CijenaTrenutneKupovine += karta.Cijena;
                 ctx.Karta.Add(karta);
                 pt.BrojProdatihKarataTip++;
                 if (pt.PostojeSjedista == true)
@@ -347,9 +356,38 @@ namespace Event_Attender.Web.Areas.ModulKorisnik.Controllers
                 }
             }
             ctx.SaveChanges();
+            //slanje maila o uspjesnoj kupovini korisniku
+            PosaljiMail(kor.Id, CijenaTrenutneKupovine, ev.Naziv);
+
             return PartialView("UspjesnaKupovina", model);
         }
+        public void PosaljiMail(int korisnikId, float cijena, string NazivEventa)
+        {
+            Korisnik k = ctx.Korisnik.Where(x => x.Id == korisnikId).Include(x => x.Osoba).Include(x => x.Osoba.LogPodaci).SingleOrDefault();
+            var message = new MimeMessage();
 
+            message.From.Add(new MailboxAddress("Event Atteder", "event.attender@gmail.com"));
+            
+            message.To.Add(new MailboxAddress(k.Osoba.Ime,k.Osoba.LogPodaci.Email));  
+
+
+            message.Subject = "Uspješna kupovina karte";
+
+            message.Body = new TextPart("plain")
+            {
+                Text = "Poštovani/a " + k.Osoba.Ime+" "+k.Osoba.Prezime+ " uspješno ste obavili kupovinu karte za event "+NazivEventa+", u iznosu od "+ cijena + "KM. Hvala na povjerenju! "
+            };
+
+            using (var client = new SmtpClient())
+            {
+                client.Connect("smtp.gmail.com", 587, false);
+               
+                client.Authenticate("event.attender@gmail.com", "eventat123");
+
+                client.Send(message);
+                client.Disconnect(true);
+            }
+        }
         public IActionResult UserPodaci(int drzavaId)
         {
             LogPodaci l = HttpContext.GetLogiraniUser();

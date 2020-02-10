@@ -22,7 +22,7 @@ namespace Event_Attender.Web.Areas.ModulKorisnik.Controllers
             ctx = context;
         }
 
-        [Obsolete]   //?
+        [Obsolete]   
         public async Task<IActionResult> Index(int page=1)
         {
             LogPodaci l = HttpContext.GetLogiraniUser();

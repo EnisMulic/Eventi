@@ -12,7 +12,6 @@
         margin-bottom: 1%;
         padding-left: 0%;
         padding-right: 0%;
-        /*background-color:#e7e7e7*/
     }
 
     #opcijeDiv {
@@ -31,13 +30,10 @@
     #izbornik {
         display: inline;
         float: right;
-        
-        /*background-color:#e7e7e7;*/
+       
     }
 
-    #unutrasnji {
-        /*background-color:lightgray;*/
-    }
+   
 </style>
 
 <div id="opcijeDiv">
@@ -85,44 +81,3 @@
 
 </div>
 
-@*Prva verzija*@
-@*<table class="table">
-        <tbody>
-            @foreach (Event e in Model.eventi)
-            {
-                <tr>
-                    @/*<td>@e.Slika</td>
-                    <td>@e.Naziv</td>*/@
-    <td>
-        <div>
-            @e.Slika
-        </div>
-    </td>
-    <td>
-        <div id="opis_@e.Id">
-            @e.Naziv <br />
-
-            @e.ProstorOdrzavanja.Naziv
-            @e.ProstorOdrzavanja.Adresa  <br />
-            @e.ProstorOdrzavanja.Grad.Naziv
-
-            <br />
-            @e.DatumOdrzavanja.Day.ToString()/@e.DatumOdrzavanja.Month.ToString()/@e.DatumOdrzavanja.Year.ToString()
-            - @e.VrijemeOdrzavanja h
-
-
-        </div>
-    </td>
-    <td>
-        <div>
-            <a class="btn btn-lg btn-secondary">Kupi kartu</a>
-            <br /><br />
-            <a class="btn btn-light">  Like  </a>
-        </div>
-    </td>
-                </tr>
-            }
-
-
-        </tbody>
-    </table>  *@

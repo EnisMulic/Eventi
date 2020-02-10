@@ -42,40 +42,7 @@
         </div>
     </div>
 </form>
-@*@if (Model.eventi != null)
-    {
-        <table class="table">
-            <tbody>
-                @foreach (Event e in Model.eventi)
-                {
-                   <tr>
 
-                        <td>
-                            <div>
-                                @e.Slika
-                            </div>
-                        </td>
-
-                        <td>
-                            <div>
-                                @e.Naziv <br />
-
-                                @e.ProstorOdrzavanja.Naziv,
-                                @e.ProstorOdrzavanja.Adresa  <br />
-                                @e.ProstorOdrzavanja.Grad.Naziv
-
-                                <br />
-
-                                @e.DatumOdrzavanja.Day.ToString()/@e.DatumOdrzavanja.Month.ToString()/@e.DatumOdrzavanja.Year.ToString()
-                                - @e.VrijemeOdrzavanja h
-
-                            </div>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    }*@
 @if (Model.Eventi != null)
 {
     <table class="table">
