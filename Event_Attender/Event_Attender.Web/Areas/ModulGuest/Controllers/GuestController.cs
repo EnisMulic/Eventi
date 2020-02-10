@@ -25,14 +25,12 @@ namespace Event_Attender.Web.Areas.ModulGuest.Controllers
         {
             PretragaEventaVM model = new PretragaEventaVM();
            
-           // MojContext ctx = new MojContext();
+           
             DateTime date = DateTime.Now;
             //Where(e => e.DatumOdrzavanja.CompareTo(date)==1) // gdje je datum veci od danasnjeg
             if (filter != null)
             {
-                //model.eventi = ctx.Event.Include(e => e.ProstorOdrzavanja).Include(e => e.ProstorOdrzavanja.Grad).Where(e=>e.DatumOdrzavanja.CompareTo(date)==1).Where(e => e.IsOdobren == true).Where(e => e.IsOtkazan == false).
-                //    Where(e => e.Naziv.ToLower().Equals(filter.ToLower()) || e.Naziv.ToLower().StartsWith(filter.ToLower())
-                //     || e.Naziv.ToLower().Contains(filter.ToLower())).ToList();
+                
                 model.Eventi = ctx.Event.Include(e => e.ProstorOdrzavanja).Include(e => e.ProstorOdrzavanja.Grad).Where(e => e.DatumOdrzavanja.CompareTo(date) == 1).Where(e => e.IsOdobren == true).Where(e => e.IsOtkazan == false).
                     Where(e => e.Naziv.ToLower().Equals(filter.ToLower()) || e.Naziv.ToLower().StartsWith(filter.ToLower())
                      || e.Naziv.ToLower().Contains(filter.ToLower()))
@@ -47,13 +45,13 @@ namespace Event_Attender.Web.Areas.ModulGuest.Controllers
                         Slika = e.Slika
                     }).ToList();
             }
-          //  ctx.Dispose();
+       
             return View(model);  
         }
         public IActionResult PretraziPoLokaciji(string lokacija)  //v1 - odvojena pretraga po nazivu
         {
             PretragaEventaVM model = new PretragaEventaVM();
-          //  MojContext ctx = new MojContext();
+         
             DateTime date = DateTime.Now;
             if (lokacija != null)
             {
@@ -71,17 +69,15 @@ namespace Event_Attender.Web.Areas.ModulGuest.Controllers
                        Slika = e.Slika
                    }).ToList();
             }
-          //  ctx.Dispose();
+         
             return View(model);
         }
         public IActionResult RegistracijaForma()
         {
-          //  MojContext ctx = new MojContext();
-
+          
             RegistracijaVM model = new RegistracijaVM();
             model.Drzave = ctx.Drzava.Select(d => new SelectListItem(d.Naziv, d.Id.ToString())).ToList();
 
-         //   ctx.Dispose();
             return View(model);
         }
 
@@ -143,8 +139,6 @@ namespace Event_Attender.Web.Areas.ModulGuest.Controllers
             ctx.Korisnik.Add(k);
             ctx.SaveChanges();
            
-           // treba redirect na Prijava, Prijava na Korisnik Panel
-            // return Redirect("nekicontroller/Prijava");
             return Redirect("/Prijava/Index");
         }
     }

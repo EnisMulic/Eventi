@@ -36,7 +36,7 @@ namespace Event_Attender.Web.Areas.ModulRadnik.Controllers
             Radnik radnik = ctx.Radnik.Where(ra => ra.Osoba.LogPodaciId == l.Id).SingleOrDefault();
             //if (r == null)
             //{
-            //    return Redirect("/Prijava/LogIn");
+            //    return null;
             //}
             PrikazEvenataVM model = new PrikazEvenataVM();
             model.eventi = ctx.RadnikEvent.Where(r => r.Id == radnik.Id)
@@ -74,7 +74,6 @@ namespace Event_Attender.Web.Areas.ModulRadnik.Controllers
                   Grad = r.Event.ProstorOdrzavanja.Grad.Naziv,
                   ProstorOdrzavanjaIAdresa = r.Event.ProstorOdrzavanja.Naziv + " " + r.Event.ProstorOdrzavanja.Adresa,
                   RadnikEventId = r.Id,
-                 // RadnikId = r.RadnikId,
                   Vrijeme = r.Event.VrijemeOdrzavanja,
                   UkupnoZaradaOdEventa = ctx.KupovinaTip.Where(k => k.Kupovina.EventId == r.EventId).Sum(k => k.Cijena)
               }).ToList();
@@ -89,7 +88,7 @@ namespace Event_Attender.Web.Areas.ModulRadnik.Controllers
                 workSheet.Cells[1, 2].Value = radnik.Osoba.Ime+" "+radnik.Osoba.Prezime;
 
                 workSheet.Cells[2, 1].Value = "Datum";
-                workSheet.Cells[2, 2].Value = DateTime.Now.ToShortDateString();/*string.Format("{0:dd MMMM yyyy} - {0:H: mm tt}", DateTimeOffset.Now);*/
+                workSheet.Cells[2, 2].Value = DateTime.Now.ToShortDateString();
 
               
                 //Zaglavlje

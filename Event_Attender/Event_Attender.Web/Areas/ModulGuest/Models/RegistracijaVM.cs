@@ -20,7 +20,6 @@ namespace Event_Attender.Web.Areas.ModulGuest.Models
         public string Prezime { get; set; }
 
         [Required(ErrorMessage = "Obavezno polje")]   
-       // [Phone (ErrorMessage = "Niste unijeli pravilan format broja telefona")]// problem
        [RegularExpression(@"\+[0-9]{3}[\s][0-9]{2}[\s][0-9]{3}[\s][0-9]{3}", ErrorMessage ="U formatu +387 xx xxx xxx")]
         public string Telefon { get; set; }
 
