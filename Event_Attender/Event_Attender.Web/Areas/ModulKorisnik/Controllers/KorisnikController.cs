@@ -312,6 +312,7 @@ namespace Event_Attender.Web.Areas.ModulKorisnik.Controllers
                    
                 }
                 ctx.SaveChanges();
+                PosaljiMail(kor.Id, CijenaTrenutneKupovine, ev.Naziv);
                 return PartialView("UspjesnaKupovina",model);
             }
             KupovinaTip kupTip = ctx.KupovinaTip.Where(kt => kt.KupovinaId == k.Id && kt.TipKarte == pt.TipKarte).SingleOrDefault();

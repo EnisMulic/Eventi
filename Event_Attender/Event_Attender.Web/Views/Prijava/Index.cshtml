@@ -3,7 +3,19 @@
     string error = (String)TempData["error_poruka"];
     Layout = "~/Views/Shared/_LayoutPrijava.cshtml";  
 }
+
 @model Event_Attender.Web.ViewModels.LoginVM
+
+<style>
+    form{
+        width:50%;
+        margin-left:auto;
+        margin-right:auto;
+    }
+    .btn-dark{
+        width:100%;
+    }
+</style>
     <form action="/Prijava/LogIn">
         <label>Username: </label>
         <input class="form-control" name="username" type="text" size="20" />
