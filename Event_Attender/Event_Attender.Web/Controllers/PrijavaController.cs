@@ -27,8 +27,10 @@ namespace Event_Attender.Web.Controllers
 
         public IActionResult LogIn( LoginVM input)
         {
-            //MojContext ctx = new MojContext();
-
+            if (!ModelState.IsValid)
+            {
+                return View("Index", input);
+            }
             Korisnik k= ctx.Korisnik.Include(k => k.Osoba).Include(o => o.Osoba.LogPodaci)
                 .Where(o => o.Osoba.LogPodaci.Username == input.username && o.Osoba.LogPodaci.Password == input.password).SingleOrDefault();
             if (k != null)
