@@ -40,7 +40,7 @@ namespace Event_Attender.Web.Areas.ModulKorisnik.Models
         
         [Required(ErrorMessage = "Obavezno polje")]
         [MaxLength(20)]
-        [RegularExpression("[^0-9]", ErrorMessage = "Morate unijeti naziv nekog grada")]
+       // [RegularExpression("[^0-9]", ErrorMessage = "Morate unijeti naziv nekog grada")]
         public string Grad { get; set; } 
         public int gradId { get; set; }
 
@@ -50,7 +50,7 @@ namespace Event_Attender.Web.Areas.ModulKorisnik.Models
         public int DrzavaId { get; set; }
         public List<SelectListItem> drzave { get; set; }
 
-        public List<Grad> gradovi { get; set; }
+        //public List<Grad> gradovi { get; set; }
         public string Slika { get; set; }
     }
 }

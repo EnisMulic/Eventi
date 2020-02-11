@@ -28,7 +28,7 @@ namespace Event_Attender.Web.Areas.ModulGuest.Models
 
         [Required(ErrorMessage = "Obavezno polje")]
         [MaxLength(20)]
-        [RegularExpression("[^0-9]", ErrorMessage = "Morate unijeti naziv nekog grada")]
+       // [RegularExpression("[^0-9]", ErrorMessage = "Morate unijeti naziv nekog grada")]
         public string Grad { get; set; }  
 
         [Required(ErrorMessage = "Obavezno polje")]
