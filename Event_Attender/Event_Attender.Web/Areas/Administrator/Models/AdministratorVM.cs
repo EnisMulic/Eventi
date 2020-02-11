@@ -26,11 +26,13 @@ namespace Event_Attender.Web.Areas.Administrator.Models
 
         [Required]
         [Remote(action: "IsEmailUnique", controller: "Administrator", areaName: "Administrator",
+                AdditionalFields = "LogPodaciId",
                 ErrorMessage = "Email Vec postoji")]
         public string Email { get; set; }
 
         [Required]
         [Remote(action: "IsUsernameUnique", controller: "Administrator", areaName: "Administrator",
+                AdditionalFields = "LogPodaciId",
                 ErrorMessage = "Username Vec postoji")]
         public string Username { get; set; }
         public string Password { get; set; }
