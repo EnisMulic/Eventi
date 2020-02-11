@@ -65,7 +65,7 @@ namespace Event_Attender.Web.Areas.ModulKorisnik.Controllers
 
             return View(model);  
         }
-        List<PretragaEventaVM.Rows> PrikazEvenata()
+        public List<PretragaEventaVM.Rows> PrikazEvenata()
         {
             DateTime date = DateTime.Now;
           
@@ -86,7 +86,7 @@ namespace Event_Attender.Web.Areas.ModulKorisnik.Controllers
                 }).ToList();
             return lista;
         }
-        List<PretragaEventaVM.Rows> PretragaPoKategoriji(Kategorija k)
+        public List<PretragaEventaVM.Rows> PretragaPoKategoriji(Kategorija k)
         {
             DateTime date = DateTime.Now;
          
@@ -107,7 +107,7 @@ namespace Event_Attender.Web.Areas.ModulKorisnik.Controllers
             }).ToList();
             return lista;
         }
-        List<PretragaEventaVM.Rows> PretragaPoNazivuLokaciji(string filter)
+        public List<PretragaEventaVM.Rows> PretragaPoNazivuLokaciji(string filter)
         {
             DateTime date = DateTime.Now;
         
@@ -395,7 +395,7 @@ namespace Event_Attender.Web.Areas.ModulKorisnik.Controllers
                 client.Disconnect(true);
             }
         }
-        public IActionResult UserPodaci(int drzavaId)
+        public IActionResult UserPodaci() //int drzavaId
         {
             LogPodaci l = HttpContext.GetLogiraniUser();
             if (l == null)
@@ -432,8 +432,8 @@ namespace Event_Attender.Web.Areas.ModulKorisnik.Controllers
 
             return View(model);     
         }
-
-        public async Task<IActionResult> SnimiPodatkeAsync(KorisnikPodaciVM model,int drzavaId,int gradId, IFormFile slika)
+        //int drzavaId,int gradId
+        public async Task<IActionResult> SnimiPodatkeAsync(KorisnikPodaciVM model, IFormFile slika)
         {
             if (slika != null && slika.Length > 0)
             {

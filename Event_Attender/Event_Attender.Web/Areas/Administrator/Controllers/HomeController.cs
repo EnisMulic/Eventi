@@ -1282,6 +1282,8 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
 
             return Json(email != null);
         }
+
+       
     }
 
     

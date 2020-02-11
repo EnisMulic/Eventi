@@ -15,13 +15,7 @@ namespace Event_Attender.Web.Controllers
 {
     public class HomeController : Controller
     {  
-        //private readonly ILogger<HomeController> _logger;
-
-        //public HomeController(ILogger<HomeController> logger)
-        //{
-        //    _logger = logger;
-        //}
-
+      
         private readonly MojContext ctx;
 
         public HomeController(MojContext context)
@@ -30,11 +24,11 @@ namespace Event_Attender.Web.Controllers
         }
         public IActionResult Index()
         {
-            HttpContext.SetLogiraniUser(null);
+             HttpContext.SetLogiraniUser(null);
             // kada se otvori stranica, modul je guest, i nijedan user jos nije logiran
 
             PretragaEventaVM model = new PretragaEventaVM();
-            //MojContext ctx = new MojContext();
+            
             DateTime date = DateTime.Now;
             model.Eventi = ctx.Event.Where(e => e.IsOdobren == true).Where(e => e.IsOtkazan == false)
                 .Where(e => e.DatumOdrzavanja.CompareTo(date) == 1)
@@ -44,10 +38,25 @@ namespace Event_Attender.Web.Controllers
                      Kategorija=e.Kategorija.ToString(),
                      Slika=e.Slika
                 }).ToList();
-            //ctx.Dispose();
+           
             return View(model);
 
         }
+       
+        //public List<PretragaEventaVM.Rows> Proba()
+        //{
+        //    DateTime date = DateTime.Now;
+        //    List<PretragaEventaVM.Rows> eventi = ctx.Event.Where(e => e.IsOdobren == true).Where(e => e.IsOtkazan == false)
+        //        .Where(e => e.DatumOdrzavanja.CompareTo(date) == 1)
+        //    .Select(e => new PretragaEventaVM.Rows
+        //    {
+        //        EventId = e.Id,
+        //        Naziv = e.Naziv,
+        //        Kategorija = e.Kategorija.ToString(),
+        //        Slika = e.Slika
+        //    }).ToList();
+        //    return eventi;
+        //}
 
         // U slucaju da pretraga po nazivu i pretraga po lakaciji ne idu kao 2 odvojene
         // pretrage, 2 buttona, moze se vrsiti pretraga i po nazivu i po lokaciji zajedno
@@ -74,7 +83,7 @@ namespace Event_Attender.Web.Controllers
 
         //    return View("Index", model);
         //}
-       
+
 
         public IActionResult Privacy() 
         {
