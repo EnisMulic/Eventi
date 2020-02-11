@@ -1275,13 +1275,67 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
         }
         #endregion
 
-        public IActionResult EmailPostoji(string Email)
-        {
-            var email = uow.LogPodaciRepository.GetAll()
-                .SingleOrDefault(i => i.Email == Email);
+        //public IActionResult EmailPostoji(string Email)
+        //{
+        //    var email = uow.LogPodaciRepository.GetAll()
+        //        .SingleOrDefault(i => i.Email == Email);
 
-            return Json(email != null);
+        //    return Json(email != null);
+        //}
+
+        public IActionResult DodajRadnikaNaEvent(int id)
+        {
+            var Event = uow.EventRepository.GetAll()
+                .Include(i => i.ProstorOdrzavanja)
+                .Where(i => i.Id == id)
+                .SingleOrDefault();
+
+
+            var model = new DodajRadnikEventVM
+            {
+                EventId = Event.Id,
+                EventNaziv = Event.Naziv,
+                Datum = Event.DatumOdrzavanja.ToString("dd/MM/yyyy"),
+                Vrijeme = Event.VrijemeOdrzavanja,
+                ProstorOdrzavanja = Event.ProstorOdrzavanja.Naziv,
+                Radnici = uow.RadnikRepository.GetAll()
+                    .Select
+                    (
+                        i => new SelectListItem
+                        {
+                            Value = i.Id.ToString(),
+                            Text = i.Osoba.Ime + " " + i.Osoba.Prezime
+                        }
+                    )
+                    .ToList()
+            };
+
+            return PartialView(model);
         }
+
+        public IActionResult SnimiRadnikEvent(DodajRadnikEventVM model)
+        {
+            var RadnikoviEventi = uow.RadnikEventRepository.GetAll()
+                .Where
+                (
+                    i => i.RadnikId == model.RadnikId && 
+                         i.EventId == model.EventId
+                )
+                .ToList();
+
+            if(!RadnikoviEventi.Any())
+            {
+                var RadnikEvent = new RadnikEvent
+                {
+                    EventId = model.EventId,
+                    RadnikId = model.RadnikId
+                };
+                uow.RadnikEventRepository.Add(RadnikEvent);
+            }
+
+            return Redirect("/Administrator/Home/Index");
+        }
+
     }
 
     
