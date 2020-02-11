@@ -39,7 +39,7 @@ namespace Event_Attender.Web.Areas.ModulRadnik.Controllers
                 return null;   //"Server ce javiti gresku no Content"
             }
             PrikazEvenataVM model = new PrikazEvenataVM();
-            model.eventi = ctx.RadnikEvent.Where(r => r.Id == radnik.Id)
+            model.eventi = ctx.RadnikEvent.Where(r => r.RadnikId == radnik.Id)
                 .Select(r => new PrikazEvenataVM.Rows
                 {
                     EventId = r.EventId,
@@ -65,7 +65,7 @@ namespace Event_Attender.Web.Areas.ModulRadnik.Controllers
             Radnik radnik = ctx.Radnik.Where(ra => ra.Osoba.LogPodaciId == l.Id).Include(r=>r.Osoba).SingleOrDefault();
 
             PrikazEvenataVM model = new PrikazEvenataVM { RadnikId = radnik.Id };
-            model.eventi = ctx.RadnikEvent.Where(r => r.Id == radnik.Id)
+            model.eventi = ctx.RadnikEvent.Where(r => r.RadnikId == radnik.Id)
               .Select(r => new PrikazEvenataVM.Rows
               {
                   EventId = r.EventId,
