@@ -11,6 +11,8 @@ namespace Event_Attender.Web.Areas.Administrator.Models
     public class KorisnikVM
     {
         public int Id { get; set; }
+        public int LogPodaciId { get; set; }
+
         [Required(ErrorMessage = "Obavezno polje")]
         [MaxLength(20)]
         public string Ime { get; set; }
@@ -20,13 +22,15 @@ namespace Event_Attender.Web.Areas.Administrator.Models
         public string Prezime { get; set; }
 
         [Required(ErrorMessage = "Obavezno polje")]
-        [Remote(action: "IsUsernameUnique", controller: "Administrator", areaName: "Administrator",
+        [Remote(action: "IsUsernameUnique", controller: "Administrator", areaName: "Administrator", 
+                AdditionalFields = "LogPodaciId", 
                 ErrorMessage = "Username Vec postoji")]
         public string Username { get; set; }
 
         [Required(ErrorMessage = "Obavezno polje")]
         [EmailAddress(ErrorMessage = "Niste unijeli pravilan format")]
-        [Remote(action: "IsEmailUnique", controller: "Administrator", areaName: "Administrator",
+        [Remote(action: "IsEmailUnique", controller: "Administrator", areaName: "Administrator", 
+                AdditionalFields = "LogPodaciId",
                 ErrorMessage = "Email Vec postoji")]
         public string Email { get; set; }
 

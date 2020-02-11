@@ -435,7 +435,10 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
                         Username = i.Osoba.LogPodaci.Username,
                         Email = i.Osoba.LogPodaci.Email,
                         Password = i.Osoba.LogPodaci.Password,
-                        Adresa = i.Adresa
+                        Adresa = i.Adresa,
+                        PostanskiBroj = i.PostanskiBroj,
+                        BrojKreditneKartice = i.BrojKreditneKartice,
+                        LogPodaciId = i.Osoba.LogPodaci.Id
 
                     }
                 )
@@ -462,6 +465,8 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
             item.Osoba.LogPodaci.Password = model.Password;
             item.Osoba.GradId = model.GradId;
             item.Osoba.Telefon = model.Telefon;
+            item.PostanskiBroj = model.PostanskiBroj;
+            item.BrojKreditneKartice = model.BrojKreditneKartice;
             item.Adresa = model.Adresa;
 
 
@@ -594,7 +599,8 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
                         GradNaziv = i.Osoba.Grad.Naziv,
                         Username = i.Osoba.LogPodaci.Username,
                         Email = i.Osoba.LogPodaci.Email,
-                        Password = i.Osoba.LogPodaci.Password
+                        Password = i.Osoba.LogPodaci.Password,
+                        LogPodaciId = i.Osoba.LogPodaci.Id
                     }
                 )
                 .Where(i => i.Id == Id)
@@ -694,6 +700,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
                         GradNaziv = i.Grad.Naziv,
                         Username = i.LogPodaci.Username,
                         Email = i.LogPodaci.Email
+                        
                     }
                 )
                 .ToList();
@@ -751,7 +758,8 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
                         GradNaziv = i.Grad.Naziv,
                         Username = i.LogPodaci.Username,
                         Email = i.LogPodaci.Email,
-                        Password = i.LogPodaci.Password
+                        Password = i.LogPodaci.Password,
+                        LogPodaciId = i.LogPodaci.Id
                     }
                 )
                 .Where(i => i.Id == Id)

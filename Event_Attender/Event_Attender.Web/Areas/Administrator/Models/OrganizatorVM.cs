@@ -13,10 +13,13 @@ namespace Event_Attender.Web.Areas.Administrator.Models
     {
         public int Id { get; set; }
 
+        public int LogPodaciId { get; set; }
+
         [Required(ErrorMessage = "Obavezno polje")]
         public string Naziv { get; set; }
 
-        [Remote(action: "IsUsernameUnique", controller: "Administrator", areaName: "Administrator", 
+        [Remote(action: "IsUsernameUnique", controller: "Administrator", areaName: "Administrator",
+                AdditionalFields = "LogPodaciId",
                 ErrorMessage = "Username Vec postoji")]
         [Required(ErrorMessage = "Obavezno polje")]
         public string Username { get; set; }
@@ -29,6 +32,7 @@ namespace Event_Attender.Web.Areas.Administrator.Models
         //[Required(ErrorMessage = "Obavezno polje")]
 
         [Remote(action: "IsEmailUnique", controller: "Administrator", areaName: "Administrator",
+                AdditionalFields = "LogPodaciId",
                 ErrorMessage = "Email Vec postoji")]
         [Required(ErrorMessage = "Obavezno polje")]
         public string Email { get; set; }
