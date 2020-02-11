@@ -435,7 +435,10 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
                         Username = i.Osoba.LogPodaci.Username,
                         Email = i.Osoba.LogPodaci.Email,
                         Password = i.Osoba.LogPodaci.Password,
-                        Adresa = i.Adresa
+                        Adresa = i.Adresa,
+                        PostanskiBroj = i.PostanskiBroj,
+                        BrojKreditneKartice = i.BrojKreditneKartice,
+                        LogPodaciId = i.Osoba.LogPodaci.Id
 
                     }
                 )
@@ -462,6 +465,8 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
             item.Osoba.LogPodaci.Password = model.Password;
             item.Osoba.GradId = model.GradId;
             item.Osoba.Telefon = model.Telefon;
+            item.PostanskiBroj = model.PostanskiBroj;
+            item.BrojKreditneKartice = model.BrojKreditneKartice;
             item.Adresa = model.Adresa;
 
 
@@ -594,7 +599,8 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
                         GradNaziv = i.Osoba.Grad.Naziv,
                         Username = i.Osoba.LogPodaci.Username,
                         Email = i.Osoba.LogPodaci.Email,
-                        Password = i.Osoba.LogPodaci.Password
+                        Password = i.Osoba.LogPodaci.Password,
+                        LogPodaciId = i.Osoba.LogPodaci.Id
                     }
                 )
                 .Where(i => i.Id == Id)
@@ -694,6 +700,7 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
                         GradNaziv = i.Grad.Naziv,
                         Username = i.LogPodaci.Username,
                         Email = i.LogPodaci.Email
+                        
                     }
                 )
                 .ToList();
@@ -751,7 +758,8 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
                         GradNaziv = i.Grad.Naziv,
                         Username = i.LogPodaci.Username,
                         Email = i.LogPodaci.Email,
-                        Password = i.LogPodaci.Password
+                        Password = i.LogPodaci.Password,
+                        LogPodaciId = i.LogPodaci.Id
                     }
                 )
                 .Where(i => i.Id == Id)
@@ -1275,15 +1283,67 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
         }
         #endregion
 
-        public IActionResult EmailPostoji(string Email)
-        {
-            var email = uow.LogPodaciRepository.GetAll()
-                .SingleOrDefault(i => i.Email == Email);
+        //public IActionResult EmailPostoji(string Email)
+        //{
+        //    var email = uow.LogPodaciRepository.GetAll()
+        //        .SingleOrDefault(i => i.Email == Email);
 
-            return Json(email != null);
+        //    return Json(email != null);
+        //}
+
+        public IActionResult DodajRadnikaNaEvent(int id)
+        {
+            var Event = uow.EventRepository.GetAll()
+                .Include(i => i.ProstorOdrzavanja)
+                .Where(i => i.Id == id)
+                .SingleOrDefault();
+
+
+            var model = new DodajRadnikEventVM
+            {
+                EventId = Event.Id,
+                EventNaziv = Event.Naziv,
+                Datum = Event.DatumOdrzavanja.ToString("dd/MM/yyyy"),
+                Vrijeme = Event.VrijemeOdrzavanja,
+                ProstorOdrzavanja = Event.ProstorOdrzavanja.Naziv,
+                Radnici = uow.RadnikRepository.GetAll()
+                    .Select
+                    (
+                        i => new SelectListItem
+                        {
+                            Value = i.Id.ToString(),
+                            Text = i.Osoba.Ime + " " + i.Osoba.Prezime
+                        }
+                    )
+                    .ToList()
+            };
+
+            return PartialView(model);
         }
 
-       
+        public IActionResult SnimiRadnikEvent(DodajRadnikEventVM model)
+        {
+            var RadnikoviEventi = uow.RadnikEventRepository.GetAll()
+                .Where
+                (
+                    i => i.RadnikId == model.RadnikId && 
+                         i.EventId == model.EventId
+                )
+                .ToList();
+
+            if(!RadnikoviEventi.Any())
+            {
+                var RadnikEvent = new RadnikEvent
+                {
+                    EventId = model.EventId,
+                    RadnikId = model.RadnikId
+                };
+                uow.RadnikEventRepository.Add(RadnikEvent);
+            }
+
+            return Redirect("/Administrator/Home/Index");
+        }
+
     }
 
     
