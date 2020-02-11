@@ -133,12 +133,10 @@ namespace Event_Attender.Web.Areas.ModulKorisnik.Controllers
             return lista;
         }
         public IActionResult LikeEvent(int eId, int korId) {
-
-            // ctx.Event.Where(e => e.Id == model.EventId).Any() && ctx.Korisnik.Where(x => x.Id == model.KorisnikId).Any()
-
             
             ViewData["eId"] = eId;
             ViewData["kId"] = korId;
+            
             if (eId > 0 && korId > 0)
             {
                 // ako taj id eventa i taj id korisnika postoje u bazi
@@ -146,20 +144,19 @@ namespace Event_Attender.Web.Areas.ModulKorisnik.Controllers
                 {
                     Like l = new Like
                     {
-                        KorisnikId = korId, //model.KorisnikId,
-                        EventId = eId,  //model.EventId,
+                        KorisnikId = korId, 
+                        EventId = eId,  
                         DatumLajka = DateTime.Now
                     };
                     ctx.Like.Add(l);
                     ctx.SaveChanges();
                 }
             }
-            return PartialView();  //model
+            return PartialView();  
         }
         public IActionResult DisLikeEvent(int eId, int korId)
         {
-            // int eId = model.EventId;
-            // int kId = model.KorisnikId;
+          
             ViewData["eId"] = eId;
             ViewData["kId"] = korId;
 
@@ -173,7 +170,7 @@ namespace Event_Attender.Web.Areas.ModulKorisnik.Controllers
                 }
             }
 
-            return PartialView();  //model
+            return PartialView();  
         }
         public IActionResult OEventu(int eId, int korId)
         {
@@ -260,11 +257,17 @@ namespace Event_Attender.Web.Areas.ModulKorisnik.Controllers
             Korisnik kor = ctx.Korisnik.Find(model.KorisnikId);
             if(pt==null || ev==null|| kor==null|| model.KorisnikId==0 || model.EventId == 0)
             {
+                TempData["error_Msg"] = "Niste odabrali tip karte. ";
                 return PartialView("NemKupovina");
             }
             float CijenaTrenutneKupovine = 0;
             // provjera da li ima toliko karata
             int zeljeniBrojKarata = model.OdabranBrKarata;
+            if (zeljeniBrojKarata <= 0)
+            {
+                TempData["error_Msg"] = "Nije moguće obaviti kupovinu. Niste unijeli ispravan broj karata.";
+                return Redirect("/ModulKorisnik/Korisnik/KupiKartu?eId=" + model.EventId + "&kId=" + model.KorisnikId);
+            }
             if(zeljeniBrojKarata> (pt.UkupnoKarataTip - pt.BrojProdatihKarataTip))
             {
                 TempData["error_Msg"] = "Nema toliko karata u ponudi, broj " +
@@ -287,7 +290,7 @@ namespace Event_Attender.Web.Areas.ModulKorisnik.Controllers
                     ProdajaTipId = pt.Id,
                     TipKarte = pt.TipKarte,
                     BrojKarata = zeljeniBrojKarata,
-                    Cijena = zeljeniBrojKarata * pt.CijenaTip
+                    Cijena = zeljeniBrojKarata * pt.CijenaTip,
                 };
                 ctx.KupovinaTip.Add(kt);
                 ctx.SaveChanges();
@@ -298,7 +301,8 @@ namespace Event_Attender.Web.Areas.ModulKorisnik.Controllers
                     {
                         KupovinaTipId = kt.Id,
                         Cijena = pt.CijenaTip,
-                        Tip = kt.TipKarte
+                        Tip = kt.TipKarte,
+                        DatumKupovine=DateTime.Now
                     };
                     CijenaTrenutneKupovine += karta.Cijena;
                     ctx.Karta.Add(karta); 
@@ -411,7 +415,7 @@ namespace Event_Attender.Web.Areas.ModulKorisnik.Controllers
                 Adresa = kor.Adresa,
                 BrojKreditneKartice = kor.BrojKreditneKartice,
                 Email = kor.Osoba.LogPodaci.Email,
-                gradId = kor.Osoba.GradId??0,
+                Grad = kor.Osoba.Grad.Naziv,
                 Ime = kor.Osoba.Ime,
                 PostanskiBroj = kor.PostanskiBroj,
                 Prezime = kor.Osoba.Prezime,
@@ -423,32 +427,10 @@ namespace Event_Attender.Web.Areas.ModulKorisnik.Controllers
                   Text=d.Naziv,
                    Value=d.Id.ToString()
             }).ToList();
-            //if (drzavaId != 0)    // u slucaju ajax poziva na select
-            //{
-            //    model.gradovi = ctx.Grad.Where(g=>g.DrzavaId==drzavaId).ToList();
-            //}
-            //else
-            //{
-            //    model.gradovi = ctx.Grad.Where(g => g.DrzavaId == model.DrzavaId).ToList();
-            //    // ako je drzava 0, onda pripadajuci gradovi vec odabrane drzave
-            //}
-            model.gradovi = ctx.Grad.ToList();
+           
+          //  model.gradovi = ctx.Grad.ToList();
 
-            //v2 - unosenje grada - ispraviti
-            //List<Grad> gradovi = ctx.Grad.ToList();     //ili padajuca lista gradova ?
-            //foreach (Grad g in gradovi)
-            //{
-            //    if (model.Grad.ToLower().Equals(g.Naziv.ToLower()))
-            //    {
-            //        k.Osoba.GradId = g.Id;
-            //        break;
-            //    }
-            //}
-            //if (k.Osoba.GradId == 0)  // znaci da nema u bazi, 
-            //{
-            //    k.Osoba.Grad = new Grad { Naziv = model.Grad, DrzavaId = model.DrzavaId };
-            //}
-            return View(model);     // PartialView(model);
+            return View(model);     
         }
 
         public async Task<IActionResult> SnimiPodatkeAsync(KorisnikPodaciVM model,int drzavaId,int gradId, IFormFile slika)
@@ -473,29 +455,52 @@ namespace Event_Attender.Web.Areas.ModulKorisnik.Controllers
                 {
                     return Redirect("Index");   // filter null
                 }
-                Grad grad= ctx.Grad.Where(g => g.Id == model.gradId).SingleOrDefault();
+              
                 kor.Osoba.Ime = model.Ime;
                 kor.Osoba.Prezime = model.Prezime;
                 kor.Osoba.Telefon = model.Telefon;
-                kor.Osoba.GradId = model.gradId;
-                kor.Osoba.Grad.DrzavaId = grad.DrzavaId;  // uzet ce se drzava izabranog grada, jer se moze desiti da korisnik unese neodgovarajucu drzavu i grad
                 kor.Osoba.LogPodaci.Email = model.Email;
                 kor.PostanskiBroj = model.PostanskiBroj;
                 kor.Adresa = model.Adresa;
                 kor.BrojKreditneKartice = model.BrojKreditneKartice;
                 kor.Slika = model.Slika;
 
+            //v2 - unosenje grada 
+          
+            model.Grad = model.Grad.Replace("ć", "c");
+            model.Grad = model.Grad.Replace("č", "c");
+            model.Grad = model.Grad.Replace("š", "s");
+            model.Grad = model.Grad.Replace("đ", "d");
+            model.Grad = model.Grad.Replace("ž", "z");
+            model.Grad = model.Grad.Replace("Ć", "C");
+            model.Grad = model.Grad.Replace("Č", "C");
+            model.Grad = model.Grad.Replace("Š", "S");
+            model.Grad = model.Grad.Replace("Đ", "D");
+            model.Grad = model.Grad.Replace("Ž", "Z");
+
+            bool postoji = false;
+            List<Grad> gradovi = ctx.Grad.ToList();
+            foreach (Grad g in gradovi)
+            {
                
-                await ctx.SaveChangesAsync();
+                if (model.Grad.ToLower().Equals(g.Naziv.ToLower()))
+                {
+
+                    kor.Osoba.GradId = g.Id;
+                    postoji = true;
+                    break;
+                }
+            }
+            if (postoji==false)  // znaci da nema u bazi, 
+            {
+                kor.Osoba.Grad = new Grad { Naziv = model.Grad, DrzavaId = model.DrzavaId };
+            }
+            await ctx.SaveChangesAsync();
             
             return Redirect("UserPodaci");
         }
        
-        //public IActionResult UserPodaci2  // u sliucaju ajax-a na select
-        //{
-        //    return View();
-        //}
-
+        
     }
 }
 

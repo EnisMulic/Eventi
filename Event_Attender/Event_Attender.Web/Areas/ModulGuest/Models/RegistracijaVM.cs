@@ -28,8 +28,8 @@ namespace Event_Attender.Web.Areas.ModulGuest.Models
 
         [Required(ErrorMessage = "Obavezno polje")]
         [MaxLength(20)]
-        [RegularExpression("[A-Za-z]+", ErrorMessage ="Morate unijeti naziv nekog grada")]
-        public string Grad { get; set; }  // kao string?
+        [RegularExpression("[^0-9]", ErrorMessage = "Morate unijeti naziv nekog grada")]
+        public string Grad { get; set; }  
 
         [Required(ErrorMessage = "Obavezno polje")]
         [MaxLength(40)]

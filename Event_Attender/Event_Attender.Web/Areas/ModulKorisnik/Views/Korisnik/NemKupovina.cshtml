@@ -1,12 +1,14 @@
 ﻿
 @{
     ViewData["Title"] = "NemKupovina";
+    string err_msg = (string)TempData["error_Msg"];
 }
 
  <div class="alert alert-danger alert-dismissible">
        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
        <strong>Nije moguce obaviti kupovinu karte.</strong>
-       Kliknite na ime eventa kako bi se vratili nazad
+        @if (err_msg != null) { @err_msg; }
+        Kliknite na ime eventa kako bi se vratili nazad
  </div>
  
 

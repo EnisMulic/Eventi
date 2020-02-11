@@ -34,17 +34,19 @@
 
     #likeTd {
         text-align: center;
-        background-color: #268c59; /*#cf405a; */
+        background-color: #268c59; 
         height:250px;   /*kao velicina slike*/
         text-align:center;
+        line-height:250px;
         
     }
 
     #kupiKartuTd {
         text-align: center;
-        background-color: #58ad67; /*#4bc98a;    /* #b50543  */ /*#5a93b8*/
+        background-color: #58ad67; 
         height:250px;
         text-align:center;
+        line-height:250px;
     }
 
     #likeTd:hover {
@@ -59,17 +61,19 @@
         color: white;
     }
 
-        a.tdLink:hover {
-            text-decoration: none;
-            color: white;
-        }
-        #linkNaziv{
-            color:black;
-        }
-        #linkNaziv:hover{
-            color:forestgreen;
-            text-decoration:none;
-        }
+   a.tdLink:hover {
+       text-decoration: none;
+       color: white;
+   }
+   #linkNaziv{
+       color:black;
+   }
+   #linkNaziv:hover{
+        color:forestgreen;
+        text-decoration:none;
+   }
+
+       
 </style>
 <h5><strong> <a id="linkNaziv" href="/ModulKorisnik/Korisnik/OEventu?eId=@Model.EventId&korId=@Model.KorisnikId">@Model.Naziv</a></strong></h5>
 <br />
