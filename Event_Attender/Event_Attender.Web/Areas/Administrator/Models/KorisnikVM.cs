@@ -36,8 +36,8 @@ namespace Event_Attender.Web.Areas.Administrator.Models
         public string Password { get; set; }
 
         [Required(ErrorMessage = "Obavezno polje")]
-        [RegularExpression(@"\+[0-9]{3}[\s][0-9]{3}[\s][0-9]{3}[\s][0-9]{3}",
-            ErrorMessage = "U formatu +387 xxx xxx xxx")]
+        [RegularExpression(@"\+[0-9]{3}[\s][0-9]{2}[\s][0-9]{3}[\s][0-9]{3}", 
+                ErrorMessage = "U formatu +387 xx xxx xxx")]
         public string Telefon { get; set; }
 
         [Required(ErrorMessage = "Obavezno polje")]
