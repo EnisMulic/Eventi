@@ -11,6 +11,9 @@ namespace Event_Attender.Web.Areas.Administrator.Models
     public class RadnikVM
     {
         public int Id { get; set; }
+
+        public int LogPodaciId { get; set; }
+
         [Required(ErrorMessage = "Obavezno polje")]
         [MaxLength(20)]
         public string Ime { get; set; }
@@ -21,12 +24,14 @@ namespace Event_Attender.Web.Areas.Administrator.Models
 
         [Required(ErrorMessage = "Obavezno polje")]
         [Remote(action: "IsUsernameUnique", controller: "Administrator", areaName: "Administrator",
+                AdditionalFields = "LogPodaciId",
                 ErrorMessage = "Username Vec postoji")]
         public string Username { get; set; }
 
         [Required(ErrorMessage = "Obavezno polje")]
         [EmailAddress(ErrorMessage = "Niste unijeli pravilan format")]
         [Remote(action: "IsEmailUnique", controller: "Administrator", areaName: "Administrator",
+                AdditionalFields = "LogPodaciId",
                 ErrorMessage = "Email Vec postoji")]
         public string Email { get; set; }
 
@@ -35,8 +40,8 @@ namespace Event_Attender.Web.Areas.Administrator.Models
         [MaxLength(25)]
         public string Password { get; set; }
         [Required(ErrorMessage = "Obavezno polje")]
-        [RegularExpression(@"\+[0-9]{3}[\s][0-9]{3}[\s][0-9]{3}[\s][0-9]{3}",
-            ErrorMessage = "U formatu +387 xxx xxx xxx")]
+        [RegularExpression(@"\+[0-9]{3}[\s][0-9]{2}[\s][0-9]{3}[\s][0-9]{3}", 
+                ErrorMessage = "U formatu +387 xx xxx xxx")]
         public string Telefon { get; set; }
 
         [Required]

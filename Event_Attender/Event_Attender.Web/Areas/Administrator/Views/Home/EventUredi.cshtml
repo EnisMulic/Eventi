@@ -6,7 +6,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="EventUredi" method="post" enctype="multipart/form-data" class="ea-form">
+        <form asp-action="EventSnimi" method="post" enctype="multipart/form-data" class="ea-form">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Id" class="control-label"></label>
@@ -89,6 +89,18 @@
     </div>
 </div>
 
-@*<div>
-    <a asp-area="Administrator" asp-controller="Home" asp-action="Index">Back to List</a>
-</div>*@
+<div>
+    <a @*asp-area="Administrator" 
+       asp-controller="Home" 
+       asp-action="DodajRadnikaNaEvent" 
+       asp-route-id="@Model.Id"*@ class="btn btn-default dodaj-radnik">Dodaj radnika</a>
+</div>
+
+<script>
+    $("a.dodaj-radnik").click(function (e) {
+        e.preventDefault();
+        $.get("/Administrator/Home/DodajRadnikaNaEvent?id=@Model.Id", function (response) {
+            $("#Main-Display").html(response);
+        });
+    })
+</script>

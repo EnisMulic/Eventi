@@ -8,6 +8,7 @@ using Event_Attender.Data.Repository;
 using Event_Attender.Web.Areas.Administrator.Models;
 using Event_Attender.Web.Helper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Event_Attender.Web.Areas.Administrator.Controllers
 {
@@ -52,21 +53,21 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
             return View(model);
         }
 
-        public bool IsUsernameUnique(string Username)
+        public bool IsUsernameUnique(string Username, int LogPodaciId)
         {
             List<LogPodaci> logPodaci = uow.LogPodaciRepository.GetAll().ToList();
             foreach (LogPodaci l in logPodaci)
-                if (l.Username == Username)
+                if (l.Username == Username && l.Id != LogPodaciId)
                     return false;
 
             return true;
         }
 
-        public bool IsEmailUnique(string Email)
+        public bool IsEmailUnique(string Email, int LogPodaciId)
         {
             List<LogPodaci> logPodaci = uow.LogPodaciRepository.GetAll().ToList();
             foreach (LogPodaci l in logPodaci)
-                if (l.Email == Email)
+                if (l.Email == Email && l.Id != LogPodaciId)
                     return false;
 
             return true;
