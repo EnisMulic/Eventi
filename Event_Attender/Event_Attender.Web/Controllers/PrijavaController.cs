@@ -31,8 +31,15 @@ namespace Event_Attender.Web.Controllers
             {
                 return View("Index", input);
             }
-            Korisnik k= ctx.Korisnik.Include(k => k.Osoba).Include(o => o.Osoba.LogPodaci)
-                .Where(o => o.Osoba.LogPodaci.Username == input.username && o.Osoba.LogPodaci.Password == input.password).SingleOrDefault();
+            Korisnik k =null; 
+            List<Korisnik> korisnici = ctx.Korisnik.Include(o=>o.Osoba).Include(o=>o.Osoba.LogPodaci).ToList();
+            foreach (Korisnik kor in korisnici)
+            {
+                if (kor.Osoba.LogPodaci.Username.Equals(input.username) && kor.Osoba.LogPodaci.Password.Equals(input.password))
+                {
+                    k = kor;
+                }
+            }
             if (k != null)
             {
                 HttpContext.SetLogiraniUser(k.Osoba.LogPodaci);
@@ -40,16 +47,31 @@ namespace Event_Attender.Web.Controllers
                 return Redirect("/ModulKorisnik/Korisnik/Index");
             }
 
-            Administrator a= ctx.Administrator.Include(k => k.Osoba).Include(o => o.Osoba.LogPodaci)
-                .Where(o => o.Osoba.LogPodaci.Username == input.username && o.Osoba.LogPodaci.Password == input.password).SingleOrDefault();
+            
+            Administrator a = null;
+            List<Administrator> administratori = ctx.Administrator.Include(o => o.Osoba).Include(o => o.Osoba.LogPodaci).ToList();
+            foreach (Administrator adm in administratori)
+            {
+                if (adm.Osoba.LogPodaci.Username.Equals(input.username) && adm.Osoba.LogPodaci.Password.Equals(input.password))
+                {
+                    a=adm;
+                }
+            }
             if (a != null)
             {
                 HttpContext.SetLogiraniUser(a.Osoba.LogPodaci);
                 return Redirect("/Administrator/Home/Index");
             }
 
-            Radnik r = ctx.Radnik.Include(k => k.Osoba).Include(o => o.Osoba.LogPodaci)
-                .Where(o => o.Osoba.LogPodaci.Username == input.username && o.Osoba.LogPodaci.Password == input.password).SingleOrDefault();
+            Radnik r = null;
+            List<Radnik> radnici = ctx.Radnik.Include(o => o.Osoba).Include(o => o.Osoba.LogPodaci).ToList();
+            foreach (Radnik rad in radnici)
+            {
+                if (rad.Osoba.LogPodaci.Username.Equals(input.username) && rad.Osoba.LogPodaci.Password.Equals(input.password))
+                {
+                    r = rad;
+                }
+            }
             if (r != null)
             {
                 HttpContext.SetLogiraniUser(r.Osoba.LogPodaci);
@@ -57,7 +79,15 @@ namespace Event_Attender.Web.Controllers
                 
             }
 
-            Organizator o = ctx.Organizator.Include(o => o.LogPodaci).Where(o => o.LogPodaci.Username == input.username && o.LogPodaci.Password == input.password).SingleOrDefault();
+            Organizator o = null;
+            List<Organizator> organizatori = ctx.Organizator.Include(s=>s.LogPodaci).ToList();
+            foreach (Organizator org in organizatori)
+            {
+                if (org.LogPodaci.Username.Equals(input.username) && org.LogPodaci.Password.Equals(input.password))
+                {
+                    o = org;
+                }
+            }
             if (o != null)
             {
                 HttpContext.SetLogiraniUser(o.LogPodaci);

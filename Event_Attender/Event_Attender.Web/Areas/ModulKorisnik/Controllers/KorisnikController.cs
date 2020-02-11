@@ -136,21 +136,23 @@ namespace Event_Attender.Web.Areas.ModulKorisnik.Controllers
 
             // ctx.Event.Where(e => e.Id == model.EventId).Any() && ctx.Korisnik.Where(x => x.Id == model.KorisnikId).Any()
 
-            //int eId = model.EventId;
-            //int kId=model.KorisnikId;
+            
             ViewData["eId"] = eId;
             ViewData["kId"] = korId;
             if (eId > 0 && korId > 0)
             {
                 // ako taj id eventa i taj id korisnika postoje u bazi
-                Like l = new Like
+                if (ctx.Event.Where(e => e.Id == eId).Any() && ctx.Korisnik.Where(x => x.Id == korId).Any())
                 {
-                    KorisnikId = korId, //model.KorisnikId,
-                    EventId = eId,  //model.EventId,
-                    DatumLajka = DateTime.Now
-                };
-                ctx.Like.Add(l);
-                ctx.SaveChanges();
+                    Like l = new Like
+                    {
+                        KorisnikId = korId, //model.KorisnikId,
+                        EventId = eId,  //model.EventId,
+                        DatumLajka = DateTime.Now
+                    };
+                    ctx.Like.Add(l);
+                    ctx.SaveChanges();
+                }
             }
             return PartialView();  //model
         }
@@ -431,6 +433,21 @@ namespace Event_Attender.Web.Areas.ModulKorisnik.Controllers
             //    // ako je drzava 0, onda pripadajuci gradovi vec odabrane drzave
             //}
             model.gradovi = ctx.Grad.ToList();
+
+            //v2 - unosenje grada - ispraviti
+            //List<Grad> gradovi = ctx.Grad.ToList();     //ili padajuca lista gradova ?
+            //foreach (Grad g in gradovi)
+            //{
+            //    if (model.Grad.ToLower().Equals(g.Naziv.ToLower()))
+            //    {
+            //        k.Osoba.GradId = g.Id;
+            //        break;
+            //    }
+            //}
+            //if (k.Osoba.GradId == 0)  // znaci da nema u bazi, 
+            //{
+            //    k.Osoba.Grad = new Grad { Naziv = model.Grad, DrzavaId = model.DrzavaId };
+            //}
             return View(model);     // PartialView(model);
         }
 
