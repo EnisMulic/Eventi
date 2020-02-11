@@ -18,11 +18,11 @@
 </style>
     <form action="/Prijava/LogIn">
         <label>Username: </label>
-        <input class="form-control" name="username" type="text" size="20" />
+        <input class="form-control" asp-for="username" name="username" type="text" size="20" />
         <span asp-validation-for="username" class="text-danger"></span>
         <br />
         <label>Password: </label>
-        <input class="form-control" name="password" type="password" size="20" />
+        <input class="form-control" asp-for="password" name="password" type="password" size="20" />
         <span asp-validation-for="password" class="text-danger"></span>
         <br />
         <input class="btn btn-dark" type="submit" value="Prijava" />

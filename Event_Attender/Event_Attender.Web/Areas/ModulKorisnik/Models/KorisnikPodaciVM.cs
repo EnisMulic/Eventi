@@ -47,6 +47,7 @@ namespace Event_Attender.Web.Areas.ModulKorisnik.Models
         public List<SelectListItem> drzave { get; set; }
 
         public List<Grad> gradovi { get; set; }
+       //   public string Grad { get; set; }
 
         public string Slika { get; set; }
     }
