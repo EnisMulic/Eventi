@@ -1,13 +1,4 @@
-﻿<style>
-  .link{
-      color:white;
-      text-decoration:none;
-  }
-  .link:hover{
-      color:white;
-      text-decoration:none;
-  }
-</style>
+﻿
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,31 +10,13 @@
 </head>
 <body>
     <header>
-        @*<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-                <div class="container">
-                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Event Attender</a>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                            aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                        <ul class="navbar-nav flex-grow-1">
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </nav>*@
+       
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm bg-dark border-bottom box-shadow mb-3 navbar-dark">
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Event Attender</a>
                 <ul class="nav navbar-nav navbar-right">
-                    <li> <a class="link" href="ModulGuest/Guest/RegistracijaForma"> Registruj se</a></li>
-                    <li> <a class="link" href="Prijava/Index">Prijavi se</a></li>
+                    <li> <a class="navbar-brand" href="ModulGuest/Guest/RegistracijaForma"> Registruj se</a></li>
+                    <li> <a class="navbar-brand" href="/Prijava/Index">Prijavi se</a></li>
                 </ul>
             </div>
         </nav>
@@ -54,11 +27,7 @@
         </main>
     </div>
 
-    @*<footer class="border-top footer text-muted">
-            <div class="container">
-                &copy; 2019 - Event Attender - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-            </div>
-        </footer>*@
+   
     <footer class="border-top footer text-muted bg-dark ">
         <div class="container">
             &copy; 2019 - Event Attender - <a style="color:white" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>

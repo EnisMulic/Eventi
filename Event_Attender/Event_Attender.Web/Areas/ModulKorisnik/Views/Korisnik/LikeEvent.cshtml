@@ -1,18 +1,10 @@
 ﻿
 @{
-    //ViewData["Title"] = "LikeEvent";
+    ViewData["Title"] = "LikeEvent";
     int eId = (int)ViewData["eId"];
     int korId = (int)ViewData["kId"];
 }
 
-@*@model Event_Attender.Web.Areas.ModulKorisnik.Models.EventKorisnikVM*@
-
-@*<a href="/ModulKorisnik/Korisnik/DisLikeEvent?eId=@Model.EventId&korId=@Model.KorisnikId" ajax-poziv="dislike"
-    ajax-rezultat="likeTd" >Dislike</a>*@
-
-@*<a>Dislike</a>*@
-
 <a class="tdLink" href="/ModulKorisnik/Korisnik/DisLikeEvent?eId=@eId&korId=@korId" ajax-poziv="dislike"
    ajax-rezultat="likeTd">Dislike</a>
 
-@*?eId=@Model.EventId&korId=@Model.KorisnikId"*@

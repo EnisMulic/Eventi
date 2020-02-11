@@ -37,7 +37,11 @@ namespace Event_Attender.Web.Areas.ModulKorisnik.Models
         [Required(ErrorMessage = "Obavezno polje")]
         [RegularExpression(@"\+[0-9]{3}[\s][0-9]{2}[\s][0-9]{3}[\s][0-9]{3}", ErrorMessage = "U formatu +387 xx xxx xxx")]
         public string Telefon { get; set; }
-
+        
+        [Required(ErrorMessage = "Obavezno polje")]
+        [MaxLength(20)]
+        [RegularExpression("[^0-9]", ErrorMessage = "Morate unijeti naziv nekog grada")]
+        public string Grad { get; set; } 
         public int gradId { get; set; }
 
         [Required(ErrorMessage = "Obavezno polje")]
@@ -47,8 +51,6 @@ namespace Event_Attender.Web.Areas.ModulKorisnik.Models
         public List<SelectListItem> drzave { get; set; }
 
         public List<Grad> gradovi { get; set; }
-       //   public string Grad { get; set; }
-
         public string Slika { get; set; }
     }
 }

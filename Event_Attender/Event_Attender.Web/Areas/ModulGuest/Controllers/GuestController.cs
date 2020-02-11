@@ -124,7 +124,18 @@ namespace Event_Attender.Web.Areas.ModulGuest.Controllers
                 Email = model.Email
             };
 
-            List<Grad> gradovi = ctx.Grad.ToList();     //ili padajuca lista gradova ?
+            List<Grad> gradovi = ctx.Grad.ToList();
+
+            model.Grad = model.Grad.Replace("ć", "c");
+            model.Grad = model.Grad.Replace("č", "c");
+            model.Grad = model.Grad.Replace("š", "s");
+            model.Grad = model.Grad.Replace("đ", "d");
+            model.Grad = model.Grad.Replace("ž", "z");
+            model.Grad = model.Grad.Replace("Ć", "C");
+            model.Grad = model.Grad.Replace("Č", "C");
+            model.Grad = model.Grad.Replace("Š", "S");
+            model.Grad = model.Grad.Replace("Đ", "D");
+            model.Grad = model.Grad.Replace("Ž", "Z");
             foreach (Grad g in gradovi)
             {
                 if (model.Grad.ToLower().Equals(g.Naziv.ToLower()))
