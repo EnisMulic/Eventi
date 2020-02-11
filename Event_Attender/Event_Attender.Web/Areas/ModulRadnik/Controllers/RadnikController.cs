@@ -34,10 +34,10 @@ namespace Event_Attender.Web.Areas.ModulRadnik.Controllers
             LogPodaci l = HttpContext.GetLogiraniUser();
 
             Radnik radnik = ctx.Radnik.Where(ra => ra.Osoba.LogPodaciId == l.Id).SingleOrDefault();
-            //if (r == null)
-            //{
-            //    return null;
-            //}
+            if (radnik == null)
+            {
+                return null;   //"Server ce javiti gresku no Content"
+            }
             PrikazEvenataVM model = new PrikazEvenataVM();
             model.eventi = ctx.RadnikEvent.Where(r => r.Id == radnik.Id)
                 .Select(r => new PrikazEvenataVM.Rows
@@ -143,11 +143,128 @@ namespace Event_Attender.Web.Areas.ModulRadnik.Controllers
                  fileDownloadName: "Eventi.xlsx"
                 );
         }
-        //public IActionResult Detalji(int id)
-        //{
-        //    Event ev = ctx.Event.Where(e => e.Id == id).SingleOrDefault();
+        public IActionResult Detalji(int id)
+        {
+            if (id <= 0 || ctx.Event.Where(e=>e.Id==id).Any()==false)
+            {
+                return Redirect("/Modulradnik/Radnik/Index");
+            }
+            Event ev = ctx.Event.Where(e => e.Id == id)
+                .Include(e=>e.ProstorOdrzavanja).SingleOrDefault();
 
-        //    return View();
-        //}
+            EventDetaljiVM model = new EventDetaljiVM
+            {
+                EventId = ev.Id,
+                NazivEventa = ev.Naziv
+            };
+            model.TipoviProdaje = ctx.ProdajaTip.Where(p=>p.EventId==id)
+                .Select(t => new EventDetaljiVM.TipProdaje
+                {
+                    TipKarte = t.TipKarte.ToString(),
+                    UkupnoKarataTip = t.UkupnoKarataTip,
+                    CijenaTip = t.CijenaTip,
+                    ProdajaTipId = t.Id,
+                    BrojProdatihKarataTip = t.BrojProdatihKarataTip,
+                    BrojPreostalihKarata = (t.UkupnoKarataTip - t.BrojProdatihKarataTip),
+                    ZaradaOdTipa = (t.CijenaTip * t.BrojProdatihKarataTip),
+
+                }).ToList();
+
+            return View(model); 
+        }
+
+        public IActionResult ExportDetaljiToExcel(int id)
+        {
+            if (id <= 0 || ctx.Event.Where(e => e.Id == id).Any() == false)
+            {
+                return Redirect("/Modulradnik/Radnik/Index");
+            }
+           
+            byte[] fileContents;
+
+            Event ev = ctx.Event.Where(e => e.Id == id)
+               .Include(e => e.ProstorOdrzavanja).SingleOrDefault();
+
+            EventDetaljiVM model = new EventDetaljiVM
+            {
+                EventId = ev.Id,
+                NazivEventa = ev.Naziv
+            };
+            model.TipoviProdaje = ctx.ProdajaTip.Where(p => p.EventId == id)
+                .Select(t => new EventDetaljiVM.TipProdaje
+                {
+                    TipKarte = t.TipKarte.ToString(),
+                    UkupnoKarataTip = t.UkupnoKarataTip,
+                    CijenaTip = t.CijenaTip,
+                    ProdajaTipId = t.Id,
+                    BrojProdatihKarataTip = t.BrojProdatihKarataTip,
+                    BrojPreostalihKarata = (t.UkupnoKarataTip - t.BrojProdatihKarataTip),
+                    ZaradaOdTipa = (t.CijenaTip * t.BrojProdatihKarataTip),
+
+                }).ToList();
+
+            using (var package = new ExcelPackage())
+            {
+                var workSheet = package.Workbook.Worksheets.Add("Sheet1");
+
+
+                workSheet.Cells[1, 1].Value = "Event ";
+                workSheet.Cells[1, 2].Value = model.NazivEventa;
+
+                workSheet.Cells[2, 1].Value = "Datum";
+                workSheet.Cells[2, 2].Value = DateTime.Now.ToShortDateString();
+
+
+                workSheet.Cells[4, 1].Value = "Tip karte";
+                workSheet.Cells[4, 1].Style.Font.Size = 12;
+                workSheet.Cells[4, 1].Style.Font.Bold = true;
+
+                workSheet.Cells[4, 2].Value = "Ukupno za prodaju";
+                workSheet.Cells[4, 2].Style.Font.Size = 12;
+                workSheet.Cells[4, 2].Style.Font.Bold = true;
+
+                workSheet.Cells[4, 3].Value = "Broj prodatih karata";
+                workSheet.Cells[4, 3].Style.Font.Size = 12;
+                workSheet.Cells[4, 3].Style.Font.Bold = true;
+
+                workSheet.Cells[4, 4].Value = "Broj preostalih karata";
+                workSheet.Cells[4, 4].Style.Font.Size = 12;
+                workSheet.Cells[4, 4].Style.Font.Bold = true;
+
+                workSheet.Cells[4, 5].Value = "Cijena";
+                workSheet.Cells[4, 5].Style.Font.Size = 12;
+                workSheet.Cells[4, 5].Style.Font.Bold = true;
+
+                workSheet.Cells[4, 6].Value = "Zarada od tipa (KM)";
+                workSheet.Cells[4, 6].Style.Font.Size = 12;
+                workSheet.Cells[4, 6].Style.Font.Bold = true;
+
+               
+                int startRow = 5;
+                foreach (var item in model.TipoviProdaje)
+                {
+                    workSheet.Cells[startRow, 1].Value = item.TipKarte;
+                    workSheet.Cells[startRow, 2].Value = item.UkupnoKarataTip;
+                    workSheet.Cells[startRow, 3].Value = item.BrojProdatihKarataTip;
+                    workSheet.Cells[startRow, 4].Value = item.BrojPreostalihKarata;
+                    workSheet.Cells[startRow, 5].Value = item.CijenaTip;
+                    workSheet.Cells[startRow, 6].Value = item.ZaradaOdTipa;
+                    startRow++;
+                }
+
+                fileContents = package.GetAsByteArray();
+            }
+
+            if (fileContents == null || fileContents.Length == 0)
+            {
+                return NotFound();
+            }
+
+            return File(
+                fileContents: fileContents,
+                 contentType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                 fileDownloadName: "DetajiEventa.xlsx"
+                );
+        }
     }
 }
