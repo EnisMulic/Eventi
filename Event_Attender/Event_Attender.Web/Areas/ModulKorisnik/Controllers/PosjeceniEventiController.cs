@@ -81,6 +81,10 @@ namespace Event_Attender.Web.Areas.ModulKorisnik.Controllers
 
         public IActionResult SnimiRecenziju(RecenzijaVM model)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
             Recenzija r;
             if (model.RecenzijaId == 0)
             {

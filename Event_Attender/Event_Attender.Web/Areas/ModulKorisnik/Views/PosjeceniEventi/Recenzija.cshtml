@@ -12,6 +12,7 @@
         <input type="hidden" asp-for="page" value="@Model.page" />
         <label>Komentar</label>
         <textarea class="form-control" asp-for="Komentar" value="@Model.Komentar"></textarea>
+        <span asp-validation-for="Komentar" class="text-danger"></span>
         <br />
         <label>Ocjena</label>
         <input type="radio" asp-for="Ocjena" value="1" />1
