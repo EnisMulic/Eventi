@@ -395,7 +395,7 @@ namespace Event_Attender.Web.Areas.ModulKorisnik.Controllers
                 client.Disconnect(true);
             }
         }
-        public IActionResult UserPodaci() //int drzavaId
+        public IActionResult UserPodaci() 
         {
             LogPodaci l = HttpContext.GetLogiraniUser();
             if (l == null)
@@ -428,13 +428,22 @@ namespace Event_Attender.Web.Areas.ModulKorisnik.Controllers
                    Value=d.Id.ToString()
             }).ToList();
            
-          //  model.gradovi = ctx.Grad.ToList();
+          
 
             return View(model);     
         }
-        //int drzavaId,int gradId
+        
         public async Task<IActionResult> SnimiPodatkeAsync(KorisnikPodaciVM model, IFormFile slika)
         {
+            if (!ModelState.IsValid)
+            {
+                model.drzave = ctx.Drzava.Select(d => new SelectListItem
+                {
+                    Text = d.Naziv,
+                    Value = d.Id.ToString()
+                }).ToList();
+                return View(model);
+            }
             if (slika != null && slika.Length > 0)
             {
                 var nazivSlike = Path.GetFileName(slika.FileName);

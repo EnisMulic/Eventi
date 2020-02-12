@@ -20,14 +20,14 @@ namespace Event_Attender.Web.Helper
                 context.Response.SetCookieJson(LogiraniUser, 0);
             }
             else
-            {                                     // logPodaci?
+            {                                    
                 context.Response.SetCookieJson(LogiraniUser, logPodaci.Id);
             }
         }
-        public static /*int*/ LogPodaci GetLogiraniUser(this HttpContext context)
+        public static  LogPodaci GetLogiraniUser(this HttpContext context)
         {
             MojContext ctx = context.RequestServices.GetService<MojContext>();
-            //MojContext ctx = new MojContext();
+            
 
             string logPodaciIdCookie = context.Request.GetCookieJson<string>(LogiraniUser);
 
@@ -39,7 +39,7 @@ namespace Event_Attender.Web.Helper
            
             return l;
 
-            //return int.Parse(logPodaciIdCookie);  // verzija1
+          
         }
 
         public static void RemoveCookie(this HttpContext context)
