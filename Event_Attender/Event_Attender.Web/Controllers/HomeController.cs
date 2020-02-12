@@ -43,20 +43,7 @@ namespace Event_Attender.Web.Controllers
 
         }
        
-        //public List<PretragaEventaVM.Rows> Proba()
-        //{
-        //    DateTime date = DateTime.Now;
-        //    List<PretragaEventaVM.Rows> eventi = ctx.Event.Where(e => e.IsOdobren == true).Where(e => e.IsOtkazan == false)
-        //        .Where(e => e.DatumOdrzavanja.CompareTo(date) == 1)
-        //    .Select(e => new PretragaEventaVM.Rows
-        //    {
-        //        EventId = e.Id,
-        //        Naziv = e.Naziv,
-        //        Kategorija = e.Kategorija.ToString(),
-        //        Slika = e.Slika
-        //    }).ToList();
-        //    return eventi;
-        //}
+       
 
         // U slucaju da pretraga po nazivu i pretraga po lakaciji ne idu kao 2 odvojene
         // pretrage, 2 buttona, moze se vrsiti pretraga i po nazivu i po lokaciji zajedno
