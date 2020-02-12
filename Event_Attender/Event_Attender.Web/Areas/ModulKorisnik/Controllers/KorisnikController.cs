@@ -435,6 +435,15 @@ namespace Event_Attender.Web.Areas.ModulKorisnik.Controllers
         
         public async Task<IActionResult> SnimiPodatkeAsync(KorisnikPodaciVM model, IFormFile slika)
         {
+            if (!ModelState.IsValid)
+            {
+                model.drzave = ctx.Drzava.Select(d => new SelectListItem
+                {
+                    Text = d.Naziv,
+                    Value = d.Id.ToString()
+                }).ToList();
+                return View(model);
+            }
             if (slika != null && slika.Length > 0)
             {
                 var nazivSlike = Path.GetFileName(slika.FileName);
