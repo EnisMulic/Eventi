@@ -68,7 +68,7 @@ namespace Event_Attender.Web.Helper
                 await next();
                 return;
             }
-            if (_radnik && ctx.Korisnik.Where(r=>r.Osoba.LogPodaciId==logPodaci.Id).Any())
+            if (_radnik && ctx.Radnik.Where(r=>r.Osoba.LogPodaciId==logPodaci.Id).Any())
             {
                 await next();
                 return;

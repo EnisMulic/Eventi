@@ -14,6 +14,8 @@ using OfficeOpenXml;
 
 namespace Event_Attender.Web.Areas.ModulRadnik.Controllers
 {
+    
+     [Autorizacija(korisnik: false, organizator: false, administrator: false, radnik: true)]
     [Area("ModulRadnik")]
     public class RadnikController : Controller
     {
@@ -26,6 +28,10 @@ namespace Event_Attender.Web.Areas.ModulRadnik.Controllers
         }
         public IActionResult Index()
         {
+            if (HttpContext.GetLogiraniUser() == null)
+            {
+                return Redirect("/Prijava/Index");
+            }
             return View();
         }
 
@@ -145,6 +151,10 @@ namespace Event_Attender.Web.Areas.ModulRadnik.Controllers
         }
         public IActionResult Detalji(int id)
         {
+            if (HttpContext.GetLogiraniUser() == null)
+            {
+                return Redirect("/Prijava/Index");
+            }
             if (id <= 0 || ctx.Event.Where(e=>e.Id==id).Any()==false)
             {
                 return Redirect("/Modulradnik/Radnik/Index");
