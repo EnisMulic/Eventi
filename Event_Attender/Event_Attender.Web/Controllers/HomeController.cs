@@ -10,6 +10,7 @@ using Event_Attender.Data.Models;
 using Event_Attender.Web.ViewModels;
 using Event_Attender.Data.EF;
 using Event_Attender.Web.Helper;
+using Microsoft.EntityFrameworkCore;
 
 namespace Event_Attender.Web.Controllers
 {
@@ -22,6 +23,17 @@ namespace Event_Attender.Web.Controllers
         {
             ctx = context;
         }
+
+        bool IsSoldOut(int EventId)
+        {
+           
+            int MaxKarti = ctx.ProdajaTip.Where(i => i.EventId == EventId).Select(i => i.UkupnoKarataTip).Sum();
+            int BrojProdanihKarti = ctx.ProdajaTip.Where(i => i.EventId == EventId).Select(i => i.BrojProdatihKarataTip).Sum();
+            
+
+            return BrojProdanihKarti == MaxKarti;
+        }
+
         public IActionResult Index()
         {
              HttpContext.SetLogiraniUser(null);
@@ -38,7 +50,9 @@ namespace Event_Attender.Web.Controllers
                      Kategorija=e.Kategorija.ToString(),
                      Slika=e.Slika
                 }).ToList();
-           
+
+            foreach (var Event in model.Eventi)
+                Event.SoldOut = IsSoldOut(Event.EventId);
             return View(model);
 
         }

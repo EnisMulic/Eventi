@@ -11,7 +11,7 @@
 
     <div id="izborDiv">
         <a asp-area="ModulGuest" asp-controller="Guest" asp-action="PretraziPoNazivu" class="btn btn-light">Pretraga po nazivu</a>
-        <a asp-area="ModulGuest" asp-controller="Guest" asp-action="PretraziPoLokaciji"  class="btn btn-light">Pretraga po lokaciji</a>
+        <a asp-area="ModulGuest" asp-controller="Guest" asp-action="PretraziPoLokaciji" class="btn btn-light">Pretraga po lokaciji</a>
     </div>
 </div>
 @*@<form >
@@ -25,22 +25,47 @@
 
     @foreach (var e in Model.Eventi)
     {
-    <div class="col-sm-4">
-        <div id="unutrasnji" class="thumbnail">
-            @if (e.Slika == null)
-                {                                                      
-            <img src="~/images/items/events.jpg" width="350" height="250">
+        <div class="col-sm-4">
+            <div id="unutrasnji" class="thumbnail">
+                @if (e.Slika == null)
+                {
+                    @if (e.SoldOut)
+                    {
+                        <img src="~/images/items/events.jpg" width="350" height="250" class="sold-out-wm">
+                    }
+                    else
+                    {
+                        <img src="~/images/items/events.jpg" width="350" height="250">
+                    }
                 }
                 else
                 {
-            <img src="~/images/items/@e.Slika" width="350" height="250">
+                    @if (e.SoldOut)
+                    {
+                        <img src="~/images/items/@e.Slika" width="350" height="250" class="sold-out-wm">
+                    }
+                    else
+                    {
+                        <img src="~/images/items/@e.Slika" width="350" height="250">
+                    }
+                    
                 }
-            <p><string>@e.Naziv</string></p>
+                <p><string>@e.Naziv</string></p>
 
 
-            <br /><br />
+                <br /><br />
+            </div>
         </div>
-    </div>
     }
 
 </div>
+<!-- jQuery 1.5+ -->
+<script src="~/lib/jquery/dist/jquery.js" type="text/javascript"></script>
+<!-- jQuery plugin Watermark -->
+<script src="~/lib/watermark/jquery.watermark.js" type="text/javascript"></script>
+<script>
+    $("img.sold-out-wm").watermark({
+        path: '/images/items/sold_out.png',
+        gravity: 'c'
+    });
+</script>
