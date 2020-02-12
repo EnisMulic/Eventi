@@ -21,7 +21,7 @@ namespace Event_Attender.Web.ViewModels
             //public string VrijemeOdrzavanja { get; set; }
             //public byte[] Slika { get; set; }
             public string Slika { get; set; }
-
+            public bool SoldOut { get; set; }
         }
     }
 }
