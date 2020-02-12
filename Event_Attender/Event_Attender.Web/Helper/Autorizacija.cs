@@ -34,10 +34,10 @@ namespace Event_Attender.Web.Helper
 
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            //int logPodaciId = context.HttpContext.GetLogiraniUser();  // verzija 1
+            
             LogPodaci logPodaci = context.HttpContext.GetLogiraniUser();
 
-            // if (logPodaciId == 0)  // verzija 1
+           
             if (logPodaci==null)
             {
                 if(context.Controller is Controller controller)
@@ -49,16 +49,7 @@ namespace Event_Attender.Web.Helper
             }
 
             MojContext ctx = context.HttpContext.RequestServices.GetService<MojContext>();
-            // ne moze zato sto u MojContext.cs nije dependency injection
-
-           // MojContext ctx = new MojContext();
-
-            // verzija 1 
-            //if(_korisnik && ctx.Korisnik.Where(k => k.Osoba.LogPodaciId == logPodaciId).Count() == 1)
-            //{
-            //    await next();
-            //    return;
-            //}
+            
 
             if (_korisnik && ctx.Korisnik.Where(k => k.Osoba.LogPodaciId == logPodaci.Id).Any())
             {
@@ -83,11 +74,7 @@ namespace Event_Attender.Web.Helper
                 return;
             }
 
-            //if(context.Controller is Controller ct)
-            //{
-            //    ct.ViewData["error_poruka"] = "Nemate pravo pristupa";
-            //}                                                   // ?
-            //context.Result=new RedirectToActionResult("Index", context.Controller.ToString(), context.)
+           
         }
     }
 }
