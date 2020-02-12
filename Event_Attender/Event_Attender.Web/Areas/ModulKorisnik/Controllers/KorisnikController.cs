@@ -382,7 +382,7 @@ namespace Event_Attender.Web.Areas.ModulKorisnik.Controllers
 
             message.Body = new TextPart("plain")
             {
-                Text = "Poštovani/a " + k.Osoba.Ime+" "+k.Osoba.Prezime+ " uspješno ste obavili kupovinu karte za event "+NazivEventa+", u iznosu od "+ cijena + "KM. Hvala na povjerenju! "
+                Text = "Poštovani/a " + k.Osoba.Ime+" "+k.Osoba.Prezime+ " uspješno ste obavili kupovinu karte/karata za event "+NazivEventa+", u iznosu od "+ cijena + "KM. Hvala na povjerenju! "
             };
 
             using (var client = new SmtpClient())
