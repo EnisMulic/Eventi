@@ -53,6 +53,57 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
             return View(model);
         }
 
+        public IActionResult Uredi(int id)
+        {
+            return AdminProfil(id);
+        }
+
+        public IActionResult Snimi(AdministratorVM model)
+        {
+            var Admin = uow.AdministratorRepository.GetAll()
+                .Include(i => i.Osoba)
+                .Include(i => i.Osoba.LogPodaci)
+                .Where(i => i.Id == model.Id)
+                .SingleOrDefault();
+
+            Admin.Osoba.Ime = model.Ime;
+            Admin.Osoba.Prezime = model.Prezime;
+            Admin.Osoba.LogPodaci.Email = model.Email;
+            Admin.Osoba.LogPodaci.Username = model.Username;
+            Admin.Osoba.Telefon = model.Telefon;
+
+            ctx.SaveChanges();
+            return Redirect("AdminProfil?id=" + model.Id);
+        }
+
+        public IActionResult PromijeniPassword(int id)
+        {
+            var Admin = uow.AdministratorRepository.GetAll()
+                .Include(i => i.Osoba)
+                .Include(i => i.Osoba.LogPodaci)
+                .Where(i => i.Id == id)
+                .SingleOrDefault();
+
+            var model = new AdministratorVM
+            {
+                Id = id,
+                LogPodaciId = Admin.Osoba.LogPodaci.Id,
+                Username = Admin.Osoba.LogPodaci.Username,
+                OldPassword = Admin.Osoba.LogPodaci.Password
+            };
+
+            return View(model);
+        }
+
+
+        public IActionResult SnimiPassword(AdministratorVM model)
+        {
+            var LogPodaci = uow.LogPodaciRepository.Get(model.LogPodaciId);
+            LogPodaci.Password = model.NewPassword;
+            ctx.SaveChanges();
+            return Redirect("AdminProfil?id=" + model.Id);
+        }
+
         public bool IsUsernameUnique(string Username, int LogPodaciId)
         {
             List<LogPodaci> logPodaci = uow.LogPodaciRepository.GetAll().ToList();
@@ -72,5 +123,11 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
 
             return true;
         }
+
+        public bool IsOldPassword(string OldPassword, int LogPodaciId) => 
+            OldPassword == uow.LogPodaciRepository.Get(LogPodaciId).Password;
+
+        public bool MatchNewPassword(string NewPasswordConfirmed, string NewPassword) =>
+            NewPasswordConfirmed == NewPassword;
     }
 }
