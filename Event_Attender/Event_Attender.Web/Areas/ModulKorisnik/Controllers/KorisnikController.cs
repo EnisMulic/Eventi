@@ -395,7 +395,7 @@ namespace Event_Attender.Web.Areas.ModulKorisnik.Controllers
                 client.Disconnect(true);
             }
         }
-        public IActionResult UserPodaci() //int drzavaId
+        public IActionResult UserPodaci() 
         {
             LogPodaci l = HttpContext.GetLogiraniUser();
             if (l == null)
@@ -428,11 +428,11 @@ namespace Event_Attender.Web.Areas.ModulKorisnik.Controllers
                    Value=d.Id.ToString()
             }).ToList();
            
-          //  model.gradovi = ctx.Grad.ToList();
+          
 
             return View(model);     
         }
-        //int drzavaId,int gradId
+        
         public async Task<IActionResult> SnimiPodatkeAsync(KorisnikPodaciVM model, IFormFile slika)
         {
             if (slika != null && slika.Length > 0)

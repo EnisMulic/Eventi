@@ -21,7 +21,7 @@ namespace Event_Attender.Web.Areas.ModulGuest.Controllers
         {
             ctx = context;
         }
-        public IActionResult PretraziPoNazivu(string filter)  // v1- odvojena pretraga po lokaciji
+        public IActionResult PretraziPoNazivu(string filter)  // v1- odvojena pretraga po nazivu
         {
             PretragaEventaVM model = new PretragaEventaVM();
            
@@ -48,7 +48,7 @@ namespace Event_Attender.Web.Areas.ModulGuest.Controllers
        
             return View(model);  
         }
-        public IActionResult PretraziPoLokaciji(string lokacija)  //v1 - odvojena pretraga po nazivu
+        public IActionResult PretraziPoLokaciji(string lokacija)  //v1 - odvojena pretraga po lokaciji
         {
             PretragaEventaVM model = new PretragaEventaVM();
          

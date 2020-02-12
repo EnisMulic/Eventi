@@ -50,7 +50,6 @@ namespace Event_Attender.Web.Areas.ModulKorisnik.Models
         public int DrzavaId { get; set; }
         public List<SelectListItem> drzave { get; set; }
 
-        //public List<Grad> gradovi { get; set; }
         public string Slika { get; set; }
     }
 }

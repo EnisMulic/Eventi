@@ -9,7 +9,7 @@ namespace Event_Attender.Web.Areas.ModulKorisnik.Models
     public class PretragaEventaVM
     {
         public List<Rows> Eventi { get; set; }
-         public int KorisnikId { get; set; } // ili u akciji getLogiraniUser ?
+         public int KorisnikId { get; set; } // ili u akciji getLogiraniUser 
         
         public class Rows
         {
@@ -22,7 +22,6 @@ namespace Event_Attender.Web.Areas.ModulKorisnik.Models
             public string ProstorOdrzavanjaGrad { get; set; }
             public string DatumOdrzavanja { get; set; }  
             public string VrijemeOdrzavanja { get; set; }
-            //public byte[] Slika { get; set; }
             public string Slika { get; set; }
         }
 
