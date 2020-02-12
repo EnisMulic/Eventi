@@ -18,11 +18,10 @@ namespace Event_Attender.Web.Controllers
         }
         public IActionResult Index()
         {
-            //using(MojContext ctx=new MojContext())
-            //{
+            
                 List<Drzava> drzave = ctx.Drzava.ToList();
                 ViewData["drzave"] = drzave;
-            //}
+         
             return View();
         }
         public IActionResult DodajForma(int poziv, int gradId)
@@ -34,17 +33,16 @@ namespace Event_Attender.Web.Controllers
         }
         public IActionResult Uredi(int id)
         {
-            //using(MojContext ctx= new MojContext())
-            //{
+            
                 ViewData["drzava"]= ctx.Drzava.Find(id);
                 ViewData["poziv"] = 0;
                 ViewData["gradId"] = 0;
-            //}
+           
             return View("DodajForma");
         }
         public IActionResult Snimi(int id,string naziv, int poziv, int gradId)
         {
-            //MojContext ctx = new MojContext();
+            
             Drzava d;
             if (id == 0)
             {
@@ -68,12 +66,11 @@ namespace Event_Attender.Web.Controllers
            
         }
         public IActionResult Obrisi(int id)
-        {   //using(MojContext ctx=new MojContext())
-        //    {
+        {   
                 Drzava d = ctx.Drzava.Find(id);
                 ctx.Drzava.Remove(d);
                 ctx.SaveChanges();
-            //}
+         
          
             return Redirect("/Drzava/Index");
         }

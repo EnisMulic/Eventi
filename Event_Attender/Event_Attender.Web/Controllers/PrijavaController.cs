@@ -102,7 +102,7 @@ namespace Event_Attender.Web.Controllers
         
         public IActionResult LogOut()
         {
-            HttpContext.RemoveCookie();  //?
+            HttpContext.RemoveCookie(); 
             return RedirectToAction("Index", "Home","");
         }
     }
