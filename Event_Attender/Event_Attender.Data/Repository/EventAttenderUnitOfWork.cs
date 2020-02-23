@@ -31,6 +31,7 @@ namespace Event_Attender.Data.Repository
         private EventAttenderRepository<Sjediste> sjedisteRepository;
         private EventAttenderRepository<Sponzor> sponzorRepository;
         private EventAttenderRepository<SponzorEvent> sponzorEventRepository;
+        private EventAttenderRepository<ChatPoruke> chatPorukeRepository;
         
         public EventAttenderUnitOfWork(MojContext context)
         {
@@ -320,6 +321,19 @@ namespace Event_Attender.Data.Repository
                     sponzorEventRepository = new EventAttenderRepository<SponzorEvent>(ctx);
                 }
                 return sponzorEventRepository;
+            }
+        }
+
+        public EventAttenderRepository<ChatPoruke> ChatPorukeRepository
+        {
+            get
+            {
+
+                if (chatPorukeRepository == null)
+                {
+                    chatPorukeRepository = new EventAttenderRepository<ChatPoruke>(ctx);
+                }
+                return chatPorukeRepository;
             }
         }
     }
