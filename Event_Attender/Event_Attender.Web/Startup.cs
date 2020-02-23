@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using ReflectionIT.Mvc.Paging;
+using SignalRChat.Hubs;
 
 namespace Event_Attender.Web
 {
@@ -38,7 +39,7 @@ namespace Event_Attender.Web
                 options.HtmlIndicatorUp = " <span>&uarr;</span>";
             });
             services.AddControllersWithViews();
-            
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -71,6 +72,8 @@ namespace Event_Attender.Web
                 endpoints.MapControllerRoute(   
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+                endpoints.MapHub<ChatHub>("/chatHub");
 
             });
         }
