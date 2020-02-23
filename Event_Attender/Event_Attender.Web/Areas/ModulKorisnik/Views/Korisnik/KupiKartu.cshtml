@@ -9,11 +9,15 @@
 
 @foreach (var tp in Model.TipoviProdaje)
 {
+    if (tp.IsRasprodano == false)
+    {
+        <p>@tp.TipKarte - @tp.CijenaTip KM</p>
+    }
     if (tp.IsRasprodano == true)
     {
         <p>@tp.TipKarte karte su rasprodane</p>
     }
-}                                                                     
+}
 <form ajax-poziv="da" action="/ModulKorisnik/Korisnik/KupovinaSnimi" ajax-rezultat="ajaxDiv" class="form">
     <input type="hidden" asp-for="EventId" value="@Model.EventId" />
     <input type="hidden" asp-for="KorisnikId" value="@Model.KorisnikId" />
@@ -50,20 +54,20 @@
 
 <script>
     $(document).ready(
-        function(){
-            $("form[ajax-poziv='da']").submit(function(event) {
-                $(this).attr("ajax-poziv","dodan");
+        function () {
+            $("form[ajax-poziv='da']").submit(function (event) {
+                $(this).attr("ajax-poziv", "dodan");
                 event.preventDefault();
                 var urlPoziv = $(this).attr("action");
                 var divRezultat = $(this).attr("ajax-rezultat");
 
                 var form = $(this);
                 $.ajax({
-                    type:"POST",
-                    url:urlPoziv,
-                    data:form.serialize(),
+                    type: "POST",
+                    url: urlPoziv,
+                    data: form.serialize(),
                     success: function (data) {
-                       $("#ajaxDiv").html(data);
+                        $("#ajaxDiv").html(data);
                     }
 
                 });
@@ -71,4 +75,3 @@
         });
 </script>
 
- 
