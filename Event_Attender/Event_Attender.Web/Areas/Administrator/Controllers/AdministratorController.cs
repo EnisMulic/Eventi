@@ -104,6 +104,47 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
             return Redirect("AdminProfil?id=" + model.Id);
         }
 
+        public IActionResult Poruke()
+        {
+            var Log = HttpContext.GetLogiraniUser();
+            var Osoba = uow.OsobaRepository.GetAll()
+                .Where(i => i.LogPodaciId == Log.Id)
+                .SingleOrDefault();
+
+            var model = new ChatVM
+            {
+                AdministratorId = Osoba.Id,
+                Username = Log.Username,
+                Rows = uow.ChatPorukeRepository.GetAll()
+                    .Select
+                    (
+                        i => new ChatVM.Row
+                        {
+                            AutorId = i.OsobaId,
+                            Autor = i.Osoba.LogPodaci.Username,
+                            ChatPorukaId = i.Id,
+                            Poruka = i.Poruka,
+                            Kreirana = i.Kreirana.ToString("dd/MM/yyyy hh:mm")
+
+                        }
+                    )
+                    .ToList()
+            };
+            return View(model);
+        }
+
+        public IActionResult SnimiPoruku(int userId, string poruka)
+        {
+            var Poruka = new ChatPoruke
+            {
+                OsobaId = userId,
+                Poruka = poruka,
+                Kreirana = DateTime.Now
+            };
+            uow.ChatPorukeRepository.Add(Poruka);
+            return Redirect("Poruke");
+        }
+
         public bool IsUsernameUnique(string Username, int LogPodaciId)
         {
             List<LogPodaci> logPodaci = uow.LogPodaciRepository.GetAll().ToList();
