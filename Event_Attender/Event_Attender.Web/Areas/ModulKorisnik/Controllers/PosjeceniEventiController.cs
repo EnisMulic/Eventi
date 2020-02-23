@@ -12,6 +12,7 @@ using ReflectionIT.Mvc.Paging;
 
 namespace Event_Attender.Web.Areas.ModulKorisnik.Controllers
 {
+    [Autorizacija(korisnik: true, organizator: false, administrator: false, radnik: false)]
     [Area("ModulKorisnik")]
     public class PosjeceniEventiController : Controller
     {
