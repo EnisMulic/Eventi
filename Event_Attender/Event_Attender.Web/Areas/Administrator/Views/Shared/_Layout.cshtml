@@ -16,25 +16,31 @@
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm bg-dark box-shadow navbar-dark">
-                <div class="container">
-                    <a class="navbar-brand" asp-area="" asp-controller="" asp-action="Index">Početna</a>
-                    <ul class="nav navbar-nav navbar-right">
-                        <li>
-                            <a class="navbar-brand" id="AdminUsername"
-                               asp-area="Administrator" asp-controller="Administrator"
-                               asp-action="AdminProfil" asp-route-id="@user.Id">@user.Username</a>
-                        </li>
-                        <li>
-                            <a class="navbar-brand" id="AdminUsername"
-                               asp-area="Administrator" asp-controller="Administrator"
-                               asp-action="Poruke">Poruke</a>
-                        </li>
-                        <li>
-                            <a class="navbar-brand"
-                               asp-area="" asp-controller="Prijava" asp-action="LogOut">Odjava</a>
-                        </li>
-                    </ul>
-                </div>
+            <div class="container">
+                <a class="navbar-brand" asp-area="" asp-controller="" asp-action="Index">Početna</a>
+                
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a class="navbar-brand" id="AdminUsername"
+                           asp-area="Administrator" asp-controller="Administrator"
+                           asp-action="AdminProfil" asp-route-id="@user.Id">@user.Username</a>
+                    </li>
+                    <li>
+                        <a class="navbar-brand" id="AdminUsername"
+                           asp-area="Administrator" asp-controller="Home"
+                           asp-action="Index">Administrator</a>
+                    </li>
+                    <li>
+                        <a class="navbar-brand" id="AdminUsername"
+                           asp-area="Administrator" asp-controller="Administrator"
+                           asp-action="Poruke">Poruke</a>
+                    </li>
+                    <li>
+                        <a class="navbar-brand"
+                           asp-area="" asp-controller="Prijava" asp-action="LogOut">Odjava</a>
+                    </li>
+                </ul>
+            </div>
             </nav>
     </header>
     <main role="main" id="Admin-Layout">

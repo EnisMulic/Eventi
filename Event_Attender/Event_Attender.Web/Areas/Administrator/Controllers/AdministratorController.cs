@@ -133,11 +133,14 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
 
         public IActionResult Poruke()
         {
-            
+            var Osoba = uow.OsobaRepository.GetAll()
+                .Where(i => i.LogPodaci.Id == HttpContext.GetLogiraniUser().Id)
+                .SingleOrDefault();
+
             var model = new ChatVM
             {
                 Username = HttpContext.GetLogiraniUser().Username,
-                AdministratorId = HttpContext.GetLogiraniUser().Id,
+                AdministratorId = Osoba.Id,
                 Rows = uow.ChatPorukeRepository.GetAll()
                     .Select
                     (

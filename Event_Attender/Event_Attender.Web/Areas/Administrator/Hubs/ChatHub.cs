@@ -26,9 +26,9 @@ namespace SignalRChat.Hubs
                 Poruka = message,
                 Kreirana = DateTime.Now
             };
-            
-
             uow.ChatPorukeRepository.Add(Poruka);
+
+            
             await Clients.All.SendAsync("ReceiveMessage", Poruka.Id, user, message, DateTime.Now.ToString("dd/MM/yyyy HH:mm"));
         }
     }
