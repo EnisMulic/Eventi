@@ -1,3 +1,5 @@
+using Event_Attender.Web.Areas.Administrator.Controllers;
+using Event_Attender.Web.Areas.Administrator.Models;
 using Event_Attender.Web.Areas.ModulGuest.Controllers;
 using Event_Attender.Web.Areas.ModulKorisnik.Controllers;
 using Event_Attender.Web.Areas.ModulKorisnik.Models;
@@ -6,6 +8,7 @@ using Event_Attender.Web.Areas.ModulRadnik.Models;
 using Event_Attender.Web.Controllers;
 using Event_Attender.Web.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,20 +23,20 @@ namespace UnitTestovi
         public void IndexTestPrijePokretanjaZakomentiratiSetLogiraniKorisnik()
         {
             //prije pokretanja zakomentarisati liniju koda  HttpContext.SetLogiraniUser(null); u HomeController, akcija Index
-            var hc = new HomeController(ctx);
+            var hc = new Event_Attender.Web.Controllers.HomeController(ctx);
             var result = hc.Index() as ViewResult;
 
             var model = result.Model as Event_Attender.Web.ViewModels.PretragaEventaVM;
 
             var eventi = model.Eventi as List<Event_Attender.Web.ViewModels.PretragaEventaVM.Rows>;
-            
+
             Assert.AreEqual(3, eventi.Count());
         }
 
         [TestMethod]
         public void PrivacyTest()
         {
-            var hc = new HomeController(ctx);
+            var hc = new Event_Attender.Web.Controllers.HomeController(ctx);
             var result = hc.Privacy() as ViewResult;
             Assert.IsNotNull(result);
         }
@@ -210,5 +213,4 @@ namespace UnitTestovi
             Assert.AreEqual(3, model.Ocjena);
         }
     }
-   
 }

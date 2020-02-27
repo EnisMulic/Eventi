@@ -11,6 +11,7 @@ body
 
 main
 {
+    height: 100vw;
     display: grid;
     grid-template-columns: 100% 100%;
     grid-template-areas: "Sidebar Main";
