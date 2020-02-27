@@ -11,6 +11,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using System.IO;
 using Microsoft.AspNetCore.Http;
 using Event_Attender.Web.Helper;
+using Event_Attender.Web.Areas.OrganizatorModul.ViewModels;
+using SendGrid;
+using SendGrid.Helpers.Mail;
+using Microsoft.Extensions.Configuration;
+using Nexmo.Api;
 
 namespace Event_Attender.Web.Controllers
 {
@@ -18,14 +23,14 @@ namespace Event_Attender.Web.Controllers
     [Area("OrganizatorModul")]
     public class OrganizatorHomeController : Controller
     {
-        
         private readonly MojContext ctx;
+        private readonly IConfiguration _configuration;
 
-        public OrganizatorHomeController(MojContext context)
+        public OrganizatorHomeController(MojContext context,IConfiguration configuration)
         {
             ctx = context;
+            _configuration = configuration;
         }
-
 
         List<OrganizatorEventVM> getListuEvenata(int orgId)
         {
@@ -58,7 +63,19 @@ namespace Event_Attender.Web.Controllers
 
             List<OrganizatorEventVM> eventi = getListuEvenata(org.Id);
 
-                ViewData["OrganizatorID"] = org.Id;
+            var model = new StatistickiPodaciVM
+            {
+                Redovi = ctx.Event.Where(x => x.OrganizatorId == org.Id).Select(x => new StatistickiPodaciVM.Rows
+                {
+                    NazivEventa = x.Naziv,
+                    UkupnoBrojProdatihKarata = ctx.ProdajaTip.Where(y => y.EventId == x.Id).Select(y => y.BrojProdatihKarataTip).Sum(),
+                    UkupanPrihodPoEventu = ctx.ProdajaTip.Where(y => y.EventId == x.Id).Sum(y => y.BrojProdatihKarataTip * y.CijenaTip),
+                    ProsjecnaOcjenaEventa = ctx.Recenzija.Where(y => y.Kupovina.EventId == x.Id).Select(y => y.Ocjena).Average().ToString("F") 
+                   }).ToList()
+            };
+
+            ViewData["StatistickiPodaci"] = model;
+            ViewData["OrganizatorID"] = org.Id;
                 ViewData["EventiOrganizatora"] = eventi;
                 ViewData["ProstoriOdrzavanja"] = ctx.ProstorOdrzavanja.Select(s => new SelectListItem
                 {
@@ -144,6 +161,18 @@ namespace Event_Attender.Web.Controllers
 
                 ctx.Event.Add(e);
                 await ctx.SaveChangesAsync();
+
+                var apiKey = _configuration.GetSection("SENDGRID_API_KEY").Value;
+                var client = new SendGridClient(apiKey);
+                var from = new EmailAddress("event_attender@outlook.com", "Event Attender team");
+                List<EmailAddress> tos = new List<EmailAddress>
+                {
+                    new EmailAddress("zinedin.mezit.98@gmail.com","Zinedin Mezit")
+                };
+                var subject = "Obavijest o novom eventu";
+                var htmlContent = $"<h1>Kreiran je novi event : {data._nazivEventa}</h1>";
+                var msg = MailHelper.CreateSingleEmailToMultipleRecipients(from, tos, subject, "", htmlContent, false);
+                var response = await client.SendEmailAsync(msg);
             }
             return Redirect("Index");
         }
@@ -200,7 +229,18 @@ namespace Event_Attender.Web.Controllers
             }
 
             ctx.SaveChanges();
-            
+
+            var Nexmo_Api_Key = _configuration.GetSection("NEXMO_API_KEY").Value;
+            var Nexmo_Api_Secret = _configuration.GetSection("NEXMO_API_SECRET").Value;
+
+            var client = new Client(creds: new Nexmo.Api.Request.Credentials(nexmoApiKey: Nexmo_Api_Key, nexmoApiSecret: Nexmo_Api_Secret));
+                client.SMS.Send(new SMS.SMSRequest
+                {
+                    from = "NEXMO_Zinedin",
+                    to = "387603022082",
+                    text = "Ovo je test poruka preko Nexmo"
+                });
+
             return Redirect("EventInfoPrikaz?EventID=" + EventID.ToString());
         }
 
@@ -218,6 +258,52 @@ namespace Event_Attender.Web.Controllers
             ctx.SaveChanges();
 
             return Redirect("EventInfoPrikaz?EventID=" + EventID.ToString());
+        }
+
+        public IActionResult UrediEvent(int EventId)
+        {
+            var _event = ctx.Event.Where(x => x.Id == EventId).FirstOrDefault();
+
+            var model = new EventUrediFormVM
+            {
+                EventId = _event.Id,
+                Sponzori = ctx.Sponzor.Select(x => new SelectListItem
+                {
+                    Text = x.Naziv,
+                    Value = x.Id.ToString()
+                }).ToList(),
+                NazivEventaOd =_event.Naziv,
+                OpisEventaOd = _event.Opis,
+                VrijemeOdrzavanjaOd = _event.VrijemeOdrzavanja
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult UrediSnimiEvent(EventUrediFormVM model)
+        {
+            
+            var _event = ctx.Event.Where(x => x.Id == model.EventId).FirstOrDefault();
+            _event.Naziv = model.NazivEventaOd;
+            _event.Opis = model.OpisEventaOd;
+            _event.VrijemeOdrzavanja = model.VrijemeOdrzavanjaOd;
+            if(model.SponzorOdabir != 0)
+            {
+                var noviSponzor = new SponzorEvent
+                {
+                    EventId = model.EventId,
+                    SponzorId = model.SponzorOdabir,
+                    Prioritet = Prioritet.Silver
+
+                };
+
+                ctx.SponzorEvent.Add(noviSponzor);
+            }
+
+            ctx.SaveChanges();
+            return Redirect("EventInfoPrikaz?EventID=" + model.EventId.ToString());
+
         }
 
     }
