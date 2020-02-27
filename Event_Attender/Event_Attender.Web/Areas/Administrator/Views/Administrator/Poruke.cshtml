@@ -39,16 +39,12 @@
 <script src="~/js/chat.js"></script>
 <script src="~/lib/jquery/dist/jquery.js"></script>
 <script>
-    $(document).ready(function () {
+    $(document).ready(setChatToBottom());
 
+    $(document).ajaxComplete(setChatToBottom());
+
+    function setChatToBottom() {
         var messageBody = document.querySelector('#messages-container');
         messageBody.scrollTop = messageBody.scrollHeight - messageBody.clientHeight;
-
-        $("input#sendButton").click(function () {
-            var userId = $("#userId").val();
-            var message = $("#messageInput").val();
-            console.log(userId);
-            $.post("/Administrator/Administrator/SnimiPoruku?userId=" + userId + "&poruka=" + message);
-        })
-    })
+    }
 </script>

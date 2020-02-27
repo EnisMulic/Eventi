@@ -1,7 +1,4 @@
 ﻿$(document).ready(function () {
-    $.get("/Administrator/Administrator/Chat", function (response) {
-        $("#Main-Display").html(response);
-    });
 
     $("div.ea-navbar").on('click', function (e) {
         $.get("../Home/" + e.target.id + "List", function (response) {
