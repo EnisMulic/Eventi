@@ -450,7 +450,7 @@ namespace Event_Attender.Web.Areas.ModulKorisnik.Controllers
                 var putanja = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images\\korisnicke", nazivSlike);
                 using (var fajlSteam = new FileStream(putanja, FileMode.Create))
                 {
-                    await slika.CopyToAsync(fajlSteam);
+                      await slika.CopyToAsync(fajlSteam);
                 }
 
                 model.Slika = nazivSlike;
