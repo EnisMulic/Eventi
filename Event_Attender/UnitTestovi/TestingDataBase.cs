@@ -28,13 +28,28 @@ namespace UnitTestovi
             ctx.Grad.Add(grad);
 
             var logPodaci = new LogPodaci { Email = "azra.becirevic1998@gmail.com", Username = "User1", Password = "password1" };
+            var logPodaci2 = new LogPodaci { Email = "enis.s.mulic@gmail.com", Username = "User2", Password = "password1" };
+            var logPodaci3 = new LogPodaci { Email = "enis.x.mulic@gmail.com", Username = "User3", Password = "password1" };
             ctx.LogPodaci.Add(logPodaci);
+            ctx.LogPodaci.Add(logPodaci2);
+            ctx.LogPodaci.Add(logPodaci3);
 
             var osoba = new Osoba {  LogPodaciId=1, Ime="Ime", Prezime="Prezime", GradId=1, Telefon="+387 62 980 370"};
+            var osoba2 = new Osoba { LogPodaciId = 2, Ime = "Ime", Prezime = "Prezime", GradId = 1, Telefon = "+387 61 980 370" };
+            var osoba3 = new Osoba { LogPodaciId = 3, Ime = "Ime", Prezime = "Prezime", GradId = 1, Telefon = "+387 61 980 371" };
             ctx.Osoba.Add(osoba);
-
+            ctx.Osoba.Add(osoba2);
+            ctx.Osoba.Add(osoba3);
+            
             var korisnik = new Korisnik { OsobaId = 1, Adresa = "adresa", Slika = null, PostanskiBroj = "98765", BrojKreditneKartice = "7642829030308750" };
             ctx.Korisnik.Add(korisnik);
+
+            var admin = new Administrator { OsobaId = 2 };
+            ctx.Administrator.Add(admin);
+
+            var org = new Organizator { LogPodaciId = 2 };
+            ctx.Organizator.Add(org);
+            ctx.SaveChanges();
 
             var prostorOdrzavanja = new ProstorOdrzavanja { GradId = 1, Adresa = "adresa1", Naziv = "Prostor", TipProstoraOdrzavanja = TipProstoraOdrzavanja.Sala };
             ctx.ProstorOdrzavanja.Add(prostorOdrzavanja);
@@ -69,6 +84,23 @@ namespace UnitTestovi
             var recenzija = new Recenzija { KupovinaId = 1, Komentar = "komentar", Ocjena = 3 };
             ctx.Recenzija.Add(recenzija);
 
+            ctx.SaveChanges();
+
+            var izvodjaci = new[]
+            {
+                new Izvodjac {Naziv = "Izvodjac1", TipIzvodjaca = TipIzvodjaca.Bend},
+                new Izvodjac {Naziv = "Izvodjac2", TipIzvodjaca = TipIzvodjaca.FudbalskiTim},
+                new Izvodjac {Naziv = "Izvodjac3", TipIzvodjaca = TipIzvodjaca.Grupa},
+                new Izvodjac {Naziv = "Izvodjac4", TipIzvodjaca = TipIzvodjaca.Hor},
+                new Izvodjac {Naziv = "Izvodjac5", TipIzvodjaca = TipIzvodjaca.Pjevac},
+
+            };
+
+            ctx.Izvodjac.AddRange(izvodjaci);
+            ctx.SaveChanges();
+
+            var radnik = new Radnik { OsobaId = 3 };
+            ctx.Radnik.Add(radnik);
             ctx.SaveChanges();
         }
 

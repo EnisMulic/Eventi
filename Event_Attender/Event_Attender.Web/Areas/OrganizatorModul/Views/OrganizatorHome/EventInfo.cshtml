@@ -20,8 +20,8 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <style>
         body {
-            background: rgb(155,244,164);
-            background: linear-gradient(90deg, rgba(155,244,164,1) 0%, rgba(148,187,233,1) 100%);
+            background: rgb(136,172,140);
+            background: linear-gradient(90deg, rgba(136,172,140,1) 0%, rgba(87,132,185,1) 100%); 
         }
 
         #navBrand {
@@ -93,12 +93,9 @@
         }
 
         #mojWell {
-            -webkit-box-shadow: inset -14px -13px 19px -9px rgba(0,0,0,0.75);
-            -moz-box-shadow: inset -14px -13px 19px -9px rgba(0,0,0,0.75);
-            box-shadow: inset -14px -13px 19px -9px rgba(0,0,0,0.75);
+            background: rgba(58, 61, 66,0.3);
             border: none;
             border-radius: 0px;
-            background-color: rgb(131, 222, 154);
         }
 
         .naslovEventa {
@@ -110,7 +107,9 @@ font-family: 'Roboto', sans-serif;
 
         .textEventa {
             text-align: center;
-font-family: 'Roboto', sans-serif;
+            font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
+            font-weight:bold;
+            color:white;
         }
 
         .imageCenter {
@@ -128,9 +127,9 @@ font-family: 'Roboto', sans-serif;
             border-radius: 4px;
             text-align: center;
         }
-        .slikaEventa
-        {
-            border:6px solid black;
+
+        .slikaEventa {
+            border: 2px solid black;
         }
     </style>
 </head>
@@ -160,43 +159,39 @@ font-family: 'Roboto', sans-serif;
 
         <div class="row">
             <div id="mojWell" class="col-md-6 well">
-
-                <div class="naslovEventa">
-                    <h3>Detaljne informacije o eventu</h3>
-                </div>
                 <div class="imageCenter">
                     <img class="img-responsive slikaEventa" style="width: 500px; height: 150px;" src="@Url.Content("~/images/items/" + eventInfo.Slika)" alt="">
                 </div>
                 <br />
-                <div class="textEventa">
-                    <h4>Naziv : @eventInfo.Naziv</h4>
+                <div >
+                    <h4 class="textEventa">Naziv : @eventInfo.Naziv</h4>
                 </div>
-                <div class="textEventa">
-                    <h4>Kategorija : @eventInfo.Kategorija.ToString()</h4>
+                <div >
+                    <h4 class="textEventa">Kategorija : @eventInfo.Kategorija.ToString()</h4>
                 </div>
-                <div class="textEventa">
-                    <h4>Opis eventa : @eventInfo.Opis</h4>
+                <div>
+                    <h4 class="textEventa">Opis eventa : @eventInfo.Opis</h4>
                 </div>
-                <div class="textEventa">
-                    <h4>Mjesto odrzavanja : @eventInfo.ProstorOdrzavanjaNaziv</h4>
+                <div >
+                    <h4 class="textEventa">Mjesto odrzavanja : @eventInfo.ProstorOdrzavanjaNaziv</h4>
                 </div>
-                <div class="textEventa">
-                    <h4>Datum odrzavanja :  @eventInfo.DatumOdrzavanja.ToShortDateString()</h4>
+                <div >
+                    <h4 class="textEventa">Datum odrzavanja :  @eventInfo.DatumOdrzavanja.ToShortDateString()</h4>
                 </div>
-                <div class="textEventa">
-                    <h4>Vrijeme odrzavanja : @eventInfo.VrijemeOdrzavanja</h4>
+                <div>
+                    <h4 class="textEventa">Vrijeme odrzavanja : @eventInfo.VrijemeOdrzavanja</h4>
                 </div>
-                <div class="textEventa">
+                <div >
                     @if (eventInfo.IsOdobren)
-                    {<h4>Odobren : Da</h4> }
+                    {<h4 class="textEventa">Odobren : Da</h4> }
                     else
-                    { <h4>Odobren : Ne</h4>}
+                    { <h4 class="textEventa">Odobren : Ne</h4>}
                 </div>
-                <div class="textEventa">
+                <div >
                     @if (eventInfo.IsOtkazan)
-                    {<h4>Otkazan : Da</h4> }
+                    {<h4 class="textEventa">Otkazan : Da</h4> }
                     else
-                    { <h4>Otkazan : Ne</h4>}
+                    { <h4 class="textEventa">Otkazan : Ne</h4>}
                 </div>
                 <div class="textEventa mojeDugme">
                     @if (eventInfo.IsOtkazan)

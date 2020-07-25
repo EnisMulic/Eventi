@@ -35,6 +35,93 @@ namespace Event_Attender.Web.Areas.ModulRadnik.Controllers
             return View();
         }
 
+        public IActionResult PregledProstoraOdrzavanja()
+        {
+            var model = new PregledProstoraOdrzavanjaVM
+            {
+                Redovi = ctx.ProstorOdrzavanja.Select(x => new PregledProstoraOdrzavanjaVM.Rows
+                {
+                    Naziv = x.Naziv,
+                    Adresa = x.Adresa,
+                    Grad = x.Grad.Naziv,
+                    ProstorOdrzavanjaId = x.Id,
+                    TipProstora = x.TipProstoraOdrzavanja.ToString()
+                }).ToList()
+            };
+
+            return View(model);
+        }
+
+        public IActionResult DodajProstorOdrzavanja()
+        {
+            var model = new DodajProstorOdrzavanjaVM
+            {
+                Gradovi = ctx.Grad.Select(x => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
+                {
+                    Value = x.Id.ToString(),
+                    Text = x.Naziv
+                }).ToList()
+            };
+
+
+            return View(model);
+        }
+
+
+        [HttpPost]
+        public IActionResult DodajProstorOdrzavanja(DodajProstorOdrzavanjaVM model)
+        {
+            var prostor = new ProstorOdrzavanja
+            {
+                Adresa = model.Adresa,
+                GradId = model.GradOdabir,
+                Naziv = model.Naziv,
+                TipProstoraOdrzavanja = (TipProstoraOdrzavanja)model.TipProstoraOdabir
+
+            };
+
+            ctx.ProstorOdrzavanja.Add(prostor);
+            ctx.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+
+        public IActionResult DodajSponzora()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult DodajSponzora(DodajSponzorFormVM model)
+        {
+            var sponzor = new Sponzor
+            {
+                Naziv = model.NazivSponzora,
+                Email = model.EmailSponzora,
+                Telefon = model.TelefonSponzora
+            };
+
+            ctx.Sponzor.Add(sponzor);
+            ctx.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult PregledSponzora()
+        {
+            var model = new PregledSponzoraVM
+            {
+                Redovi = ctx.Sponzor.Select(x => new PregledSponzoraVM.Rows
+                {
+                    Id = x.Id,
+                    EmailSponzora = x.Email,
+                    NazivSponzora = x.Naziv,
+                    TelefonSponzora = x.Telefon
+                }).ToList()
+            };
+
+            return View(model);
+        }
+
         public string GetProizvodi()
         {
             LogPodaci l = HttpContext.GetLogiraniUser();

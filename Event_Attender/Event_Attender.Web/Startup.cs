@@ -1,17 +1,14 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Event_Attender.Data.EF;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc.ApplicationModels;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using ReflectionIT.Mvc.Paging;
+using SignalRChat.Hubs;
 
 namespace Event_Attender.Web
 {
@@ -28,9 +25,10 @@ namespace Event_Attender.Web
         [Obsolete]     //?
         public void ConfigureServices(IServiceCollection services)
         {
+            
             services.AddDbContext<MojContext>(options =>
                options.UseSqlServer(Configuration.GetConnectionString("proba1"))); // za konstruktor
-
+            
             services.AddPaging(options =>
             {
                 options.ViewName = "Bootstrap4";
@@ -38,10 +36,13 @@ namespace Event_Attender.Web
                 options.HtmlIndicatorUp = " <span>&uarr;</span>";
             });
             services.AddControllersWithViews();
-            
+            services.AddSignalR();
+
+            services.AddMvc();
+            services.AddSingleton<IConfiguration>(Configuration);
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -52,14 +53,11 @@ namespace Event_Attender.Web
             {
                 app.UseExceptionHandler("/Home/Error");
             }
+
             app.UseStaticFiles();
-
             app.UseRouting();
-
-          
-
             app.UseAuthorization();
-
+            
 
             app.UseEndpoints(endpoints =>
             {   
@@ -72,6 +70,7 @@ namespace Event_Attender.Web
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+                endpoints.MapHub<ChatHub>("/chatHub");
             });
         }
     }

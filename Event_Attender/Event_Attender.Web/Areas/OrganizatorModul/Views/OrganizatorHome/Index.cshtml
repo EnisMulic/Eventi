@@ -1,10 +1,12 @@
 ﻿@using Event_Attender.Web.ViewModels
+@using Event_Attender.Web.Areas.OrganizatorModul.ViewModels
 
 @{
     Layout = null;
     var prostori = (List<SelectListItem>) ViewData["ProstoriOdrzavanja"];
     var eventiOrganizatora = (List<OrganizatorEventVM>) ViewData["EventiOrganizatora"];
     var orgId = (int)ViewData["OrganizatorID"];
+    var model = (StatistickiPodaciVM)ViewData["StatistickiPodaci"];
 
 }
 
@@ -20,303 +22,449 @@
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
-        // Load the Visualization API and the corechart package.
+
       google.charts.load('current', {'packages':['corechart']});
 
-      // Set a callback to run when the Google Visualization API is loaded.
-        google.charts.setOnLoadCallback(drawChart);
+        google.charts.setOnLoadCallback(UkupnoKarata);
+        google.charts.setOnLoadCallback(UkupnaZarada);
+        google.charts.setOnLoadCallback(ProsjecnaOcjena);
 
-        function drawChart() {
+
+        function ProsjecnaOcjena() {
             var data = google.visualization.arrayToDataTable([
-                ['Event','Broj prodatih karata',]
+                ['Event', 'Prosjecna ocjena'],
+                  @foreach(var items in model.Redovi)
+                  {
+                      <text>['@items.NazivEventa',@items.ProsjecnaOcjenaEventa],</text>
+                  }
+                ['Mushrooms', 3]
             ]);
+
+            data.removeRow(data.getNumberOfRows() - 1);
+
+            var options = {'title':'Prosjecna ocjena eventa',
+                     'width':400,
+                'height': 300
+            };
+
+            var chart = new google.visualization.BarChart(document.getElementById('chart_div3'));
+            chart.draw(data, options);
         }
+
+
+
+
+      function UkupnoKarata() {
+
+          var data = new google.visualization.DataTable();
+          data.addColumn('string', 'Naziv eventa');
+          data.addColumn('number', 'Ukupan broj prodatih karata');
+
+
+          data.addRows([
+                  @foreach(var items in model.Redovi)
+                  {
+                      <text>['@items.NazivEventa',@items.UkupnoBrojProdatihKarata],</text>
+                  }
+                ['Mushrooms', 3]
+          ]);
+
+          data.removeRow(data.getNumberOfRows() - 1);
+
+         var options = {'title':'Odnos prodatih karata',
+                     'width':400,
+                     'height':300};
+
+            var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+             chart.draw(data, options);
+      }
+
+
+
+
+        function UkupnaZarada() {
+            var data = new google.visualization.DataTable();
+            data.addColumn('string', 'Naziv eventa');
+            data.addColumn('number', 'BAM');
+
+
+          data.addRows([
+                  @foreach(var items in model.Redovi)
+                  {
+                      <text>['@items.NazivEventa',@items.UkupanPrihodPoEventu],</text>
+                  }
+                ['Mushrooms', 3]
+          ]);
+
+          data.removeRow(data.getNumberOfRows() - 1);
+
+           var options = {'title':'Zarada od prodatih karata',
+                     'width':400,
+                     'height':300};
+
+         var chart = new google.visualization.ColumnChart(document.getElementById('chart_div2'));
+         chart.draw(data, options);
+      }
+
+
+
+    </script>
+
+    <style>
+        body {
+            background: rgb(155,244,164);
+            background: linear-gradient(90deg, rgba(155,244,164,1) 0%, rgba(148,187,233,1) 100%);
+        }
+
+        .subWrapper {
+            padding: 10px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill,minmax(300px,1fr));
+            grid-gap: 10px;
+        }
+
+        .subWrapper2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fill,minmax(400px,1fr));
+            justify-items:center;
+        }
+
+        .littleBox {
+            text-align: center;
+        }
+
+        .labels {
+            font-weight: bold;
+        }
+
+        .dugmic:focus,
+        .dugmic:hover {
+            cursor: pointer;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            padding-top: 60px;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .modal2 {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            padding-top: 80px;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .modal-content {
+            background-color: rgb(86, 219, 121);
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            max-width: 460px;
+        }
+
+        .close {
+            color: red;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+            .close:hover,
+            .close:focus {
+                color: #000;
+                text-decoration: none;
+                cursor: pointer;
+            }
+
+        .close2 {
+            color: red;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+            .close2:hover,
+            .close2:focus {
+                color: #000;
+                text-decoration: none;
+                cursor: pointer;
+            }
+
+        .naslovA {
+            color: black;
+        }
+
+            .naslovA:hover, .naslovA:focus {
+                color: white;
+            }
+
+        .nazivEventa {
+            font-weight: bold;
+        }
+
+        .buttonBox {
+            padding: 10px;
+        }
+
+        .box {
+            -webkit-box-shadow: -8px 5px 9px 0px rgba(0,0,0,0.48);
+            -moz-box-shadow: -8px 5px 9px 0px rgba(0,0,0,0.48);
+            box-shadow: -8px 5px 9px 0px rgba(0,0,0,0.48);
+        }
+
+        .radioBox {
+            background-color: black;
+            width: 200px;
+            padding: 10px;
+        }
+
+        .inputBox {
+            border-radius: 5px;
+            background-color: rgb(212, 255, 223);
+        }
+
+        .inputi {
+            max-width: 450px;
+        }
+
+        #modalDugme:hover {
+            color: white;
+        }
+
+        #modalDugme {
+            color: rgb(92,92,92);
+            font-weight: bold;
+        }
+
+
+        #navBrand {
+            color: rgb(92,92,92);
+            font-weight: bold;
+        }
+
+            #navBrand:hover {
+                color: white;
+            }
+
+
+        .modal-content {
+            background-color: rgb(86, 219, 121);
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            max-width: 460px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+
+        <div class="row">
+            <nav style="border-radius: 0px; box-shadow: 0px 5px 9px 0px rgba(0,0,0,0.48);
+                         background-color:rgb(141, 242, 167);" class="navbar navbar-inverse">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <a id="navBrand" class="navbar-brand" href="Index">Organizator panel</a>
+                    </div>
+                    <ul class="nav navbar-nav">
+                        <li class="dugmic"><a id="modalDugme">Dodaj event</a></li>
+
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+
+                        <li>
+                            <a class="navbar-brand"
+                               asp-area="" asp-controller="Prijava" asp-action="LogOut">Odjava</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+
+        <div id="modalForma2" class="modal2">
+
+        </div>
+
+        <div id="modalForma" class="modal">
+
+            <div class="modal-content">
+                <span class="close" style="color:red;">&times;</span>
+                <form asp-action="SnimiEvent" method="post" enctype="multipart/form-data">
+                    <input type="hidden" asp-for="_organizatorID" value="@orgId" />
+
+                    <div class="form-group">
+                        <label for="nazivEventa">Naziv eventa</label>
+                        <input required type="text" class="form-control inputBox inputi" id="nazivEventa" asp-for="_nazivEventa">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="opisEventa">Opis</label>
+                        <textarea type="text" class="form-control inputBox inputi" id="opisEventa" asp-for="_opisEventa"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <input name="slika" type="file" class="form-control inputBox inputi" />
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="datumEventa">Datum odrzavanja</label>
+                        <input style="width:200px;" required type="date" class="form-control inputBox" id="datumEventa" asp-for="_datumEventa">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="vrijemeEventa">Vrijeme odrzavanja</label>
+                        <input style="width:200px;" required type="time" class="form-control inputBox" id="vrijemeEventa" asp-for="_vrijemeEventa">
+                    </div>
+
+                    <label>Kategorija eventa</label>
+                    <div class="radioBox inputBox">
+                        <div class="radio">
+                            <label><input required type="radio" asp-for="_optradio" value="0">Muzika</label>
+                        </div>
+                        <div class="radio">
+                            <label><input required type="radio" asp-for="_optradio" value="1">Kultura</label>
+                        </div>
+                        <div class="radio">
+                            <label><input required type="radio" asp-for="_optradio" value="2">Sport</label>
+                        </div>
+                    </div>
+                    <br />
+                    <label for="odabirProstor">Prostor odrzavanja</label>
+                    <select class="inputBox" required id="odabirProstor" asp-for="_optcombo" asp-items="prostori">
+                        <option value="" disabled selected>odaberite prostor</option>
+                    </select>
+                    <br />
+                    <button type="submit" class="btn btn-default">Submit</button>
+                </form>
+            </div>
+
+        </div>
+
+        <div class="subWrapper2">
+            <div  id="chart_div" style="width:400px;height:300px;"></div>
+            <div  id="chart_div2" style="width:400px;height:300px;"></div>
+            <div  id="chart_div3" style="width:400px;height:300px;"></div>
+        </div>
+        
+        <div class="subWrapper">
+
+            @foreach (var i in eventiOrganizatora)
+            {
+                @if (i.IsOdobren)
+                {
+                    <div class="box" style="background-color: #62aaf0; ">
+                        <div class="littleBox box1">
+                            <a class="naslovA" href="EventInfoPrikaz?EventID=@i.Id">
+                                <h4 style="display: inline-block;margin-left:20px;" class="nazivEventa">@i.Naziv</h4>
+                            </a>
+                            <a class="dugmeEdit" data-vrijednost="@i.Id"><img style="margin-left:2px;margin-bottom:5px;" src="@Url.Content("~/images/ikonice/pen.png")" /></a>
+
+                        </div>
+                        <div class="littleBox">
+                            <p class="labels">Prostor odrzavanja</p>
+                            <p>@i.ProstorOdrzavanjaNaziv</p>
+                        </div>
+                        <div class="littleBox">
+                            <p class="labels">Datum odrzavanja</p>
+                            <p>@i.DatumOdrzavanja.ToShortDateString()</p>
+                        </div>
+                        <div class="littleBox">
+                            <p class="labels">Vrijeme odrzavanja</p>
+                            <p>@i.VrijemeOdrzavanja</p>
+                        </div>
+                        <div class="littleBox">
+                            <p class="labels">Kategorija eventa</p>
+                            <p>@i.Kategorija.ToString()</p>
+                        </div>
+
+                    </div>
+                }
+                else
+                {
+                    <div class="box" style=" background-color: #FF839C;">
+                        <div class="littleBox">
+                            <a class="naslovA" href="EventInfoPrikaz?EventID=@i.Id">
+                                <h4 style="display: inline-block;" class="nazivEventa">@i.Naziv</h4>
+                            </a>
+                        </div>
+                        <div class="littleBox">
+                            <p class="labels">Prostor odrzavanja</p>
+                            <p>@i.ProstorOdrzavanjaNaziv</p>
+                        </div>
+                        <div class="littleBox">
+                            <p class="labels">Datum odrzavanja</p>
+                            <p>@i.DatumOdrzavanja.ToShortDateString()</p>
+                        </div>
+                        <div class="littleBox">
+                            <p class="labels">Vrijeme odrzavanja</p>
+                            <p>@i.VrijemeOdrzavanja</p>
+                        </div>
+                        <div class="littleBox">
+                            <p class="labels">Kategorija eventa</p>
+                            <p>@i.Kategorija.ToString()</p>
+                        </div>
+                    </div>
+                }
+            }
+
+
+
+        </div>
+
+
+
+        <script>
+            $(".dugmeEdit").click(function () {
+                var vrijednost = this.getAttribute("data-vrijednost");
+                $.get("/OrganizatorModul/OrganizatorHome/UrediEvent?EventId=" + vrijednost, function (data) {
+                    $("#modalForma2").html(data);
+                    $("#modalForma2").show();
+
+                    $(".close2").click(function () {
+                        $("#modalForma2").hide();
+                    });
+                });
+            });
+
+            var modal = document.getElementById("modalForma");
+            var dugme = document.getElementById("modalDugme");
+            var span = document.getElementsByClassName("close")[0];
+
+            dugme.onclick = function () {
+                modal.style.display = "block";
+            }
+
+            span.onclick = function () {
+                modal.style.display = "none";
+            }
 
         </script>
 
-            <style>
-                body {
-                    background: rgb(155,244,164);
-                    background: linear-gradient(90deg, rgba(155,244,164,1) 0%, rgba(148,187,233,1) 100%);
-                }
-
-                .subWrapper {
-                    padding: 10px;
-                    display: grid;
-                    grid-template-columns: repeat(auto-fill,minmax(300px,1fr));
-                    grid-gap: 10px;
-                }
-
-                .littleBox {
-                    text-align: center;
-                }
-
-                .labels {
-                    font-weight: bold;
-                }
-
-                .dugmic:focus,
-                .dugmic:hover {
-                    cursor: pointer;
-                }
-
-                .modal {
-                    display: none;
-                    position: fixed;
-                    z-index: 1;
-                    padding-top: 80px;
-                    left: 0;
-                    top: 0;
-                    width: 100%;
-                    height: 100%;
-                    overflow: auto;
-                    background-color: rgb(0,0,0);
-                    background-color: rgba(0,0,0,0.4);
-                }
-
-                .modal-content {
-                    background-color: rgb(86, 219, 121);
-                    margin: auto;
-                    padding: 20px;
-                    border: 1px solid #888;
-                    max-width: 460px;
-                }
-
-                .close {
-                    color: #aaaaaa;
-                    float: right;
-                    font-size: 28px;
-                    font-weight: bold;
-                }
-
-                    .close:hover,
-                    .close:focus {
-                        color: #000;
-                        text-decoration: none;
-                        cursor: pointer;
-                    }
-
-                .naslovA {
-                    color: black;
-                }
-
-                    .naslovA:hover, .naslovA:focus {
-                        color: white;
-                    }
-
-                .nazivEventa {
-                    font-weight: bold;
-                }
-
-                .buttonBox {
-                    padding: 10px;
-                }
-
-                .box {
-                    -webkit-box-shadow: -8px 5px 9px 0px rgba(0,0,0,0.48);
-                    -moz-box-shadow: -8px 5px 9px 0px rgba(0,0,0,0.48);
-                    box-shadow: -8px 5px 9px 0px rgba(0,0,0,0.48);
-                }
-
-                .radioBox {
-                    background-color: black;
-                    width: 200px;
-                    padding: 10px;
-                }
-
-                .inputBox {
-                    border-radius: 5px;
-                    background-color: rgb(212, 255, 223);
-                }
-
-                .inputi {
-                    max-width: 450px;
-                }
-
-                #modalDugme:hover {
-                    color: white;
-                }
-
-                #modalDugme {
-                    color: rgb(92,92,92);
-                    font-weight: bold;
-                }
-
-                #navBrand {
-                    color: rgb(92,92,92);
-                    font-weight: bold;
-                }
-
-                    #navBrand:hover {
-                        color: white;
-                    }
-            </style>
-</head>
-<body>
-            <div class="container-fluid">
-
-                <div class="row">
-                    <nav style="border-radius: 0px; box-shadow: 0px 5px 9px 0px rgba(0,0,0,0.48);
-                         background-color:rgb(141, 242, 167);" class="navbar navbar-inverse">
-                        <div class="container-fluid">
-                            <div class="navbar-header">
-                                <a id="navBrand" class="navbar-brand" href="Index">Organizator panel</a>
-                            </div>
-                            <ul class="nav navbar-nav">
-                                <li class="dugmic"><a id="modalDugme">Dodaj event</a></li>
-
-                            </ul>
-                            <ul class="nav navbar-nav navbar-right">
-
-                                <li>
-                                    <a class="navbar-brand"
-                                       asp-area="" asp-controller="Prijava" asp-action="LogOut">Odjava</a>
-                                </li>
-                                </ul>
-                        </div>
-                    </nav>
-                </div>
-
-                <div id="modalForma" class="modal">
-
-                    <div class="modal-content">
-                        <span class="close">&times;</span>
-                        <form asp-action="SnimiEvent" method="post" enctype="multipart/form-data">
-                            <input type="hidden" asp-for="_organizatorID" value="@orgId" />
-
-                            <div class="form-group">
-                                <label for="nazivEventa">Naziv eventa</label>
-                                <input required type="text" class="form-control inputBox inputi" id="nazivEventa" asp-for="_nazivEventa">
-                            </div>
-
-                            <div class="form-group">
-                                <label for="opisEventa">Opis</label>
-                                <textarea type="text" class="form-control inputBox inputi" id="opisEventa" asp-for="_opisEventa"></textarea>
-                            </div>
-
-                            <div class="form-group">
-                                <input name="slika" type="file" class="form-control inputBox inputi" />
-                            </div>
-
-
-                            <div class="form-group">
-                                <label for="datumEventa">Datum odrzavanja</label>
-                                <input style="width:200px;" required type="date" class="form-control inputBox" id="datumEventa" asp-for="_datumEventa">
-                            </div>
-
-                            <div class="form-group">
-                                <label for="vrijemeEventa">Vrijeme odrzavanja</label>
-                                <input style="width:200px;" required type="time" class="form-control inputBox" id="vrijemeEventa" asp-for="_vrijemeEventa">
-                            </div>
-
-                            <label>Kategorija eventa</label>
-                            <div class="radioBox inputBox">
-                                <div class="radio">
-                                    <label><input required type="radio" asp-for="_optradio" value="0">Muzika</label>
-                                </div>
-                                <div class="radio">
-                                    <label><input required type="radio" asp-for="_optradio" value="1">Kultura</label>
-                                </div>
-                                <div class="radio">
-                                    <label><input required type="radio" asp-for="_optradio" value="2">Sport</label>
-                                </div>
-                            </div>
-                            <br />
-                            <label for="odabirProstor">Prostor odrzavanja</label>
-                            <select class="inputBox" required id="odabirProstor" asp-for="_optcombo" asp-items="prostori">
-                                <option value="" disabled selected>odaberite prostor</option>
-                            </select>
-                            <br />
-                            <button type="submit" class="btn btn-default">Submit</button>
-                        </form>
-                    </div>
-
-                </div>
-
-                <script>
-                    var modal = document.getElementById("modalForma");
-                    var dugme = document.getElementById("modalDugme");
-                    var span = document.getElementsByClassName("close")[0];
-
-                    dugme.onclick = function () {
-                        modal.style.display = "block";
-                    }
-
-                    span.onclick = function() {
-                        modal.style.display = "none";
-                    }
-                    window.onclick = function(event) {
-                     if (event.target == modal) {
-                        modal.style.display = "none";
-                      }
-                    }
-    </script>
-
-    <div class="subWrapper">
-
-        @foreach (var i in eventiOrganizatora)
-        {
-            @if (i.IsOdobren)
-            {
-                <div class="box" style="background-color:#62aaf0;">
-                    <div class="littleBox box1">
-                        <a class="naslovA" href="EventInfoPrikaz?EventID=@i.Id">
-                            <h4 style="display: inline-block;" class="nazivEventa">@i.Naziv</h4>
-                        </a>
-                    </div>
-                    <div class="littleBox">
-                        <p class="labels">Prostor odrzavanja</p>
-                        <p>@i.ProstorOdrzavanjaNaziv</p>
-                    </div>
-                    <div class="littleBox">
-                        <p class="labels">Datum odrzavanja</p>
-                        <p>@i.DatumOdrzavanja.ToShortDateString()</p>
-                    </div>
-                    <div class="littleBox">
-                        <p class="labels">Vrijeme odrzavanja</p>
-                        <p>@i.VrijemeOdrzavanja</p>
-                    </div>
-                    <div class="littleBox">
-                        <p class="labels">Kategorija eventa</p>
-                        <p>@i.Kategorija.ToString()</p>
-                    </div>
-
-                </div>
-            }
-            else
-            {
-                <div class="box" style="    background-color: #FF839C;
-    ">
-                    <div class="littleBox">
-                        <a class="naslovA" href="EventInfoPrikaz?EventID=@i.Id">
-                            <h4 style="display: inline-block;" class="nazivEventa">@i.Naziv</h4>
-                        </a>
-                    </div>
-                    <div class="littleBox">
-                        <p class="labels">Prostor odrzavanja</p>
-                        <p>@i.ProstorOdrzavanjaNaziv</p>
-                    </div>
-                    <div class="littleBox">
-                        <p class="labels">Datum odrzavanja</p>
-                        <p>@i.DatumOdrzavanja.ToShortDateString()</p>
-                    </div>
-                    <div class="littleBox">
-                        <p class="labels">Vrijeme odrzavanja</p>
-                        <p>@i.VrijemeOdrzavanja</p>
-                    </div>
-                    <div class="littleBox">
-                        <p class="labels">Kategorija eventa</p>
-                        <p>@i.Kategorija.ToString()</p>
-                    </div>
-                </div>
-            }
-        }
     </div>
-    </div>
-
-
-
-
     </body>
 </html>
