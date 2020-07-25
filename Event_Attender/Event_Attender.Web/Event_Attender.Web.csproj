@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
+    <UserSecretsId>01ee30c7-4a3e-4c50-b9e0-b8013ab78460</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,7 +16,9 @@
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.0.0" />
+    <PackageReference Include="Nexmo.Csharp.Client" Version="4.3.1" />
     <PackageReference Include="ReflectionIT.Mvc.Paging" Version="4.0.0" />
+    <PackageReference Include="SendGrid" Version="9.12.7" />
   </ItemGroup>
 
   <ItemGroup>

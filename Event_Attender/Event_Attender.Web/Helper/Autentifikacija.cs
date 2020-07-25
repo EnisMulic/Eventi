@@ -27,7 +27,7 @@ namespace Event_Attender.Web.Helper
         public static  LogPodaci GetLogiraniUser(this HttpContext context)
         {
             MojContext ctx = context.RequestServices.GetService<MojContext>();
-            
+
 
             string logPodaciIdCookie = context.Request.GetCookieJson<string>(LogiraniUser);
 
@@ -36,10 +36,10 @@ namespace Event_Attender.Web.Helper
 
 
             LogPodaci l = ctx.LogPodaci.Where(l => l.Id == int.Parse(logPodaciIdCookie)).SingleOrDefault();
-           
+
             return l;
 
-          
+
         }
 
         public static void RemoveCookie(this HttpContext context)

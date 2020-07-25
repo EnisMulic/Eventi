@@ -1,5 +1,4 @@
 ﻿$(document).ready(function () {
-    
 
     $("div.ea-navbar").on('click', function (e) {
         $.get("../Home/" + e.target.id + "List", function (response) {

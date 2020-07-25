@@ -46,5 +46,6 @@ namespace Event_Attender.Data.EF
         public DbSet<Sjediste> Sjediste { get; set; }
         public DbSet<Sponzor> Sponzor { get; set; }
         public DbSet<SponzorEvent> SponzorEvent{ get; set; }
+        public DbSet<ChatPoruke> ChatPoruke { get; set; }
     }
 }

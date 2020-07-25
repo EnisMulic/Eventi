@@ -102,7 +102,8 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
             LogPodaci.Password = model.NewPassword;
             ctx.SaveChanges();
             return Redirect("AdminProfil?id=" + model.Id);
-        }
+        }      
+
 
         public bool IsUsernameUnique(string Username, int LogPodaciId)
         {
@@ -129,5 +130,33 @@ namespace Event_Attender.Web.Areas.Administrator.Controllers
 
         public bool MatchNewPassword(string NewPasswordConfirmed, string NewPassword) =>
             NewPasswordConfirmed == NewPassword;
+
+        public IActionResult Poruke()
+        {
+            var Osoba = uow.OsobaRepository.GetAll()
+                .Where(i => i.LogPodaci.Id == HttpContext.GetLogiraniUser().Id)
+                .SingleOrDefault();
+
+            var model = new ChatVM
+            {
+                Username = HttpContext.GetLogiraniUser().Username,
+                AdministratorId = Osoba.Id,
+                Rows = uow.ChatPorukeRepository.GetAll()
+                    .Select
+                    (
+                        i => new ChatVM.Row
+                        {
+                            ChatPorukaId = i.Id,
+                            AutorId = i.Osoba.Id,
+                            Autor = i.Osoba.LogPodaci.Username,
+                            Poruka = i.Poruka,
+                            Kreirana = i.Kreirana.ToString("dd/MM/yyyy HH:mm")
+                        }
+                    )
+                    .ToList()
+            };
+
+            return View(model);
+        }
     }
 }

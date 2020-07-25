@@ -1,0 +1,50 @@
+﻿@model Event_Attender.Web.Areas.Administrator.Models.ChatVM
+<link href="~/css/admin-profil.css" rel="stylesheet" />
+<link href="~/css/chat.css" rel="stylesheet" />
+
+
+<div class="row" id="messages-container">
+    <div class="col-12">
+        <div id="messagesList">
+            @foreach (var Row in Model.Rows)
+            {
+                <div id="@Row.ChatPorukaId" class="@Row.AutorId chat-container">
+                    @Row.Autor: @Row.Poruka
+                    <span class="timestamp" style="float:right">@Row.Kreirana</span>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
+        <hr />
+    </div>
+</div>
+<div>
+    <div class="row">&nbsp;</div>
+    <input id="userId" value="@Model.AdministratorId" hidden />
+    <input id="userInput" value="@Model.Username" hidden />
+    <div class="form-group">
+        <div><input type="text" id="messageInput" class="form-control" placeholder="Poruka" /></div>
+    </div>
+    <div class="row">&nbsp;</div>
+    <div class="row">
+        <div class="col-6">
+            <input type="button" id="sendButton" value="Pošalji poruku" />
+        </div>
+    </div>
+</div>
+<script src="~/js/signalr/dist/browser/signalr.js"></script>
+<script src="~/js/chat.js"></script>
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script>
+    $(document).ready(setChatToBottom());
+
+    $(document).ajaxComplete(setChatToBottom());
+
+    function setChatToBottom() {
+        var messageBody = document.querySelector('#messages-container');
+        messageBody.scrollTop = messageBody.scrollHeight - messageBody.clientHeight;
+    }
+</script>

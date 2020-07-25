@@ -1,0 +1,25 @@
+﻿@model Event_Attender.Web.Areas.ModulRadnik.Models.PregledProstoraOdrzavanjaVM
+@{
+    ViewData["Title"] = "PregledSponzora";
+}
+
+<h1>Pregled Sponzora</h1>
+
+<table class="table table-bordered">
+    <tr>
+        <td>Id</td>
+        <td>Naziv</td>
+        <td>Grad</td>
+        <td>Tip prostora</td>
+    </tr>
+    @foreach (var item in Model.Redovi)
+    {
+        <tr>
+            <td>@item.ProstorOdrzavanjaId</td>
+            <td>@item.Naziv</td>
+            <td>@item.Grad</td>
+            <td>@item.TipProstora</td>
+        </tr>
+    }
+</table>>
+

@@ -1,0 +1,41 @@
+﻿@model Event_Attender.Web.Areas.OrganizatorModul.ViewModels.EventUrediFormVM
+
+
+    <div class="modal-content">
+        <span class="close2">&times;</span>
+        <form method="post" asp-action="UrediSnimiEvent" asp-controller="OrganizatorHome">
+            <input type="hidden" asp-for="EventId" value="@Model.EventId" />
+
+            <div class="form-group">
+                <label for="nazivEventa">Naziv eventa</label>
+                <input required type="text" class="form-control inputBox inputi" id="nazivEventa" asp-for="NazivEventaOd" value="@Model.NazivEventaOd">
+            </div>
+
+            <div class="form-group">
+                <label for="opisEventa">Opis</label>
+                <textarea type="text" class="form-control inputBox inputi" id="opisEventa" asp-for="OpisEventaOd"></textarea>
+            </div>
+
+
+           
+            <div class="form-group">
+                <label for="vrijemeEventa">Vrijeme odrzavanja</label>
+                <input style="width:200px;" required type="time" class="form-control inputBox" id="vrijemeEventa" asp-for="VrijemeOdrzavanjaOd" value="@Model.VrijemeOdrzavanjaOd">
+            </div>
+
+            <div class="form-group">
+                <label>Kategorija eventa</label>
+                <select asp-for="KategorijaOdabir" asp-items="@Model.Kategorije"></select>
+            </div>
+
+            <div class="form-group">
+                <label>Sponzor eventa</label>
+                <select asp-for="SponzorOdabir" asp-items="@Model.Sponzori"></select>
+            </div>
+
+            <br />
+
+            <br />
+            <button type="submit" class="btn btn-default">Submit</button>
+        </form>
+    </div>
