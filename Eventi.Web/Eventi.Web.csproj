@@ -22,10 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Event_Attender.Data\Event_Attender.Data.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="Areas\ModulGuest\Data\" />
     <Folder Include="Areas\ModulKorisnik\Data\" />
     <Folder Include="Areas\ModulRadnik\Data\" />
@@ -33,6 +29,10 @@
     <Folder Include="Views\Organizator\" />
     <Folder Include="wwwroot\images\items\" />
     <Folder Include="wwwroot\images\korisnicke\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Eventi.Data\Eventi.Data.csproj" />
   </ItemGroup>
 
 </Project>

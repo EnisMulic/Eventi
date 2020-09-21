@@ -15,8 +15,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Event_Attender.Data\Event_Attender.Data.csproj" />
-    <ProjectReference Include="..\Event_Attender.Web\Event_Attender.Web.csproj" />
+    <ProjectReference Include="..\Eventi.Data\Eventi.Data.csproj" />
+    <ProjectReference Include="..\Eventi.Web\Eventi.Web.csproj" />
   </ItemGroup>
 
 </Project>

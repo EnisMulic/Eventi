@@ -1,21 +1,16 @@
-using Event_Attender.Web.Areas.Administrator.Controllers;
-using Event_Attender.Web.Areas.Administrator.Models;
 using Event_Attender.Web.Areas.ModulGuest.Controllers;
 using Event_Attender.Web.Areas.ModulKorisnik.Controllers;
 using Event_Attender.Web.Areas.ModulKorisnik.Models;
 using Event_Attender.Web.Areas.ModulRadnik.Controllers;
 using Event_Attender.Web.Areas.ModulRadnik.Models;
-using Event_Attender.Web.Controllers;
-using Event_Attender.Web.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace UnitTestovi
 {
-    
+
     [TestClass]
     public class HomeControllerTest:TestingDataBase
     {
