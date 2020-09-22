@@ -2,13 +2,13 @@
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Template.Contracts;
-using Template.Contracts.V1;
-using Template.Contracts.V1.Responses;
-using Template.Domain;
+using Eventi.Contracts;
+using Eventi.Contracts.V1;
+using Eventi.Contracts.V1.Responses;
+using Eventi.Domain;
 using Xunit;
 
-namespace Template.WebAPI.IntegrationTests
+namespace Eventi.WebAPI.IntegrationTests
 {
     public class UserControllerTests : IntegrationTest
     {

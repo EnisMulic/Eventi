@@ -21,10 +21,10 @@
 
 
   <ItemGroup>
-    <ProjectReference Include="..\Template.Contracts\Template.Contracts.csproj" />
-    <ProjectReference Include="..\Template.Core\Template.Core.csproj" />
-    <ProjectReference Include="..\Template.Database\Template.Database.csproj" />
-    <ProjectReference Include="..\Template.Services\Template.Services.csproj" />
+    <ProjectReference Include="..\Eventi.Contracts\Eventi.Contracts.csproj" />
+    <ProjectReference Include="..\Eventi.Core\Eventi.Core.csproj" />
+    <ProjectReference Include="..\Eventi.Database\Eventi.Database.csproj" />
+    <ProjectReference Include="..\Eventi.Services\Eventi.Services.csproj" />
   </ItemGroup>
 
 </Project>

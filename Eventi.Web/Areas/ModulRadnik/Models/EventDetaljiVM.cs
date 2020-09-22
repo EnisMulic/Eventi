@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Event_Attender.Web.Areas.ModulRadnik.Models
+namespace Eventi.Web.Areas.ModulRadnik.Models
 {
     public class EventDetaljiVM
     {

@@ -6,13 +6,12 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using Template.Contracts;
-using Template.Contracts.V1;
-using Template.Contracts.V1.Requests;
-using Template.Contracts.V1.Responses;
-using Template.Database;
+using Eventi.Database;
+using Eventi.Contracts.V1.Responses;
+using Eventi.Contracts.V1;
+using Eventi.Contracts.V1.Requests;
 
-namespace Template.WebAPI.IntegrationTests
+namespace Eventi.WebAPI.IntegrationTests
 {
     public class IntegrationTest : IDisposable
     {

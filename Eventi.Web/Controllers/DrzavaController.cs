@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Event_Attender.Data.EF;
-using Event_Attender.Data.Models;
+using Eventi.Data.EF;
+using Eventi.Data.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Event_Attender.Web.Controllers
+namespace Eventi.Web.Controllers
 {
     public class DrzavaController : Controller
     {

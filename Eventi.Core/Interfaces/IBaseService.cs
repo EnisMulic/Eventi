@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
-using Template.Contracts.V1.Requests;
-using Template.Contracts.V1.Responses;
+using Eventi.Contracts.V1.Requests;
+using Eventi.Contracts.V1.Responses;
 
-namespace Template.Core.Interfaces
+namespace Eventi.Core.Interfaces
 {
     public interface IBaseService<T, TSearch>
     {

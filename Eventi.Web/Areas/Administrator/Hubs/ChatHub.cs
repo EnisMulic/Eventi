@@ -1,6 +1,6 @@
-﻿using Event_Attender.Data.EF;
-using Event_Attender.Data.Models;
-using Event_Attender.Data.Repository;
+﻿using Eventi.Data.EF;
+using Eventi.Data.Models;
+using Eventi.Data.Repository;
 using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Threading.Tasks;

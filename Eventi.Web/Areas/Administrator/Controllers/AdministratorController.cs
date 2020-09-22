@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Event_Attender.Data.EF;
-using Event_Attender.Data.Models;
-using Event_Attender.Data.Repository;
-using Event_Attender.Web.Areas.Administrator.Models;
-using Event_Attender.Web.Helper;
+using Eventi.Data.EF;
+using Eventi.Data.Models;
+using Eventi.Data.Repository;
+using Eventi.Web.Areas.Administrator.Models;
+using Eventi.Web.Helper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace Event_Attender.Web.Areas.Administrator.Controllers
+namespace Eventi.Web.Areas.Administrator.Controllers
 {
     [Autorizacija(korisnik: false, organizator: false, administrator: true, radnik: false)]
     [Area("Administrator")]

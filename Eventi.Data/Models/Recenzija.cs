@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Event_Attender.Data.Models
+namespace Eventi.Data.Models
 {
     public class Recenzija
     {

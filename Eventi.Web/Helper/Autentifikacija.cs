@@ -1,5 +1,5 @@
-﻿using Event_Attender.Data.EF;
-using Event_Attender.Data.Models;
+﻿using Eventi.Data.EF;
+using Eventi.Data.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Event_Attender.Web.Helper
+namespace Eventi.Web.Helper
 {
     public static class Autentifikacija
     {

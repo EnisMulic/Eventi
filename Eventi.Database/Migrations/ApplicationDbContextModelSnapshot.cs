@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Template.Database;
+using Eventi.Database;
 
-namespace Template.Database.Migrations
+namespace Eventi.Database.Migrations
 {
     [DbContext(typeof(TemplateContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot

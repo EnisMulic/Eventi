@@ -2,12 +2,12 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Template.Contracts.V1;
-using Template.Contracts.V1.Requests;
-using Template.Contracts.V1.Responses;
-using Template.Core.Interfaces;
+using Eventi.Contracts.V1;
+using Eventi.Contracts.V1.Requests;
+using Eventi.Contracts.V1.Responses;
+using Eventi.Core.Interfaces;
 
-namespace Template.WebAPI.Controllers.V1
+namespace Eventi.WebAPI.Controllers.V1
 {
     [AllowAnonymous]
     [ApiController]

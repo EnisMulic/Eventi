@@ -4,11 +4,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using Template.Core.Interfaces;
-using Template.Core.Settings;
-using Template.Services;
+using Eventi.Core.Interfaces;
+using Eventi.Core.Settings;
+using Eventi.Services;
 
-namespace Template.WebAPI.Installers
+namespace Eventi.WebAPI.Installers
 {
     public class MvcInstaller : IInstaller
     {

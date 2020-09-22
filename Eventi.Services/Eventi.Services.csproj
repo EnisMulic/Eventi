@@ -11,8 +11,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Template.Core\Template.Core.csproj" />
-    <ProjectReference Include="..\Template.Database\Template.Database.csproj" />
+    <ProjectReference Include="..\Eventi.Contracts\Eventi.Contracts.csproj" />
+    <ProjectReference Include="..\Eventi.Core\Eventi.Core.csproj" />
+    <ProjectReference Include="..\Eventi.Database\Eventi.Database.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Template.WebAPI.Installers
+namespace Eventi.WebAPI.Installers
 {
     public interface IInstaller
     {

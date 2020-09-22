@@ -4,13 +4,13 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Template.Contracts.V1.Requests;
-using Template.Contracts.V1.Responses;
-using Template.Core.Interfaces;
-using Template.Database;
-using Template.Domain;
+using Eventi.Contracts.V1.Requests;
+using Eventi.Contracts.V1.Responses;
+using Eventi.Core.Interfaces;
+using Eventi.Database;
+using Eventi.Domain;
 
-namespace Template.Services
+namespace Eventi.Services
 {
     public class UserService : CRUDService<UserResponse, UserSearchRequest, User, UserInsertRequest, UserUpdateRequest>
     {

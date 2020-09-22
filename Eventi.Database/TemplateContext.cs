@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Template.Domain;
+using Eventi.Domain;
 
-namespace Template.Database
+namespace Eventi.Database
 {
     public class TemplateContext : IdentityDbContext<User>
     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Event_Attender.Data.Repository
+namespace Eventi.Data.Repository
 {
     interface IEventAttenderRepository<TEntity> where TEntity : class
     {

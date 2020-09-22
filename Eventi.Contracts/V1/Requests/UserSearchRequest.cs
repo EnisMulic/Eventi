@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Template.Contracts.V1.Requests
+namespace Eventi.Contracts.V1.Requests
 {
     public class UserSearchRequest
     {

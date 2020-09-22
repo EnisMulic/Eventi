@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Template.Contracts.V1.Responses
+namespace Eventi.Contracts.V1.Responses
 {
     public class UserResponse
     {

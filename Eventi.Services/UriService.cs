@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.WebUtilities;
 using System;
 using System.Collections.Generic;
-using Template.Contracts.V1.Requests;
-using Template.Core.Interfaces;
+using Eventi.Contracts.V1.Requests;
+using Eventi.Core.Interfaces;
 
-namespace Template.Services
+namespace Eventi.Services
 {
     public class UriService : IUriService
     {

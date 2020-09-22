@@ -1,4 +1,4 @@
-﻿using Event_Attender.Data.Models;
+﻿using Eventi.Data.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Event_Attender.Web.ViewModels
+namespace Eventi.Web.ViewModels
 {
     public class RegistracijaVM
     {

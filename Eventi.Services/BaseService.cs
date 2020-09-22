@@ -4,13 +4,13 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Template.Contracts.V1.Requests;
-using Template.Contracts.V1.Responses;
-using Template.Core.Helpers;
-using Template.Core.Interfaces;
-using Template.Database;
+using Eventi.Contracts.V1.Requests;
+using Eventi.Contracts.V1.Responses;
+using Eventi.Core.Helpers;
+using Eventi.Core.Interfaces;
+using Eventi.Database;
 
-namespace Template.Services
+namespace Eventi.Services
 {
     [Authorize]
     public class BaseService<TModel, TSearch, TDatabase> : IBaseService<TModel, TSearch> where TDatabase: class

@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Template.Database.Migrations
+namespace Eventi.Database.Migrations
 {
     public partial class CreateIdentitySchema : Migration
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Template.Core.Settings
+namespace Eventi.Core.Settings
 {
     public class JwtSettings
     {

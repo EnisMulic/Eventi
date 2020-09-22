@@ -10,8 +10,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Template.Contracts\Template.Contracts.csproj" />
-    <ProjectReference Include="..\Template.Domain\Template.Domain.csproj" />
+    <ProjectReference Include="..\Eventi.Contracts\Eventi.Contracts.csproj" />
+    <ProjectReference Include="..\Eventi.Domain\Eventi.Domain.csproj" />
   </ItemGroup>
 
 </Project>
