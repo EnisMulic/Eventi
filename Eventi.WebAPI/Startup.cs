@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Template.WebAPI.Installers;
+using Eventi.WebAPI.Installers;
 
-namespace Template.WebAPI
+namespace Eventi.WebAPI
 {
     public class Startup
     {

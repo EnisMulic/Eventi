@@ -4,7 +4,7 @@ using System.Text;
 
 public enum Kategorija {Muzika,Kultura,Sport}
 
-namespace Event_Attender.Data.Models
+namespace Eventi.Data.Models
 {
     public class Event
     {

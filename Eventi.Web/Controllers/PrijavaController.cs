@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Event_Attender.Data.EF;
-using Event_Attender.Data.Models;
-using Event_Attender.Web.Helper;
+using Eventi.Data.EF;
+using Eventi.Data.Models;
+using Eventi.Web.Helper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Event_Attender.Web.ViewModels;
+using Eventi.Web.ViewModels;
 
-namespace Event_Attender.Web.Controllers
+namespace Eventi.Web.Controllers
 {
     public class PrijavaController : Controller
     {

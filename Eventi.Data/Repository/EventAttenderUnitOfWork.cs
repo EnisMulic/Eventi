@@ -1,10 +1,10 @@
-﻿using Event_Attender.Data.EF;
-using Event_Attender.Data.Models;
+﻿using Eventi.Data.EF;
+using Eventi.Data.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Event_Attender.Data.Repository
+namespace Eventi.Data.Repository
 {
     public class EventAttenderUnitOfWork
     {

@@ -1,7 +1,7 @@
 ﻿using System;
-using Template.Contracts.V1.Requests;
+using Eventi.Contracts.V1.Requests;
 
-namespace Template.Core.Interfaces
+namespace Eventi.Core.Interfaces
 {
     public interface IUriService
     {

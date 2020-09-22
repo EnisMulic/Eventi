@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Template.Core.Interfaces;
+using Eventi.Core.Interfaces;
 
-namespace Template.WebAPI.Controllers.V1
+namespace Eventi.WebAPI.Controllers.V1
 {
     public class CRUDController<T, TSearch, TInsert, TUpdate> : BaseController<T, TSearch>
     {

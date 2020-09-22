@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using Template.Contracts.V1.Requests;
-using Template.Contracts.V1.Responses;
-using Template.Domain;
+using Eventi.Contracts.V1.Requests;
+using Eventi.Contracts.V1.Responses;
+using Eventi.Domain;
 
-namespace Template.Core.Mappings
+namespace Eventi.Core.Mappings
 {
     public class UserProfile : Profile
     {

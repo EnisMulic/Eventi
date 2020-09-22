@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Event_Attender.Web.ViewModels
+namespace Eventi.Web.ViewModels
 {
     public class LoginVM
     {   [Required(ErrorMessage="Obavezan unos")]

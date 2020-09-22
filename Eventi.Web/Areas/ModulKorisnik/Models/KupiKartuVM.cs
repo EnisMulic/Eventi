@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Event_Attender.Web.Areas.ModulKorisnik.Models
+namespace Eventi.Web.Areas.ModulKorisnik.Models
 {
     public class KupiKartuVM
     {

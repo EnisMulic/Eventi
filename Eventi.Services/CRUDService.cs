@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using System;
 using System.Threading.Tasks;
-using Template.Core.Interfaces;
-using Template.Database;
-using Template.Services;
+using Eventi.Core.Interfaces;
+using Eventi.Database;
+using Eventi.Services;
 
-namespace Template.Services
+namespace Eventi.Services
 {
     public class CRUDService<TModel, TSearch, TDatabase, TInsert, TUpdate> :
         BaseService<TModel, TSearch, TDatabase>, ICRUDService<TModel, TSearch, TInsert, TUpdate>

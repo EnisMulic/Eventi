@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Event_Attender.Web.Areas.ModulGuest.Models;
-using Event_Attender.Data.EF;
+using Eventi.Web.Areas.ModulGuest.Models;
+using Eventi.Data.EF;
 using Microsoft.AspNetCore.Mvc;
-using Event_Attender.Data.Models;
+using Eventi.Data.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 
-namespace Event_Attender.Web.Areas.ModulGuest.Controllers
+namespace Eventi.Web.Areas.ModulGuest.Controllers
 {   
     [Area("ModulGuest")]
     public class GuestController : Controller

@@ -22,7 +22,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Template.WebAPI\Template.WebAPI.csproj" />
+    <ProjectReference Include="..\Eventi.Contracts\Eventi.Contracts.csproj" />
+    <ProjectReference Include="..\Eventi.Database\Eventi.Database.csproj" />
+    <ProjectReference Include="..\Eventi.WebAPI\Eventi.WebAPI.csproj" />
   </ItemGroup>
 
 </Project>

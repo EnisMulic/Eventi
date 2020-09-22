@@ -1,8 +1,8 @@
-using Event_Attender.Web.Areas.ModulGuest.Controllers;
-using Event_Attender.Web.Areas.ModulKorisnik.Controllers;
-using Event_Attender.Web.Areas.ModulKorisnik.Models;
-using Event_Attender.Web.Areas.ModulRadnik.Controllers;
-using Event_Attender.Web.Areas.ModulRadnik.Models;
+using Eventi.Web.Areas.ModulGuest.Controllers;
+using Eventi.Web.Areas.ModulKorisnik.Controllers;
+using Eventi.Web.Areas.ModulKorisnik.Models;
+using Eventi.Web.Areas.ModulRadnik.Controllers;
+using Eventi.Web.Areas.ModulRadnik.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
@@ -18,12 +18,12 @@ namespace UnitTestovi
         public void IndexTestPrijePokretanjaZakomentiratiSetLogiraniKorisnik()
         {
             //prije pokretanja zakomentarisati liniju koda  HttpContext.SetLogiraniUser(null); u HomeController, akcija Index
-            var hc = new Event_Attender.Web.Controllers.HomeController(ctx);
+            var hc = new Eventi.Web.Controllers.HomeController(ctx);
             var result = hc.Index() as ViewResult;
 
-            var model = result.Model as Event_Attender.Web.ViewModels.PretragaEventaVM;
+            var model = result.Model as Eventi.Web.ViewModels.PretragaEventaVM;
 
-            var eventi = model.Eventi as List<Event_Attender.Web.ViewModels.PretragaEventaVM.Rows>;
+            var eventi = model.Eventi as List<Eventi.Web.ViewModels.PretragaEventaVM.Rows>;
 
             Assert.AreEqual(3, eventi.Count());
         }
@@ -31,7 +31,7 @@ namespace UnitTestovi
         [TestMethod]
         public void PrivacyTest()
         {
-            var hc = new Event_Attender.Web.Controllers.HomeController(ctx);
+            var hc = new Eventi.Web.Controllers.HomeController(ctx);
             var result = hc.Privacy() as ViewResult;
             Assert.IsNotNull(result);
         }
@@ -45,7 +45,7 @@ namespace UnitTestovi
         {
             var controller = new KorisnikController(ctx);
 
-            var result = controller.PrikazEvenata() as List<Event_Attender.Web.Areas.ModulKorisnik.Models.PretragaEventaVM.Rows>;
+            var result = controller.PrikazEvenata() as List<Eventi.Web.Areas.ModulKorisnik.Models.PretragaEventaVM.Rows>;
 
             Assert.AreEqual(3, result.Count());
         }
@@ -157,8 +157,8 @@ namespace UnitTestovi
         {
             var controller = new GuestController(ctx);
             var result=controller.PretraziPoLokaciji("Grad1") as ViewResult;
-            var model = result.Model as Event_Attender.Web.Areas.ModulGuest.Models.PretragaEventaVM;
-            var eventi = model.Eventi as List<Event_Attender.Web.Areas.ModulGuest.Models.PretragaEventaVM.Rows>;
+            var model = result.Model as Eventi.Web.Areas.ModulGuest.Models.PretragaEventaVM;
+            var eventi = model.Eventi as List<Eventi.Web.Areas.ModulGuest.Models.PretragaEventaVM.Rows>;
 
             Assert.AreEqual(3, eventi.Count());
 
@@ -169,8 +169,8 @@ namespace UnitTestovi
         {
             var controller = new GuestController(ctx);
             var result = controller.PretraziPoNazivu("EventTest3") as ViewResult;
-            var model = result.Model as Event_Attender.Web.Areas.ModulGuest.Models.PretragaEventaVM;
-            var eventi = model.Eventi as List<Event_Attender.Web.Areas.ModulGuest.Models.PretragaEventaVM.Rows>;
+            var model = result.Model as Eventi.Web.Areas.ModulGuest.Models.PretragaEventaVM;
+            var eventi = model.Eventi as List<Eventi.Web.Areas.ModulGuest.Models.PretragaEventaVM.Rows>;
 
             Assert.AreEqual(1, eventi.Count());
 

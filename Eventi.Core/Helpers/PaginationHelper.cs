@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Template.Contracts.V1.Requests;
-using Template.Contracts.V1.Responses;
-using Template.Core.Interfaces;
+using Eventi.Contracts.V1.Requests;
+using Eventi.Contracts.V1.Responses;
+using Eventi.Core.Interfaces;
 
-namespace Template.Core.Helpers
+namespace Eventi.Core.Helpers
 {
     public class PaginationHelper
     {

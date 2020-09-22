@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Event_Attender.Data.EF;
-using Event_Attender.Data.Models;
-using Event_Attender.Web.Areas.ModulKorisnik.Models;
-using Event_Attender.Web.Helper;
+using Eventi.Data.EF;
+using Eventi.Data.Models;
+using Eventi.Web.Areas.ModulKorisnik.Models;
+using Eventi.Web.Helper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ReflectionIT.Mvc.Paging;
 
-namespace Event_Attender.Web.Areas.ModulKorisnik.Controllers
+namespace Eventi.Web.Areas.ModulKorisnik.Controllers
 {
     [Autorizacija(korisnik: true, organizator: false, administrator: false, radnik: false)]
     [Area("ModulKorisnik")]

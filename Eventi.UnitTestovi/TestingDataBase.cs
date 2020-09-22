@@ -1,5 +1,5 @@
-﻿using Event_Attender.Data.EF;
-using Event_Attender.Data.Models;
+﻿using Eventi.Data.EF;
+using Eventi.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 

@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
-using Event_Attender.Data.EF;
-using Event_Attender.Data.Models;
-using Event_Attender.Web.Areas.ModulRadnik.Models;
-using Event_Attender.Web.Helper;
+using Eventi.Data.EF;
+using Eventi.Data.Models;
+using Eventi.Web.Areas.ModulRadnik.Models;
+using Eventi.Web.Helper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using OfficeOpenXml;
 
-namespace Event_Attender.Web.Areas.ModulRadnik.Controllers
+namespace Eventi.Web.Areas.ModulRadnik.Controllers
 {
     
      [Autorizacija(korisnik: false, organizator: false, administrator: false, radnik: true)]

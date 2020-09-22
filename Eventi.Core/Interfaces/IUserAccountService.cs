@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
-using Template.Contracts.V1.Requests;
-using Template.Domain;
+using Eventi.Contracts.V1.Requests;
+using Eventi.Domain;
 
-namespace Template.Core.Interfaces
+namespace Eventi.Core.Interfaces
 {
     public interface IUserAccountService
     {

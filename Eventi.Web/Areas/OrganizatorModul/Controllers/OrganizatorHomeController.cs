@@ -2,22 +2,22 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Event_Attender.Web.ViewModels;
-using Event_Attender.Data.EF;
-using Event_Attender.Data.Models;
+using Eventi.Web.ViewModels;
+using Eventi.Data.EF;
+using Eventi.Data.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.IO;
 using Microsoft.AspNetCore.Http;
-using Event_Attender.Web.Helper;
-using Event_Attender.Web.Areas.OrganizatorModul.ViewModels;
+using Eventi.Web.Helper;
+using Eventi.Web.Areas.OrganizatorModul.ViewModels;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 using Microsoft.Extensions.Configuration;
 using Nexmo.Api;
 
-namespace Event_Attender.Web.Controllers
+namespace Eventi.Web.Controllers
 {
     [Autorizacija(korisnik: false, organizator: true, administrator: false, radnik: false)]
     [Area("OrganizatorModul")]
@@ -164,7 +164,7 @@ namespace Event_Attender.Web.Controllers
 
                 var apiKey = _configuration.GetSection("SENDGRID_API_KEY").Value;
                 var client = new SendGridClient(apiKey);
-                var from = new EmailAddress("event_attender@outlook.com", "Event Attender team");
+                var from = new EmailAddress("Eventi@outlook.com", "Event Attender team");
                 List<EmailAddress> tos = new List<EmailAddress>
                 {
                     new EmailAddress("zinedin.mezit.98@gmail.com","Zinedin Mezit")

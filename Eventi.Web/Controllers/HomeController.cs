@@ -5,14 +5,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Event_Attender.Web.Models;
-using Event_Attender.Data.Models;
-using Event_Attender.Web.ViewModels;
-using Event_Attender.Data.EF;
-using Event_Attender.Web.Helper;
+using Eventi.Web.Models;
+using Eventi.Data.Models;
+using Eventi.Web.ViewModels;
+using Eventi.Data.EF;
+using Eventi.Web.Helper;
 using Microsoft.EntityFrameworkCore;
 
-namespace Event_Attender.Web.Controllers
+namespace Eventi.Web.Controllers
 {
     public class HomeController : Controller
     {  

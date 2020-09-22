@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
 
-namespace Template.WebAPI.Installers
+namespace Eventi.WebAPI.Installers
 {
     public static class InstallerExtensions
     {

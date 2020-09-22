@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Event_Attender.Data.Migrations
+namespace Eventi.Data.Migrations
 {
     public partial class IzmjenaKorisnik : Migration
     {

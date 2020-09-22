@@ -1,10 +1,10 @@
-﻿using Event_Attender.Data.Models;
+﻿using Eventi.Data.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Event_Attender.Web.Areas.ModulKorisnik.Models
+namespace Eventi.Web.Areas.ModulKorisnik.Models
 {
     public class PretragaEventaVM
     {

@@ -1,4 +1,4 @@
-﻿using Event_Attender.Data.EF;
+﻿using Eventi.Data.EF;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -6,7 +6,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 
-namespace Event_Attender.Data.Repository
+namespace Eventi.Data.Repository
 {
     public class EventAttenderRepository<TEntity> : IEventAttenderRepository<TEntity> where TEntity : class
     {

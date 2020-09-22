@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 
 public enum TipKarte {Vip, Parter, Tribina, Obicna}
-namespace Event_Attender.Data.Models
+namespace Eventi.Data.Models
 {
     public class ProdajaTip
     {

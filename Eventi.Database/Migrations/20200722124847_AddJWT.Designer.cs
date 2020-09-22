@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Template.Database;
+using Eventi.Database;
 
-namespace Template.Database.Migrations
+namespace Eventi.Database.Migrations
 {
     [DbContext(typeof(TemplateContext))]
     [Migration("20200722124847_AddJWT")]

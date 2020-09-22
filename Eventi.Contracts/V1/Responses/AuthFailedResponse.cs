@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Template.Contracts.V1.Responses
+namespace Eventi.Contracts.V1.Responses
 {
     public class AuthFailedResponse
     {

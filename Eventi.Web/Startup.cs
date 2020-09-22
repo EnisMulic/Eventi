@@ -1,5 +1,5 @@
 using System;
-using Event_Attender.Data.EF;
+using Eventi.Data.EF;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SignalR;
@@ -10,7 +10,7 @@ using Microsoft.Extensions.Hosting;
 using ReflectionIT.Mvc.Paging;
 using SignalRChat.Hubs;
 
-namespace Event_Attender.Web
+namespace Eventi.Web
 {
     public class Startup
     {
