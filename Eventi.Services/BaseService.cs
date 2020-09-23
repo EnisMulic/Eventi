@@ -15,17 +15,17 @@ namespace Eventi.Services
     [Authorize]
     public class BaseService<TModel, TSearch, TDatabase> : IBaseService<TModel, TSearch> where TDatabase: class
     {
-        private readonly TemplateContext _context;
+        private readonly EventiContext _context;
         private readonly IMapper _mapper;
         private readonly IUriService _uriService;
 
-        public BaseService(TemplateContext context, IMapper mapper)
+        public BaseService(EventiContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
         }
 
-        public BaseService(TemplateContext context, IMapper mapper, IUriService uriService)
+        public BaseService(EventiContext context, IMapper mapper, IUriService uriService)
         {
             _context = context;
             _mapper = mapper;

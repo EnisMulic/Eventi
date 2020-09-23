@@ -11,9 +11,9 @@ namespace Eventi.Services
         BaseService<TModel, TSearch, TDatabase>, ICRUDService<TModel, TSearch, TInsert, TUpdate>
         where TDatabase : class
     {
-        private readonly TemplateContext _context;
+        private readonly EventiContext _context;
         private readonly IMapper _mapper;
-        public CRUDService(TemplateContext context, IMapper mapper, IUriService uriService) : base(context, mapper, uriService)
+        public CRUDService(EventiContext context, IMapper mapper, IUriService uriService) : base(context, mapper, uriService)
         {
             _context = context;
             _mapper = mapper;
