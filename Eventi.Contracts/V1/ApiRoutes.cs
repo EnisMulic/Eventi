@@ -7,13 +7,13 @@
 
         public const string Base = Root + "/" + Version;
 
-        public static class UserAccount
+        public static class Auth
         {
-            public const string Register = Base + "/UserAccount/Register";
+            public const string Register = Base + "/Account/Register";
 
-            public const string Authenticate = Base + "/UserAccount/Auth";
+            public const string Login = Base + "/Account/Login";
 
-            public const string Refresh = Base + "/UserAccount/Refresh";
+            public const string Refresh = Base + "/Account/Refresh";
         }
 
         public static class User

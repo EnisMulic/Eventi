@@ -2,14 +2,11 @@
 
 namespace Eventi.Contracts.V1.Requests
 {
-    public class UserUpdateRequest
+    public class AccountUpdateRequest
     {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
         public string UserName { get; set; }
         [EmailAddress]
         public string Email { get; set; }
-        [Phone]
-        public string PhoneNumber { get; set; }
+        public string Password { get; set; }
     }
 }

@@ -12,7 +12,7 @@ using Eventi.Domain;
 
 namespace Eventi.Services
 {
-    public class UserService : CRUDService<UserResponse, UserSearchRequest, Person, UserInsertRequest, UserUpdateRequest>
+    public class UserService : CRUDService<UserResponse, UserSearchRequest, Person, UserInsertRequest, UserInsertRequest>
     {
         private readonly EventiContext _context;
         private readonly UserManager<Person> _userManager;

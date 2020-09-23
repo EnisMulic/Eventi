@@ -53,8 +53,8 @@ namespace Eventi.WebAPI.Controllers.V1
         //    );
         //}
 
-        [HttpPost(ApiRoutes.UserAccount.Authenticate)]
-        public async Task<IActionResult> Authenticate([FromBody] UserAccountAuthenticationRequest request)
+        [HttpPost(ApiRoutes.Auth.Login)]
+        public async Task<IActionResult> Authenticate([FromBody] AccountAuthenticationRequest request)
         {
             var authResponse = await _userAccountService.AuthenticateAsync(request);
 
@@ -79,7 +79,7 @@ namespace Eventi.WebAPI.Controllers.V1
             );
         }
 
-        [HttpPost(ApiRoutes.UserAccount.Refresh)]
+        [HttpPost(ApiRoutes.Auth.Refresh)]
         public async Task<IActionResult> Refresh([FromBody] RefreshTokenRequest request)
         {
             var authResponse = await _userAccountService.RefreshTokenAsync(request);

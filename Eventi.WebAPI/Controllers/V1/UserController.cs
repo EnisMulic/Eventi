@@ -8,9 +8,9 @@ namespace Eventi.WebAPI.Controllers.V1
 {
 
     [ApiController]
-    public class UserController : CRUDController<UserResponse, UserSearchRequest, UserInsertRequest, UserUpdateRequest>
+    public class UserController : CRUDController<UserResponse, UserSearchRequest, UserInsertRequest, UserInsertRequest>
     {
-        public UserController(ICRUDService<UserResponse, UserSearchRequest, UserInsertRequest, UserUpdateRequest> service, IMapper mapper)
+        public UserController(ICRUDService<UserResponse, UserSearchRequest, UserInsertRequest, UserInsertRequest> service, IMapper mapper)
             : base(service, mapper)
         {
         }

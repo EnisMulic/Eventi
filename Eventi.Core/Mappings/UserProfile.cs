@@ -10,7 +10,6 @@ namespace Eventi.Core.Mappings
         public UserProfile()
         {
             CreateMap<Person, UserInsertRequest>().ReverseMap();
-            CreateMap<Person, UserUpdateRequest>().ReverseMap();
             CreateMap<Person, UserResponse>();
         }
     }
