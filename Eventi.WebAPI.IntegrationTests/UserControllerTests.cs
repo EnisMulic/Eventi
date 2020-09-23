@@ -24,7 +24,7 @@ namespace Eventi.WebAPI.IntegrationTests
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             // Returns one user that just registered
-            (await response.Content.ReadAsAsync<PagedResponse<User>>()).Data.Should().HaveCount(1);
+            (await response.Content.ReadAsAsync<PagedResponse<Person>>()).Data.Should().HaveCount(1);
         }
     }
 }

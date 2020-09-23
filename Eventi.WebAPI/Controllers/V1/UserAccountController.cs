@@ -19,39 +19,39 @@ namespace Eventi.WebAPI.Controllers.V1
             _userAccountService = userAccountService;
         }
 
-        [HttpPost(ApiRoutes.UserAccount.Register)]
-        public async Task<IActionResult> Register([FromBody] UserAccountRegistrationRequest request)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(new AuthFailedResponse
-                {
-                    Errors = ModelState.Values.SelectMany(i => i.Errors.Select(j => j.ErrorMessage))
-                });
-            }
+        //[HttpPost(ApiRoutes.UserAccount.Register)]
+        //public async Task<IActionResult> Register([FromBody] UserAccountRegistrationRequest request)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest(new AuthFailedResponse
+        //        {
+        //            Errors = ModelState.Values.SelectMany(i => i.Errors.Select(j => j.ErrorMessage))
+        //        });
+        //    }
 
-            var authResponse = await _userAccountService.RegisterAsync(request);
+        //    var authResponse = await _userAccountService.RegisterAsync(request);
 
-            if (!authResponse.Success)
-            {
-                return BadRequest
-                (
-                    new AuthFailedResponse
-                    {
-                        Errors = authResponse.Errors
-                    }
-                );
-            }
+        //    if (!authResponse.Success)
+        //    {
+        //        return BadRequest
+        //        (
+        //            new AuthFailedResponse
+        //            {
+        //                Errors = authResponse.Errors
+        //            }
+        //        );
+        //    }
 
-            return Ok
-            (
-                new AuthSuccessResponse
-                {
-                    Token = authResponse.Token,
-                    RefreshToken = authResponse.RefreshToken
-                }
-            );
-        }
+        //    return Ok
+        //    (
+        //        new AuthSuccessResponse
+        //        {
+        //            Token = authResponse.Token,
+        //            RefreshToken = authResponse.RefreshToken
+        //        }
+        //    );
+        //}
 
         [HttpPost(ApiRoutes.UserAccount.Authenticate)]
         public async Task<IActionResult> Authenticate([FromBody] UserAccountAuthenticationRequest request)

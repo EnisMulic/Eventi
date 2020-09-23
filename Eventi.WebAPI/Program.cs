@@ -14,7 +14,7 @@ namespace Eventi.WebAPI
             var host = CreateHostBuilder(args).Build();
             using (var scope = host.Services.CreateScope())
             {
-                var service = scope.ServiceProvider.GetRequiredService<TemplateContext>();
+                var service = scope.ServiceProvider.GetRequiredService<EventiContext>();
                 service.Database.Migrate();
             }
 

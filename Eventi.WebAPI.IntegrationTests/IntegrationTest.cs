@@ -27,11 +27,11 @@ namespace Eventi.WebAPI.IntegrationTests
                     {
                         var descriptor = services.SingleOrDefault(
                             d => d.ServiceType ==
-                                typeof(DbContextOptions<TemplateContext>));
+                                typeof(DbContextOptions<EventiContext>));
 
                         services.Remove(descriptor);
 
-                        services.AddDbContext<TemplateContext>(options =>
+                        services.AddDbContext<EventiContext>(options =>
                         {
                             options.UseInMemoryDatabase("TestDb");
                         });
@@ -67,7 +67,7 @@ namespace Eventi.WebAPI.IntegrationTests
         public void Dispose()
         {
             using var serviceScope = _serviceProvider.CreateScope();
-            var context = serviceScope.ServiceProvider.GetService<TemplateContext>();
+            var context = serviceScope.ServiceProvider.GetService<EventiContext>();
             context.Database.EnsureDeleted();
         }
     }
