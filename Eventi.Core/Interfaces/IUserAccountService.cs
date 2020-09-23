@@ -6,9 +6,9 @@ namespace Eventi.Core.Interfaces
 {
     public interface IUserAccountService
     {
-        Task<AuthenticationResult> RegisterAsync(UserAccountRegistrationRequest request);
+        Task<AuthenticationResult> RegisterAsync(AccountRegistrationRequest request);
 
-        Task<AuthenticationResult> AuthenticateAsync(UserAccountAuthenticationRequest request);
+        Task<AuthenticationResult> AuthenticateAsync(AccountAuthenticationRequest request);
 
         Task<AuthenticationResult> RefreshTokenAsync(RefreshTokenRequest request);
     }

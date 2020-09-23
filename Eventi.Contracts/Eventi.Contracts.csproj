@@ -8,4 +8,8 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.DataAnnotations" Version="2.2.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Eventi.Common\Eventi.Common.csproj" />
+  </ItemGroup>
+
 </Project>

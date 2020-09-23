@@ -35,7 +35,7 @@ namespace Eventi.Services
             _context = context;
         }
 
-        public async Task<AuthenticationResult> AuthenticateAsync(UserAccountAuthenticationRequest request)
+        public async Task<AuthenticationResult> AuthenticateAsync(AccountAuthenticationRequest request)
         {
             //var user = await _userManager.FindByNameAsync(request.Username);
 
@@ -149,7 +149,7 @@ namespace Eventi.Services
                        StringComparison.InvariantCultureIgnoreCase);
         }
 
-        public async Task<AuthenticationResult> RegisterAsync(UserAccountRegistrationRequest request)
+        public async Task<AuthenticationResult> RegisterAsync(AccountRegistrationRequest request)
         {
             //var existingUser = await _userManager.FindByEmailAsync(request.Email);
 
