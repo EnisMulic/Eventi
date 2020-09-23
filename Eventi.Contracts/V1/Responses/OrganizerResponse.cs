@@ -1,6 +1,6 @@
 ﻿namespace Eventi.Contracts.V1.Responses
 {
-    class OrganizerResponse
+    public class OrganizerResponse
     {
         public string Name { get; set; }
         public string PhoneNumber { get; set; }
