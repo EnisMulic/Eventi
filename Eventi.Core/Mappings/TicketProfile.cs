@@ -1,10 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using AutoMapper;
+using Eventi.Contracts.V1.Requests;
+using Eventi.Contracts.V1.Responses;
+using Eventi.Domain;
 
 namespace Eventi.Core.Mappings
 {
-    class TicketProfile
+    public class TicketProfile : Profile
     {
+        public TicketProfile()
+        {
+            CreateMap<Ticket, TicketInsertRequest>().ReverseMap();
+            CreateMap<Ticket, TicketUpdateRequest>().ReverseMap();
+            CreateMap<Ticket, TicketResponse>();
+        }
     }
 }
