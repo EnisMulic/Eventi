@@ -8,7 +8,14 @@ namespace Eventi.WebAPI.Installers
     {
         public void InstallServices(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddAutoMapper(typeof(Core.Mappings.UserProfile));
+            services.AddAutoMapper(typeof(Core.Mappings.VenueProfile));
+            services.AddAutoMapper(typeof(Core.Mappings.CityProfile));
+            services.AddAutoMapper(typeof(Core.Mappings.CountryProfile));
+            services.AddAutoMapper(typeof(Core.Mappings.PerformerProfile));
+            services.AddAutoMapper(typeof(Core.Mappings.TicketProfile));
+            services.AddAutoMapper(typeof(Core.Mappings.OrganizerProfile));
+            services.AddAutoMapper(typeof(Core.Mappings.SponsorProfile));
+            services.AddAutoMapper(typeof(Core.Mappings.EventProfile));
         }
     }
 }
