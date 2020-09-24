@@ -4,11 +4,11 @@ using Eventi.Domain;
 
 namespace Eventi.Core.Interfaces
 {
-    public interface IUserAccountService
+    public interface IAuthService
     {
-        Task<AuthenticationResult> RegisterAsync(AccountRegistrationRequest request);
+        Task<AuthenticationResult> RegisterAsync(RegistrationRequest request);
 
-        Task<AuthenticationResult> AuthenticateAsync(AccountAuthenticationRequest request);
+        Task<AuthenticationResult> LoginAsync(LoginRequest request);
 
         Task<AuthenticationResult> RefreshTokenAsync(RefreshTokenRequest request);
     }
