@@ -1,10 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using AutoMapper;
+using Eventi.Contracts.V1.Requests;
+using Eventi.Contracts.V1.Responses;
+using Eventi.Domain;
 
 namespace Eventi.Core.Mappings
 {
-    class CityProfile
+    public class CityProfile : Profile
     {
+        public CityProfile()
+        {
+            CreateMap<City, CityUpsertRequest>().ReverseMap();
+            CreateMap<City, CityResponse>();
+        }
     }
 }

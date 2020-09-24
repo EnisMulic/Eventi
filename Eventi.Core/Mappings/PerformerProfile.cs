@@ -1,10 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using AutoMapper;
+using Eventi.Contracts.V1.Requests;
+using Eventi.Contracts.V1.Responses;
+using Eventi.Domain;
 
 namespace Eventi.Core.Mappings
 {
-    class PerformerProfile
+    public class PerformerProfile : Profile
     {
+        public PerformerProfile()
+        {
+            CreateMap<Performer, PerformerUpsertRequest>().ReverseMap();
+            CreateMap<Performer, PerformerResponse>();
+        }
     }
 }
