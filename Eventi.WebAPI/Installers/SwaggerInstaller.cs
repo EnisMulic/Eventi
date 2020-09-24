@@ -10,7 +10,7 @@ namespace Eventi.WebAPI.Installers
         {
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Template API", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Eventi API", Version = "v1" });
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     Name = "Authorization",

@@ -18,10 +18,24 @@ namespace Eventi.WebAPI.Installers
                 options.UseSqlServer(configuration.GetConnectionString("Eventi")));
 
             // Auth
-            //services.AddScoped<IUserAccountService, UserAccountService>();
+            services.AddScoped<IAuthService, AuthService>();
 
             // User
             //services.AddScoped<ICRUDService<UserResponse, UserSearchRequest, UserInsertRequest, UserUpdateRequest>, UserService>();
+
+            // City
+            services.AddScoped<ICityService, CityService>();
+
+            // Country
+            services.AddScoped<ICountryService, CountryService>();
+
+            // Venue
+            services.AddScoped<IVenueService, VenueService>();
+
+            // Performer
+            services.AddScoped<ICRUDService<PerformerResponse, PerformerSearchRequest, PerformerUpsertRequest, PerformerUpsertRequest>, PerformerService>();
+
+
         }
     }
 }
