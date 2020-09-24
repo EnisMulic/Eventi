@@ -17,13 +17,13 @@ using Eventi.Domain;
 
 namespace Eventi.Services
 {
-    public class UserAccountService : IUserAccountService
+    public class AuthService : IAuthService
     {
         private readonly JwtSettings _jwtSettings;
         private readonly TokenValidationParameters _tokenValidationParameters;
         private readonly EventiContext _context;
 
-        public UserAccountService
+        public AuthService
         (
             JwtSettings jwtSettings, 
             TokenValidationParameters tokenValidationParameters,
@@ -35,7 +35,7 @@ namespace Eventi.Services
             _context = context;
         }
 
-        public async Task<AuthenticationResult> AuthenticateAsync(AccountAuthenticationRequest request)
+        public async Task<AuthenticationResult> LoginAsync(LoginRequest request)
         {
             //var user = await _userManager.FindByNameAsync(request.Username);
 
@@ -149,7 +149,7 @@ namespace Eventi.Services
                        StringComparison.InvariantCultureIgnoreCase);
         }
 
-        public async Task<AuthenticationResult> RegisterAsync(AccountRegistrationRequest request)
+        public async Task<AuthenticationResult> RegisterAsync(RegistrationRequest request)
         {
             //var existingUser = await _userManager.FindByEmailAsync(request.Email);
 
