@@ -11,10 +11,10 @@ namespace Eventi.WebAPI.Controllers.V1
 {
     [AllowAnonymous]
     [ApiController]
-    public class UserAccountController : ControllerBase
+    public class AuthController : ControllerBase
     {
-        private readonly IUserAccountService _userAccountService;
-        public UserAccountController(IUserAccountService userAccountService)
+        private readonly IAuthService _userAccountService;
+        public AuthController(IAuthService userAccountService)
         {
             _userAccountService = userAccountService;
         }
@@ -54,9 +54,9 @@ namespace Eventi.WebAPI.Controllers.V1
         //}
 
         [HttpPost(ApiRoutes.Auth.Login)]
-        public async Task<IActionResult> Authenticate([FromBody] AccountAuthenticationRequest request)
+        public async Task<IActionResult> Authenticate([FromBody] LoginRequest request)
         {
-            var authResponse = await _userAccountService.AuthenticateAsync(request);
+            var authResponse = await _userAccountService.LoginAsync(request);
 
             if (!authResponse.Success)
             {
