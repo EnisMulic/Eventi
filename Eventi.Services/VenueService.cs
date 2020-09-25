@@ -4,10 +4,7 @@ using Eventi.Contracts.V1.Responses;
 using Eventi.Core.Interfaces;
 using Eventi.Database;
 using Eventi.Domain;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Eventi.Services
 {
@@ -21,25 +18,7 @@ namespace Eventi.Services
             _mapper = mapper;
         }
 
-        public async override Task<PagedResponse<VenueResponse>> Get(VenueSearchRequest search, PaginationQuery pagination)
-        {
-            var query = _context.Venues
-                .AsNoTracking()
-                .AsQueryable();
-
-            query = ApplyFilter(query, search);
-
-            var skip = (pagination.PageNumber - 1) * pagination.PageSize;
-            query = query.Skip(skip).Take(pagination.PageSize);
-
-            var list = await query.ToListAsync();
-            List<VenueResponse> dtoList = _mapper.Map<List<VenueResponse>>(list);
-
-            var pagedResponse = await base.GetPagedResponse(dtoList, pagination);
-            return pagedResponse;
-        }
-
-        private IQueryable<Venue> ApplyFilter(IQueryable<Venue> query, VenueSearchRequest search)
+        protected override IQueryable<Venue> ApplyFilter(IQueryable<Venue> query, VenueSearchRequest search)
         {
             if(search != null)
             {

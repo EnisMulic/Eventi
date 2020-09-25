@@ -23,25 +23,7 @@ namespace Eventi.Services
             _mapper = mapper;
         }
 
-        public async override Task<PagedResponse<CityResponse>> Get(CitySearchRequest search, PaginationQuery pagination)
-        {
-            var query = _context.Cities
-                .AsNoTracking()
-                .AsQueryable();
-
-            query = ApplyFilter(query, search);
-
-            var skip = (pagination.PageNumber - 1) * pagination.PageSize;
-            query = query.Skip(skip).Take(pagination.PageSize);
-
-            var list = await query.ToListAsync();
-            List<CityResponse> dtoList = _mapper.Map<List<CityResponse>>(list);
-
-            var pagedResponse = await base.GetPagedResponse(dtoList, pagination);
-            return pagedResponse;
-        }
-
-        private IQueryable<City> ApplyFilter(IQueryable<City> query, CitySearchRequest search)
+        protected override IQueryable<City> ApplyFilter(IQueryable<City> query, CitySearchRequest search)
         {
             if (search != null)
             {

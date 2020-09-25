@@ -21,25 +21,7 @@ namespace Eventi.Services
            _mapper = mapper;
         }
 
-        public async override Task<PagedResponse<CountryResponse>> Get(CountrySearchRequest search, PaginationQuery pagination)
-        {
-            var query = _context.Countries
-                .AsNoTracking()
-                .AsQueryable();
-
-            query = ApplyFilter(query, search);
-
-            var skip = (pagination.PageNumber - 1) * pagination.PageSize;
-            query = query.Skip(skip).Take(pagination.PageSize);
-
-            var list = await query.ToListAsync();
-            List<CountryResponse> dtoList = _mapper.Map<List<CountryResponse>>(list);
-
-            var pagedResponse = await base.GetPagedResponse(dtoList, pagination);
-            return pagedResponse;
-        }
-
-        private IQueryable<Country> ApplyFilter(IQueryable<Country> query, CountrySearchRequest search)
+        protected override IQueryable<Country> ApplyFilter(IQueryable<Country> query, CountrySearchRequest search)
         {
             if (search != null)
             {
