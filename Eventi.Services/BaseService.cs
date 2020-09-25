@@ -38,6 +38,9 @@ namespace Eventi.Services
                 .AsNoTracking()
                 .AsQueryable();
 
+
+            query = ApplyFilter(query, search);
+
             var skip = (pagination.PageNumber - 1) * pagination.PageSize;
             query = query.Skip(skip).Take(pagination.PageSize);
 
@@ -45,6 +48,12 @@ namespace Eventi.Services
             var pagedResponse = await GetPagedResponse(_mapper.Map<List<TModel>>(list), pagination);
             return pagedResponse;
         }
+
+        protected virtual IQueryable<TDatabase> ApplyFilter(IQueryable<TDatabase> query, TSearch search)
+        {
+            return query;
+        }
+
 
         public virtual async Task<TModel> GetById(string id)
         {
