@@ -6,6 +6,6 @@ namespace Eventi.Contracts.V1.Requests
     {
         public string Name { get; set; }
         public string Address { get; set; }
-        public VenueCategory VenueCategory { get; set; }
+        public VenueCategory? VenueCategory { get; set; }
     }
 }
