@@ -9,27 +9,80 @@
 
         public static class Auth
         {
-            public const string Register = Base + "/Account/Register";
-            public const string Login = Base + "/Account/Login";
-            public const string Refresh = Base + "/Account/Refresh";
+            private const string EndpointBase = "Auth";
+            public const string Register = Base + "/" + EndpointBase  + "/Register";
+            public const string Login = Base + "/" + EndpointBase + "/Login";
+            public const string Refresh = Base + "/" + EndpointBase + "/Refresh";
         }
 
         public static class User
         {
-            public const string Get = Base + "/User";
-            public const string GetById = Base + "/User";
-            public const string Post = Base + "/User";
-            public const string Put = Base + "/User";
-            public const string Delete = Base + "/User";
+            private const string EndpointBase = "User";
+            public const string Get = Base + "/" + EndpointBase;
+            public const string GetById = Base + "/" + EndpointBase;
+            public const string Post = Base + "/" + EndpointBase;
+            public const string Put = Base + "/" + EndpointBase;
+            public const string Delete = Base + "/" + EndpointBase;
         }
 
         public static class City
         {
-            public const string Get = Base + "/City";
-            public const string GetById = Base + "/City";
-            public const string Post = Base + "/City";
-            public const string Put = Base + "/City";
-            public const string Delete = Base + "/City";
+            private const string EndpointBase = "City";
+            public const string Get = Base + "/" + EndpointBase;
+            public const string GetById = Base + "/" + EndpointBase;
+            public const string Post = Base + "/" + EndpointBase;
+            public const string Put = Base + "/" + EndpointBase;
+            public const string Delete = Base + "/" + EndpointBase;
+        }
+
+        public static class Country
+        {
+            private const string EndpointBase = "Country";
+            public const string Get = Base + "/" + EndpointBase;
+            public const string GetById = Base + "/" + EndpointBase;
+            public const string Post = Base + "/" + EndpointBase;
+            public const string Put = Base + "/" + EndpointBase;
+            public const string Delete = Base + "/" + EndpointBase;
+        }
+
+        public static class Venue
+        {
+            private const string EndpointBase = "Venue";
+            public const string Get = Base + "/" + EndpointBase;
+            public const string GetById = Base + "/" + EndpointBase;
+            public const string Post = Base + "/" + EndpointBase;
+            public const string Put = Base + "/" + EndpointBase;
+            public const string Delete = Base + "/" + EndpointBase;
+        }
+
+        public static class Performer
+        {
+            private const string EndpointBase = "Performer";
+            public const string Get = Base + "/" + EndpointBase;
+            public const string GetById = Base + "/" + EndpointBase;
+            public const string Post = Base + "/" + EndpointBase;
+            public const string Put = Base + "/" + EndpointBase;
+            public const string Delete = Base + "/" + EndpointBase;
+        }
+
+        public static class Event
+        {
+            private const string EndpointBase = "Performer";
+            public const string Get = Base + "/" + EndpointBase;
+            public const string GetById = Base + "/" + EndpointBase;
+            public const string Post = Base + "/" + EndpointBase;
+            public const string Put = Base + "/" + EndpointBase;
+            public const string Delete = Base + "/" + EndpointBase;
+        }
+        
+        public static class Sponsor
+        {
+            private const string EndpointBase = "Performer";
+            public const string Get = Base + "/" + EndpointBase;
+            public const string GetById = Base + "/" + EndpointBase;
+            public const string Post = Base + "/" + EndpointBase;
+            public const string Put = Base + "/" + EndpointBase;
+            public const string Delete = Base + "/" + EndpointBase;
         }
     }
 }
