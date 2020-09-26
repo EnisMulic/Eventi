@@ -13,7 +13,9 @@ using Eventi.Database;
 namespace Eventi.Services
 {
     [Authorize]
-    public class BaseService<TModel, TSearch, TDatabase> : IBaseService<TModel, TSearch> where TDatabase: class
+    public class BaseService<TModel, TSearch, TDatabase> : IBaseService<TModel, TSearch> 
+        where TDatabase: class 
+        where TModel : class
     {
         private readonly EventiContext _context;
         private readonly IMapper _mapper;
@@ -53,7 +55,7 @@ namespace Eventi.Services
             return query;
         }
 
-        protected IQueryable<T> ApplyPagination<T>(IQueryable<T> query, PaginationQuery pagination)
+        protected IQueryable<T> ApplyPagination<T>(IQueryable<T> query, PaginationQuery pagination) where T : class
         {
             var skip = (pagination.PageNumber - 1) * pagination.PageSize;
             query = query.Skip(skip).Take(pagination.PageSize);
@@ -61,9 +63,9 @@ namespace Eventi.Services
             return query;
         }
 
-        protected async Task<PagedResponse<TModel>> GetPagedResponse(List<TModel> list, PaginationQuery pagination)
+        protected async Task<PagedResponse<T>> GetPagedResponse<T>(List<T> list, PaginationQuery pagination) where T : class
         {
-            int count = await _context.Set<TDatabase>()
+            int count = await _context.Set<T>()
                 .AsNoTracking()
                 .CountAsync();
 
