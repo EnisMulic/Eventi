@@ -38,6 +38,8 @@ namespace Eventi.WebAPI.Installers
             // Performer
             services.AddScoped<ICRUDService<PerformerResponse, PerformerSearchRequest, PerformerUpsertRequest, PerformerUpsertRequest>, PerformerService>();
 
+            // Sponsor
+            services.AddScoped<ICRUDService<SponsorResponse, SponsorSearchRequest, SponsorUpsertRequest, SponsorUpsertRequest>, SponsorService>();
         }
     }
 }
