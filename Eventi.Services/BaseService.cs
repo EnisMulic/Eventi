@@ -40,9 +40,8 @@ namespace Eventi.Services
 
 
             query = ApplyFilter(query, search);
-
-            var skip = (pagination.PageNumber - 1) * pagination.PageSize;
-            query = query.Skip(skip).Take(pagination.PageSize);
+            query = ApplyPagination(query, pagination);
+            
 
             var list = await query.ToListAsync();
             var pagedResponse = await GetPagedResponse(_mapper.Map<List<TModel>>(list), pagination);
@@ -54,11 +53,12 @@ namespace Eventi.Services
             return query;
         }
 
-
-        public virtual async Task<TModel> GetById(string id)
+        protected IQueryable<T> ApplyPagination<T>(IQueryable<T> query, PaginationQuery pagination)
         {
-            var entity = await _context.Set<TDatabase>().FindAsync(id);
-            return _mapper.Map<TModel>(entity);
+            var skip = (pagination.PageNumber - 1) * pagination.PageSize;
+            query = query.Skip(skip).Take(pagination.PageSize);
+
+            return query;
         }
 
         protected async Task<PagedResponse<TModel>> GetPagedResponse(List<TModel> list, PaginationQuery pagination)
@@ -69,7 +69,11 @@ namespace Eventi.Services
 
             return PaginationHelper.CreatePaginatedResponse(_uriService, pagination, list, count);
         }
-            
-        
+
+        public virtual async Task<TModel> GetById(string id)
+        {
+            var entity = await _context.Set<TDatabase>().FindAsync(id);
+            return _mapper.Map<TModel>(entity);
+        }
     }
 }
