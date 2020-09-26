@@ -10,6 +10,7 @@ namespace Eventi.Services
     public class CRUDService<TModel, TSearch, TDatabase, TInsert, TUpdate> :
         BaseService<TModel, TSearch, TDatabase>, ICRUDService<TModel, TSearch, TInsert, TUpdate>
         where TDatabase : class
+        where TModel : class
     {
         private readonly EventiContext _context;
         private readonly IMapper _mapper;

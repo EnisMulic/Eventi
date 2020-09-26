@@ -46,7 +46,7 @@ namespace Eventi.Services
             
 
             var list = await query.ToListAsync();
-            var pagedResponse = await GetPagedResponse(_mapper.Map<List<TModel>>(list), pagination);
+            var pagedResponse = await GetPagedResponse<TModel, TDatabase>(_mapper.Map<List<TModel>>(list), pagination);
             return pagedResponse;
         }
 
@@ -63,9 +63,11 @@ namespace Eventi.Services
             return query;
         }
 
-        protected async Task<PagedResponse<T>> GetPagedResponse<T>(List<T> list, PaginationQuery pagination) where T : class
+        protected async Task<PagedResponse<T>> GetPagedResponse<T, TDb>(List<T> list, PaginationQuery pagination) 
+            where T : class 
+            where TDb : class
         {
-            int count = await _context.Set<T>()
+            int count = await _context.Set<TDb>()
                 .AsNoTracking()
                 .CountAsync();
 

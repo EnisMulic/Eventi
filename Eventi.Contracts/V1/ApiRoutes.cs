@@ -84,5 +84,16 @@
             public const string Put = Base + "/" + EndpointBase;
             public const string Delete = Base + "/" + EndpointBase;
         }
+
+        public static class Organizer
+        {
+            private const string EndpointBase = "Organizer";
+            public const string Get = Base + "/" + EndpointBase;
+            public const string GetById = Base + "/" + EndpointBase;
+            public const string Post = Base + "/" + EndpointBase;
+            public const string Put = Base + "/" + EndpointBase;
+            public const string Delete = Base + "/" + EndpointBase;
+            public const string GetEvents = Base + "/" + EndpointBase + "/{0}/" + "Event";
+        }
     }
 }
