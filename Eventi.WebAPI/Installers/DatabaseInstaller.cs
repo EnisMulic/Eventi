@@ -21,7 +21,7 @@ namespace Eventi.WebAPI.Installers
             services.AddScoped<IAuthService, AuthService>();
 
             // Event
-            services.AddScoped<ICRUDService<EventResponse, EventSearchRequest, EventInsertRequest, EventUpdateRequest>, EventService>();
+            services.AddScoped<IEventService, EventService>();
 
             // User
             //services.AddScoped<ICRUDService<UserResponse, UserSearchRequest, UserInsertRequest, UserUpdateRequest>, UserService>();
