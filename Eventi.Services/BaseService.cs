@@ -13,8 +13,8 @@ using Eventi.Database;
 namespace Eventi.Services
 {
     [Authorize]
-    public class BaseService<TModel, TSearch, TDatabase> : IBaseService<TModel, TSearch> 
-        where TDatabase: class 
+    public class BaseService<TModel, TSearch, TDatabase> : IBaseService<TModel, TSearch>
+        where TDatabase : class
         where TModel : class
     {
         private readonly EventiContext _context;
@@ -74,7 +74,7 @@ namespace Eventi.Services
             return PaginationHelper.CreatePaginatedResponse(_uriService, pagination, list, count);
         }
 
-        public virtual async Task<TModel> GetById(string id)
+        public virtual async Task<TModel> GetById(int id)
         {
             var entity = await _context.Set<TDatabase>().FindAsync(id);
             return _mapper.Map<TModel>(entity);
