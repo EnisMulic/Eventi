@@ -1,15 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
+using Eventi.Contracts.V1;
 using Eventi.Contracts.V1.Requests;
 using Eventi.Contracts.V1.Responses;
 using Eventi.Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Eventi.WebAPI.Controllers.V1
 {
-    [ApiController]
     public class EventController : CRUDController<EventResponse, EventSearchRequest, EventInsertRequest, EventUpdateRequest>
     {
         private readonly IEventService _service;
@@ -77,10 +76,10 @@ namespace Eventi.WebAPI.Controllers.V1
             return Ok(response);
         }
 
-        [HttpPost("{eventId}/Sponsor")]
-        public async Task<ActionResult> AddSponsorAsync(int eventId, EventSponsorInsertRequest request)
+        [HttpPost("{id}/Sponsor")]
+        public async Task<ActionResult> AddSponsorAsync(int id, EventSponsorInsertRequest request)
         {
-            var response = await _service.AddSponsor(eventId, request);
+            var response = await _service.AddSponsor(id, request);
 
             if (!response)
             {
@@ -96,7 +95,7 @@ namespace Eventi.WebAPI.Controllers.V1
             return Ok();
         }
 
-        [HttpDelete("{eventId}/Sponsor/{sponsorId}")]
+        [HttpPut("{eventId}/Sponsor/{sponsorId}")]
         public async Task<ActionResult> UpdateSponsorAsync(int eventId, int sponsorId, EventSponsorUpdateRequest request)
         {
             var response = await _service.UpdateSponsor(eventId, sponsorId, request);
@@ -109,7 +108,7 @@ namespace Eventi.WebAPI.Controllers.V1
             return Ok(response);
         }
 
-        [HttpDelete("{eventId}/Performer/{sponsorId}")]
+        [HttpDelete("{eventId}/Sponsor/{sponsorId}")]
         public async Task<ActionResult> DeleteSponsorAsync(int eventId, int sponsorId)
         {
             var response = await _service.DeleteSponsor(eventId, sponsorId);
