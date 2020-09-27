@@ -15,10 +15,24 @@ namespace Eventi.Services
     {
         private readonly EventiContext _context;
         private readonly IMapper _mapper;
-        public CountryService(EventiContext context, IMapper mapper, IUriService uriService) : base(context, mapper, uriService)
+        private readonly ICityService _cityService;
+        public CountryService(EventiContext context, IMapper mapper, IUriService uriService, ICityService cityService) : base(context, mapper, uriService)
         {
-           _context = context;
-           _mapper = mapper;
+            _context = context;
+            _mapper = mapper;
+            _cityService = cityService;
+        }
+
+        public async Task<List<CityResponse>> GetCityAsync(int id)
+        {
+            var query = _context.Cities
+                .AsNoTracking()
+                .Where(i => i.CountryID == id)
+                .AsQueryable();
+
+            var list = await query.ToListAsync();
+
+            return _mapper.Map<List<CityResponse>>(list);
         }
 
         protected override IQueryable<Country> ApplyFilter(IQueryable<Country> query, CountrySearchRequest search)
