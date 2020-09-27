@@ -43,6 +43,7 @@
             public const string Post = Base + "/" + EndpointBase;
             public const string Put = Base + "/" + EndpointBase;
             public const string Delete = Base + "/" + EndpointBase;
+            public const string GetCity = Base + "/" + EndpointBase + "/{id}/" + "City";
         }
 
         public static class Venue
@@ -73,6 +74,13 @@
             public const string Post = Base + "/" + EndpointBase;
             public const string Put = Base + "/" + EndpointBase;
             public const string Delete = Base + "/" + EndpointBase;
+            public const string GetPerformer = Base + "/" + EndpointBase + "/{id}/" + "Performer";
+            public const string PostPerformer = Base + "/" + EndpointBase + "/{eventId}/" + "Performer" + "/{performerId}";
+            public const string DeletePerformer = Base + "/" + EndpointBase + "/{eventId}/" + "Performer" + "/{performerId}";
+            public const string GetSponsor = Base + "/" + EndpointBase + "/{id}/" + "Sponsor";
+            public const string PostSponsor = Base + "/" + EndpointBase + "/{id}/" + "Sponsor";
+            public const string PutSponsor = Base + "/" + EndpointBase + "/{id}/" + "Sponsor" + "/{sponsorId}/";
+            public const string DeleteSponsor = Base + "/" + EndpointBase + "/{id}/" + "Sponsor" + "/{sponsorId}/";
         }
         
         public static class Sponsor
@@ -93,7 +101,7 @@
             public const string Post = Base + "/" + EndpointBase;
             public const string Put = Base + "/" + EndpointBase;
             public const string Delete = Base + "/" + EndpointBase;
-            public const string GetEvents = Base + "/" + EndpointBase + "/{0}/" + "Event";
+            public const string GetEvent = Base + "/" + EndpointBase + "/{id}/" + "Event";
         }
     }
 }
