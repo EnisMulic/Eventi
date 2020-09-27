@@ -1,9 +1,4 @@
-﻿using Eventi.Domain;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Eventi.Data.Models
+﻿namespace Eventi.Domain
 {
     public class Seat
     {
