@@ -43,6 +43,7 @@
             public const string Post = Base + "/" + EndpointBase;
             public const string Put = Base + "/" + EndpointBase;
             public const string Delete = Base + "/" + EndpointBase;
+            public const string GetCity = Base + "/" + EndpointBase + "/{id}/" + "City";
         }
 
         public static class Venue
@@ -93,7 +94,7 @@
             public const string Post = Base + "/" + EndpointBase;
             public const string Put = Base + "/" + EndpointBase;
             public const string Delete = Base + "/" + EndpointBase;
-            public const string GetEvents = Base + "/" + EndpointBase + "/{0}/" + "Event";
+            public const string GetEvent = Base + "/" + EndpointBase + "/{id}/" + "Event";
         }
     }
 }
