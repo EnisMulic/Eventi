@@ -1,7 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Eventi.Domain;
-using Eventi.Data.Models;
 
 namespace Eventi.Database
 {

@@ -1,7 +1,6 @@
 ﻿using Eventi.Common;
-using Eventi.Domain;
 
-namespace Eventi.Data.Models
+namespace Eventi.Domain
 {
     public class EventSponsor
     {
@@ -9,6 +8,6 @@ namespace Eventi.Data.Models
         public Event Event { get; set; }
         public int SponsorID { get; set; }
         public Sponsor Sponsor { get; set; }
-        public SponsorCategory SponsorPriority { get; set; }
+        public SponsorCategory SponsorCategory { get; set; }
     }
 }
