@@ -23,6 +23,36 @@ namespace Eventi.Services
             _mapper = mapper;
         }
 
+        public async Task<PagedResponse<EventResponse>> GetEventAsync(int id, PaginationQuery pagination)
+        {
+            var query = _context.Events
+                .AsNoTracking()
+                .Where(i => i.Venue.CityID == id)
+                .AsQueryable();
+
+            query = ApplyPagination(query, pagination);
+
+            var list = await query.ToListAsync();
+            var listDto = _mapper.Map<List<EventResponse>>(list);
+            var pagedResponse = await GetPagedResponse<EventResponse, Event>(listDto, pagination);
+            return pagedResponse;
+        }
+
+        public async Task<PagedResponse<VenueResponse>> GetVenueAsync(int id, PaginationQuery pagination)
+        {
+            var query = _context.Venues
+                .AsNoTracking()
+                .Where(i => i.CityID == id)
+                .AsQueryable();
+
+            query = ApplyPagination(query, pagination);
+
+            var list = await query.ToListAsync();
+            var listDto = _mapper.Map<List<VenueResponse>>(list);
+            var pagedResponse = await GetPagedResponse<VenueResponse, Venue>(listDto, pagination);
+            return pagedResponse;
+        }
+
         protected override IQueryable<City> ApplyFilter(IQueryable<City> query, CitySearchRequest search)
         {
             if (search != null)
