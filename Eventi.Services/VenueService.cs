@@ -4,7 +4,10 @@ using Eventi.Contracts.V1.Responses;
 using Eventi.Core.Interfaces;
 using Eventi.Database;
 using Eventi.Domain;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Eventi.Services
 {
@@ -16,6 +19,21 @@ namespace Eventi.Services
         {
             _context = context;
             _mapper = mapper;
+        }
+
+        public async Task<PagedResponse<EventResponse>> GetEventAsync(int id, PaginationQuery pagination)
+        {
+            var query = _context.Events
+                .AsNoTracking()
+                .Where(i => i.VenueID == id)
+                .AsQueryable();
+
+            query = ApplyPagination(query, pagination);
+
+            var list = await query.ToListAsync();
+            var listDto = _mapper.Map<List<EventResponse>>(list);
+            var pagedResponse = await GetPagedResponse<EventResponse, Event>(listDto, pagination);
+            return pagedResponse;
         }
 
         protected override IQueryable<Venue> ApplyFilter(IQueryable<Venue> query, VenueSearchRequest search)
