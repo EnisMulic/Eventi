@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-
-namespace Eventi.Domain
+﻿namespace Eventi.Domain
 {
     public class Person
     {
@@ -8,5 +6,7 @@ namespace Eventi.Domain
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string PhoneNumber { get; set; }
+        public int AccountID { get; set; }
+        public Account Account { get; set; }
     }
 }

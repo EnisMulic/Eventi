@@ -4,14 +4,16 @@ using Eventi.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Eventi.Database.Migrations
 {
     [DbContext(typeof(EventiContext))]
-    partial class EventiContextModelSnapshot : ModelSnapshot
+    [Migration("20200928192555_ChangeAccountIDToInteger")]
+    partial class ChangeAccountIDToInteger
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -284,9 +286,6 @@ namespace Eventi.Database.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("AccountID")
-                        .HasColumnType("int");
-
                     b.Property<string>("FirstName")
                         .HasColumnType("nvarchar(max)");
 
@@ -297,8 +296,6 @@ namespace Eventi.Database.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
-
-                    b.HasIndex("AccountID");
 
                     b.ToTable("People");
                 });
@@ -644,15 +641,6 @@ namespace Eventi.Database.Migrations
                     b.HasOne("Eventi.Domain.City", "City")
                         .WithMany()
                         .HasForeignKey("CityID");
-                });
-
-            modelBuilder.Entity("Eventi.Domain.Person", b =>
-                {
-                    b.HasOne("Eventi.Domain.Account", "Account")
-                        .WithMany()
-                        .HasForeignKey("AccountID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Eventi.Domain.Purchase", b =>
