@@ -54,6 +54,7 @@
             public const string Post = Base + "/" + EndpointBase;
             public const string Put = Base + "/" + EndpointBase;
             public const string Delete = Base + "/" + EndpointBase;
+            public const string GetEvent = Base + "/" + EndpointBase + "/{id}/" + "Event";
         }
 
         public static class Performer
