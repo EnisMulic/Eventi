@@ -16,6 +16,10 @@ namespace Eventi.WebAPI.Installers
             services.AddAutoMapper(typeof(Core.Mappings.OrganizerProfile));
             services.AddAutoMapper(typeof(Core.Mappings.SponsorProfile));
             services.AddAutoMapper(typeof(Core.Mappings.EventProfile));
+            services.AddAutoMapper(typeof(Core.Mappings.AccountProfile));
+            services.AddAutoMapper(typeof(Core.Mappings.PersonProfile));
+            services.AddAutoMapper(typeof(Core.Mappings.AdministratorProfile));
+            services.AddAutoMapper(typeof(Core.Mappings.ClientProfile));
         }
     }
 }

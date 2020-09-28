@@ -6,10 +6,10 @@ namespace Eventi.Core.Interfaces
 {
     public interface IAuthService
     {
-        Task<AuthenticationResult> RegisterAsync(RegistrationRequest request);
-
+        Task<AuthenticationResult> RegisterClientAsync(ClientRegistrationRequest request);
+        Task<AuthenticationResult> RegisterAdministratorAsync(AdministratorRegistrationRequest request);
+        Task<AuthenticationResult> RegisterOrganizerAsync(OrganizerRegistrationRequest request);
         Task<AuthenticationResult> LoginAsync(LoginRequest request);
-
         Task<AuthenticationResult> RefreshTokenAsync(RefreshTokenRequest request);
     }
 }
