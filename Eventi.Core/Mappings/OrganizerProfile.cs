@@ -12,6 +12,7 @@ namespace Eventi.Core.Mappings
             CreateMap<Organizer, OrganizerInsertRequest>().ReverseMap();
             CreateMap<Organizer, OrganizerUpdateRequest>().ReverseMap();
             CreateMap<Organizer, OrganizerResponse>();
+            CreateMap<OrganizerRegistrationRequest, Organizer>();
         }
     }
 }

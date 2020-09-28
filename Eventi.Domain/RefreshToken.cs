@@ -11,7 +11,7 @@ namespace Eventi.Domain
         public DateTime ExpiryDate { get; set; }
         public bool Used { get; set; }
         public bool Invalidated { get; set; }
-        public string AccountID { get; set; }
+        public int AccountID { get; set; }
         public Account Account { get; set; }
     }
 }

@@ -13,7 +13,8 @@ using Eventi.Core.Interfaces;
 using Eventi.Core.Settings;
 using Eventi.Database;
 using Eventi.Domain;
-
+using AutoMapper;
+using Eventi.Core.Helpers;
 
 namespace Eventi.Services
 {
@@ -22,102 +23,112 @@ namespace Eventi.Services
         private readonly JwtSettings _jwtSettings;
         private readonly TokenValidationParameters _tokenValidationParameters;
         private readonly EventiContext _context;
+        private readonly IMapper _mapper;
 
         public AuthService
         (
             JwtSettings jwtSettings, 
             TokenValidationParameters tokenValidationParameters,
-            EventiContext context
+            EventiContext context,
+            IMapper mapper
         )
         {
             _jwtSettings = jwtSettings;
             _tokenValidationParameters = tokenValidationParameters;
             _context = context;
+            _mapper = mapper;
         }
 
         public async Task<AuthenticationResult> LoginAsync(LoginRequest request)
         {
-            //var user = await _userManager.FindByNameAsync(request.Username);
+            var account = await _context.Accounts
+                .AsNoTracking()
+                .Where(i => i.Username == request.Username)
+                .SingleOrDefaultAsync();
 
-            //if (user == null)
-            //{
-            //    return new AuthenticationResult
-            //    {
-            //        Errors = new[] { "User does not exist" }
-            //    };
-            //}
+            if (account == null)
+            {
+                return new AuthenticationResult
+                {
+                    Errors = new[] { "User does not exist" }
+                };
+            }
 
-            //var userHasValidPassword = await _userManager.CheckPasswordAsync(user, request.Password);
+            var hash = HashHelper.GenerateHash(account.PasswordSalt, request.Password);
+            if (hash != account.PasswordHash)
+            {
+                return new AuthenticationResult
+                {
+                    Errors = new[] { "User/password combination is wrong" }
+                };
+            }
 
-            //if (!userHasValidPassword)
-            //{
-            //    return new AuthenticationResult
-            //    {
-            //        Errors = new[] { "User/password combination is wrong" }
-            //    };
-            //}
 
-            //return await GenerateAuthenticationResultForUserAsync(user);
+            return await GenerateAuthenticationResultForAccountAsync(account);
 
-            return default;
         }
 
         public async Task<AuthenticationResult> RefreshTokenAsync(RefreshTokenRequest request)
         {
-            //var validatedToken = GetPrincipalFromToken(request.Token);
+            var validatedToken = GetPrincipalFromToken(request.Token);
 
-            //if (validatedToken == null)
-            //{
-            //    return new AuthenticationResult { Errors = new[] { "Invalid Token" } };
-            //}
+            if (validatedToken == null)
+            {
+                return new AuthenticationResult { Errors = new[] { "Invalid Token" } };
+            }
 
-            //var expiryDateUnix =
-            //    long.Parse(validatedToken.Claims.Single(x => x.Type == JwtRegisteredClaimNames.Exp).Value);
+            var expiryDateUnix =
+                long.Parse(validatedToken.Claims.Single(x => x.Type == JwtRegisteredClaimNames.Exp).Value);
 
-            //var expiryDateTimeUtc = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)
-            //    .AddSeconds(expiryDateUnix);
+            var expiryDateTimeUtc = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)
+                .AddSeconds(expiryDateUnix);
 
-            //if (expiryDateTimeUtc > DateTime.UtcNow)
-            //{
-            //    return new AuthenticationResult { Errors = new[] { "This token hasn't expired yet" } };
-            //}
+            if (expiryDateTimeUtc > DateTime.UtcNow)
+            {
+                return new AuthenticationResult { Errors = new[] { "This token hasn't expired yet" } };
+            }
 
-            //var jti = validatedToken.Claims.Single(x => x.Type == JwtRegisteredClaimNames.Jti).Value;
+            var jti = validatedToken.Claims.Single(x => x.Type == JwtRegisteredClaimNames.Jti).Value;
 
-            //var storedRefreshToken = await _context.RefreshTokens.SingleOrDefaultAsync(x => x.Token == request.RefreshToken);
+            var storedRefreshToken = await _context.RefreshTokens.SingleOrDefaultAsync(x => x.Token == request.RefreshToken);
 
-            //if (storedRefreshToken == null)
-            //{
-            //    return new AuthenticationResult { Errors = new[] { "This refresh token does not exist" } };
-            //}
+            if (storedRefreshToken == null)
+            {
+                return new AuthenticationResult { Errors = new[] { "This refresh token does not exist" } };
+            }
 
-            //if (DateTime.UtcNow > storedRefreshToken.ExpiryDate)
-            //{
-            //    return new AuthenticationResult { Errors = new[] { "This refresh token has expired" } };
-            //}
+            if (DateTime.UtcNow > storedRefreshToken.ExpiryDate)
+            {
+                return new AuthenticationResult { Errors = new[] { "This refresh token has expired" } };
+            }
 
-            //if (storedRefreshToken.Invalidated)
-            //{
-            //    return new AuthenticationResult { Errors = new[] { "This refresh token has been invalidated" } };
-            //}
+            if (storedRefreshToken.Invalidated)
+            {
+                return new AuthenticationResult { Errors = new[] { "This refresh token has been invalidated" } };
+            }
 
-            //if (storedRefreshToken.Used)
-            //{
-            //    return new AuthenticationResult { Errors = new[] { "This refresh token has been used" } };
-            //}
+            if (storedRefreshToken.Used)
+            {
+                return new AuthenticationResult { Errors = new[] { "This refresh token has been used" } };
+            }
 
-            //if (storedRefreshToken.JwtId != jti)
-            //{
-            //    return new AuthenticationResult { Errors = new[] { "This refresh token does not match this JWT" } };
-            //}
+            if (storedRefreshToken.JwtId != jti)
+            {
+                return new AuthenticationResult { Errors = new[] { "This refresh token does not match this JWT" } };
+            }
 
-            //storedRefreshToken.Used = true;
-            //_context.RefreshTokens.Update(storedRefreshToken);
-            //await _context.SaveChangesAsync();
+            storedRefreshToken.Used = true;
+            _context.RefreshTokens.Update(storedRefreshToken);
+            await _context.SaveChangesAsync();
 
-            //var user = await _userManager.FindByIdAsync(validatedToken.Claims.Single(x => x.Type == "id").Value);
-            //return await GenerateAuthenticationResultForUserAsync(user);
-            return default;
+            var account = await _context.RefreshTokens
+                .AsNoTracking()
+                .Include(i => i.Account)
+                .Where(i => i.Token == request.Token)
+                .Select(i => i.Account)
+                .SingleOrDefaultAsync();
+
+            return await GenerateAuthenticationResultForAccountAsync(account);
         }
 
         private ClaimsPrincipal GetPrincipalFromToken(string token)
@@ -149,102 +160,164 @@ namespace Eventi.Services
                        StringComparison.InvariantCultureIgnoreCase);
         }
 
-        public async Task<AuthenticationResult> RegisterAsync(RegistrationRequest request)
+        
+        private async Task<AuthenticationResult> GenerateAuthenticationResultForAccountAsync(Account account)
         {
-            //var existingUser = await _userManager.FindByEmailAsync(request.Email);
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_jwtSettings.Secret);
 
-            //if (existingUser != null)
-            //{
-            //    return new AuthenticationResult
-            //    {
-            //        Errors = new[] { "User with this email address already exists" }
-            //    };
-            //}
+            var claims = new List<Claim>
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, account.Email),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(JwtRegisteredClaimNames.Email, account.Email),
+                new Claim("id", account.ID.ToString())
+            };
 
-            //var newUserId = Guid.NewGuid();
-            //var newUser = new Person
-            //{
-            //    Id = newUserId.ToString(),
-            //    Email = request.Email,
-            //    UserName = request.Username
-            //};
+            
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(claims),
+                Expires = DateTime.UtcNow.Add(_jwtSettings.TokenLifetime),
+                SigningCredentials =
+                    new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
 
-            //var createdUser = await _userManager.CreateAsync(newUser, request.Password);
+            var token = tokenHandler.CreateToken(tokenDescriptor);
 
-            //if (!createdUser.Succeeded)
-            //{
-            //    return new AuthenticationResult
-            //    {
-            //        Errors = createdUser.Errors.Select(x => x.Description)
-            //    };
-            //}
+            var refreshToken = new RefreshToken
+            {
+                JwtId = token.Id,
+                AccountID = account.ID,
+                CreationDate = DateTime.UtcNow,
+                ExpiryDate = DateTime.UtcNow.AddMonths(6)
+            };
 
-            //return await GenerateAuthenticationResultForUserAsync(newUser);
-            return default;
+            await _context.RefreshTokens.AddAsync(refreshToken);
+            await _context.SaveChangesAsync();
+
+            return new AuthenticationResult
+            {
+                Success = true,
+                Token = tokenHandler.WriteToken(token),
+                RefreshToken = refreshToken.Token
+            };
         }
 
-        private async Task<AuthenticationResult> GenerateAuthenticationResultForUserAsync(Person user)
+        public async Task<AuthenticationResult> RegisterClientAsync(ClientRegistrationRequest request)
         {
-            //var tokenHandler = new JwtSecurityTokenHandler();
-            //var key = Encoding.ASCII.GetBytes(_jwtSettings.Secret);
+            var result = await CheckUniqueAccount(request);
+            if (result.Errors != null)
+            {
+                return result;
+            }
 
-            //var claims = new List<Claim>
-            //{
-            //    new Claim(JwtRegisteredClaimNames.Sub, user.Email),
-            //    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            //    new Claim(JwtRegisteredClaimNames.Email, user.Email),
-            //    new Claim("id", user.Id)
-            //};
+            var account = await CreateAccountAsync(request);
 
-            //var userClaims = await _userManager.GetClaimsAsync(user);
-            //claims.AddRange(userClaims);
+            var person = await CreatePersonAsync(request, account);
 
-            //var userRoles = await _userManager.GetRolesAsync(user);
-            //foreach (var userRole in userRoles)
-            //{
-            //    claims.Add(new Claim(ClaimTypes.Role, userRole));
-            //    var role = await _roleManager.FindByNameAsync(userRole);
-            //    if (role == null) continue;
-            //    var roleClaims = await _roleManager.GetClaimsAsync(role);
+            var client = _mapper.Map<Client>(request);
+            client.PersonID = person.ID;
+            _context.Clients.Add(client);
+            _context.SaveChanges();
 
-            //    foreach (var roleClaim in roleClaims)
-            //    {
-            //        if (claims.Contains(roleClaim))
-            //            continue;
+            return await GenerateAuthenticationResultForAccountAsync(account);
+        }
 
-            //        claims.Add(roleClaim);
-            //    }
-            //}
+        public async Task<AuthenticationResult> RegisterAdministratorAsync(AdministratorRegistrationRequest request)
+        {
+            var result = await CheckUniqueAccount(request);
+            if (result.Errors != null)
+            {
+                return result;
+            }
 
-            //var tokenDescriptor = new SecurityTokenDescriptor
-            //{
-            //    Subject = new ClaimsIdentity(claims),
-            //    Expires = DateTime.UtcNow.Add(_jwtSettings.TokenLifetime),
-            //    SigningCredentials =
-            //        new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            //};
+            var account = await CreateAccountAsync(request);
 
-            //var token = tokenHandler.CreateToken(tokenDescriptor);
+            var person = await CreatePersonAsync(request, account);
 
-            //var refreshToken = new RefreshToken
-            //{
-            //    JwtId = token.Id,
-            //    UserId = user.Id,
-            //    CreationDate = DateTime.UtcNow,
-            //    ExpiryDate = DateTime.UtcNow.AddMonths(6)
-            //};
+            var admin = _mapper.Map<Administrator>(request);
+            admin.PersonID = person.ID;
+            _context.Administrators.Add(admin);
+            _context.SaveChanges();
 
-            //await _context.RefreshTokens.AddAsync(refreshToken);
-            //await _context.SaveChangesAsync();
+            return await GenerateAuthenticationResultForAccountAsync(account);
+        }
 
-            //return new AuthenticationResult
-            //{
-            //    Success = true,
-            //    Token = tokenHandler.WriteToken(token),
-            //    RefreshToken = refreshToken.Token
-            //};
+        public async Task<AuthenticationResult> RegisterOrganizerAsync(OrganizerRegistrationRequest request)
+        {
+            var result = await CheckUniqueAccount(request);
+            if (result.Errors != null)
+            {
+                return result;
+            }
 
-            return default;
+            var account = await CreateAccountAsync(request);
+
+            var organizer = _mapper.Map<Organizer>(request);
+            organizer.AccountID = account.ID;
+            _context.Organizers.Add(organizer);
+            _context.SaveChanges();
+
+            return await GenerateAuthenticationResultForAccountAsync(account);
+        }
+
+        private async Task<Account> CreateAccountAsync(RegistrationRequest request)
+        {
+            var account = _mapper.Map<Account>(request);
+            account.PasswordSalt = HashHelper.GenerateSalt();
+            account.PasswordHash = HashHelper.GenerateHash(account.PasswordSalt, request.Password);
+            _context.Accounts.Add(account);
+            await _context.SaveChangesAsync();
+
+            return account;
+        }
+
+        private async Task<Person> CreatePersonAsync(RegistrationRequest request, Account account)
+        {
+            var person = _mapper.Map<Person>(request);
+            person.AccountID = account.ID;
+            _context.People.Add(person);
+            await _context.SaveChangesAsync();
+
+            return person;
+        }
+
+        private async Task<AuthenticationResult> CheckUniqueAccount(RegistrationRequest request)
+        {
+            var result = new AuthenticationResult();
+
+            var existingEmail = await FindByEmailAsync(request.Email);
+            
+            if (existingEmail != null)
+            {
+                result.Errors.Append("User with this email address already exists");
+            }
+
+            var existingUsername = await FindByUsernameAsync(request.Username);
+
+            if (existingUsername != null)
+            {
+                result.Errors.Append("User with this username already exists");
+            }
+
+            return result;
+        }
+
+        public async Task<Account> FindByEmailAsync(string Email)
+        {
+            return await _context.Accounts
+                .AsNoTracking()
+                .Where(i => i.Email == Email)
+                .SingleOrDefaultAsync();
+        }
+
+        public async Task<Account> FindByUsernameAsync(string Username)
+        {
+            return await _context.Accounts
+                .AsNoTracking()
+                .Where(i => i.Username == Username)
+                .SingleOrDefaultAsync();
         }
     }
 }
