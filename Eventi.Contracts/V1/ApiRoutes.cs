@@ -10,7 +10,9 @@
         public static class Auth
         {
             private const string EndpointBase = "Auth";
-            public const string Register = Base + "/" + EndpointBase  + "/Register";
+            public const string RegisterClient = Base + "/" + EndpointBase  + "/Register/Client";
+            public const string RegisterAdministrator = Base + "/" + EndpointBase  + "/Register/Administrator";
+            public const string RegisterOrganizer = Base + "/" + EndpointBase  + "/Register/Organizer";
             public const string Login = Base + "/" + EndpointBase + "/Login";
             public const string Refresh = Base + "/" + EndpointBase + "/Refresh";
         }
