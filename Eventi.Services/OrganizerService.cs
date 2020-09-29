@@ -17,11 +17,13 @@ namespace Eventi.Services
     {
         private readonly EventiContext _context;
         private readonly IMapper _mapper;
+        private readonly IEventService _eventService;
 
-        public OrganizerService(EventiContext context, IMapper mapper, IUriService uriService) : base(context, mapper, uriService)
+        public OrganizerService(EventiContext context, IMapper mapper, IUriService uriService, IEventService eventService) : base(context, mapper, uriService)
         {
             _context = context;
             _mapper = mapper;
+            _eventService = eventService;
         }
 
         public async override Task<PagedResponse<OrganizerResponse>> Get(OrganizerSearchRequest search, PaginationQuery pagination)
@@ -49,6 +51,7 @@ namespace Eventi.Services
 
             
             query = ApplyPagination(query, pagination);
+            
 
             var list = await query.ToListAsync();
             var listDto = _mapper.Map<List<EventResponse>>(list);
@@ -56,7 +59,7 @@ namespace Eventi.Services
             return pagedResponse;
         }
 
-        protected override IQueryable<Organizer> ApplyFilter(IQueryable<Organizer> query, OrganizerSearchRequest search)
+        public override IQueryable<Organizer> ApplyFilter(IQueryable<Organizer> query, OrganizerSearchRequest search)
         {
             if(search != null)
             {

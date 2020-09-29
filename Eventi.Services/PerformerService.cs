@@ -21,7 +21,7 @@ namespace Eventi.Services
             _mapper = mapper;
         }
 
-        protected override IQueryable<Performer> ApplyFilter(IQueryable<Performer> query, PerformerSearchRequest search)
+        public override IQueryable<Performer> ApplyFilter(IQueryable<Performer> query, PerformerSearchRequest search)
         {
             if (search != null)
             {

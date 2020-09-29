@@ -145,7 +145,7 @@ namespace Eventi.Services
             return false;
         }
 
-        protected override IQueryable<Event> ApplyFilter(IQueryable<Event> query, EventSearchRequest search)
+        public override IQueryable<Event> ApplyFilter(IQueryable<Event> query, EventSearchRequest search)
         {
             if(search != null)
             {

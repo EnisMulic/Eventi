@@ -50,7 +50,7 @@ namespace Eventi.Services
             return pagedResponse;
         }
 
-        protected virtual IQueryable<TDatabase> ApplyFilter(IQueryable<TDatabase> query, TSearch search)
+        public virtual IQueryable<TDatabase> ApplyFilter(IQueryable<TDatabase> query, TSearch search)
         {
             return query;
         }
