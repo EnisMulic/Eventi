@@ -53,7 +53,7 @@ namespace Eventi.Services
             return pagedResponse;
         }
 
-        protected override IQueryable<City> ApplyFilter(IQueryable<City> query, CitySearchRequest search)
+        public override IQueryable<City> ApplyFilter(IQueryable<City> query, CitySearchRequest search)
         {
             if (search != null)
             {

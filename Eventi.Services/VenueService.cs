@@ -36,7 +36,7 @@ namespace Eventi.Services
             return pagedResponse;
         }
 
-        protected override IQueryable<Venue> ApplyFilter(IQueryable<Venue> query, VenueSearchRequest search)
+        public override IQueryable<Venue> ApplyFilter(IQueryable<Venue> query, VenueSearchRequest search)
         {
             if(search != null)
             {

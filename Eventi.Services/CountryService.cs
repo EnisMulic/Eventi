@@ -35,7 +35,7 @@ namespace Eventi.Services
             return _mapper.Map<List<CityResponse>>(list);
         }
 
-        protected override IQueryable<Country> ApplyFilter(IQueryable<Country> query, CountrySearchRequest search)
+        public override IQueryable<Country> ApplyFilter(IQueryable<Country> query, CountrySearchRequest search)
         {
             if (search != null)
             {

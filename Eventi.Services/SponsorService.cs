@@ -18,7 +18,7 @@ namespace Eventi.Services
         {
         }
 
-        protected override IQueryable<Sponsor> ApplyFilter(IQueryable<Sponsor> query, SponsorSearchRequest search)
+        public override IQueryable<Sponsor> ApplyFilter(IQueryable<Sponsor> query, SponsorSearchRequest search)
         {
             if(search != null)
             {
