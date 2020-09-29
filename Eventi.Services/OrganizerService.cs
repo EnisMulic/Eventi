@@ -51,7 +51,6 @@ namespace Eventi.Services
 
             
             query = ApplyPagination(query, pagination);
-            
 
             var list = await query.ToListAsync();
             var listDto = _mapper.Map<List<EventResponse>>(list);

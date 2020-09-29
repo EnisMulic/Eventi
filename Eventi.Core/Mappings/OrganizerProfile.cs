@@ -11,7 +11,9 @@ namespace Eventi.Core.Mappings
         {
             CreateMap<Organizer, OrganizerInsertRequest>().ReverseMap();
             CreateMap<Organizer, OrganizerUpdateRequest>().ReverseMap();
-            CreateMap<Organizer, OrganizerResponse>();
+            CreateMap<Organizer, OrganizerResponse>()
+                .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.Account.Username))
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Account.Email));
             CreateMap<OrganizerRegistrationRequest, Organizer>();
         }
     }
