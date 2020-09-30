@@ -23,8 +23,8 @@ namespace Eventi.WebAPI.Installers
             // Event
             services.AddScoped<IEventService, EventService>();
 
-            // User
-            //services.AddScoped<ICRUDService<UserResponse, UserSearchRequest, UserInsertRequest, UserUpdateRequest>, UserService>();
+            // Client
+            services.AddScoped<IClientService, ClientService>();
 
             // Organizer
             services.AddScoped<IOrganizerService, OrganizerService>();

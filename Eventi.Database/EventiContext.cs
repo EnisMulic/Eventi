@@ -22,15 +22,13 @@ namespace Eventi.Database
         public DbSet<Ticket> Tickets { get; set; }
         public DbSet<Sponsor> Sponsors { get; set; }
         public DbSet<Venue> Venues { get; set; }
+        public DbSet<Section> Sections { get; set; }
         public DbSet<Performer> Performers { get; set; }
         public DbSet<Seat> Seats { get; set; }
-        public DbSet<Like> Likes { get; set; }
         public DbSet<EventPerformer> EventPerformers { get; set; }
         public DbSet<EventSponsor> EventSponsors { get; set; }
-        public DbSet<SaleType> SaleTypes { get; set; }
         public DbSet<Purchase> Purchases { get; set; }
-        public DbSet<PurchaseType> PurchaseTypes { get; set; }
-        public DbSet<Review> Reviews { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -53,10 +51,8 @@ namespace Eventi.Database
                 .HasKey(k => new { k.EventID, k.PerformerID});
             modelBuilder.Entity<EventSponsor>()
                 .HasKey(k => new { k.EventID, k.SponsorID });
-            modelBuilder.Entity<Like>()
-                .HasKey(k => new { k.EventID, k.ClientID });
             modelBuilder.Entity<Purchase>()
-                .HasKey(k => new { k.EventID, k.ClientID });
+                .HasKey(k => new { k.TicketID, k.ClientID });
         }
 
     }

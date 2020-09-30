@@ -53,7 +53,7 @@ namespace Eventi.WebAPI.IntegrationTests
 
         private async Task<string> GetJwtAsync()
         {
-            var response = await _httpClient.PostAsJsonAsync(ApiRoutes.Auth.Register, new RegistrationRequest
+            var response = await _httpClient.PostAsJsonAsync(ApiRoutes.Auth.RegisterClient, new RegistrationRequest
             {
                 Username = "Integrator",
                 Email = "test2@integration.com",
