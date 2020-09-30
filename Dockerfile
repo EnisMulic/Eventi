@@ -6,10 +6,10 @@ WORKDIR /src
 COPY . .
 
 FROM build AS publish
-RUN dotnet publish "Template.WebAPI" -c Release -o /app
+RUN dotnet publish "Eventi.WebAPI" -c Release -o /app
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app .
 
 
-ENTRYPOINT ["dotnet", "Template.WebAPI.dll"]
+ENTRYPOINT ["dotnet", "Eventi.WebAPI.dll"]
