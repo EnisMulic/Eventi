@@ -86,9 +86,18 @@ namespace Eventi.Services
             return _mapper.Map<ClientResponse>(entity);
         }
 
-        public Task<PagedResponse<EventResponse>> GetEvents(int ID, EventSearchRequest search, PaginationQuery pagination)
+        public async Task<List<EventResponse>> GetEvents(int id)
         {
-            throw new NotImplementedException();
+            var query = _context.Purchases
+                .AsNoTracking()
+                .Include(i => i.Ticket)
+                .ThenInclude(i => i.Event)
+                .Where(i => i.ClientID == id)
+                .Select(i => i.Ticket.Event)
+                .AsQueryable();
+
+            var list = await query.ToListAsync();
+            return _mapper.Map<List<EventResponse>>(list);
         }
 
         public override Task<ClientResponse> Insert(object request)
