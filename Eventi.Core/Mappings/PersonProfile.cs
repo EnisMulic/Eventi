@@ -10,6 +10,7 @@ namespace Eventi.Core.Mappings
         {
             CreateMap<AdministratorRegistrationRequest, Person>();
             CreateMap<ClientRegistrationRequest, Person>();
+            CreateMap<ClientUpdateRequest, Person>();
         }
     }
 }

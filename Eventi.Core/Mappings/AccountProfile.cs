@@ -15,6 +15,7 @@ namespace Eventi.Core.Mappings
             CreateMap<ClientRegistrationRequest, Account>();
             CreateMap<AdministratorRegistrationRequest, Account>();
             CreateMap<OrganizerRegistrationRequest, Account>();
+            CreateMap<ClientUpdateRequest, Account>();
         }
     }
 }
