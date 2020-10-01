@@ -1,9 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Eventi.Domain;
+using System;
 
 namespace Eventi.Database
 {
-    public class EventiContext : DbContext
+    public partial class EventiContext : DbContext
     {
         public EventiContext(DbContextOptions<EventiContext> options)
             : base(options)
@@ -53,7 +54,11 @@ namespace Eventi.Database
                 .HasKey(k => new { k.EventID, k.SponsorID });
             modelBuilder.Entity<Purchase>()
                 .HasKey(k => new { k.TicketID, k.ClientID });
+
+
+            OnModelCreatingPartial(modelBuilder);
         }
 
+        partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
 }
