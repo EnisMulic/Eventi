@@ -1,4 +1,6 @@
-﻿namespace Eventi.Domain
+﻿using Eventi.Common;
+
+namespace Eventi.Domain
 {
     public class Account
     {
@@ -7,5 +9,6 @@
         public string Username { get; set; }
         public string PasswordHash { get; set; }
         public string PasswordSalt { get; set; }
+        public AccountCategory? AccountCategory { get; set; }
     }
 }

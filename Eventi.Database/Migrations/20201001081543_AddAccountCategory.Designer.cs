@@ -4,14 +4,16 @@ using Eventi.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Eventi.Database.Migrations
 {
     [DbContext(typeof(EventiContext))]
-    partial class EventiContextModelSnapshot : ModelSnapshot
+    [Migration("20201001081543_AddAccountCategory")]
+    partial class AddAccountCategory
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -26,7 +28,7 @@ namespace Eventi.Database.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("AccountCategory")
+                    b.Property<int>("AccountCategory")
                         .HasColumnType("int");
 
                     b.Property<string>("Email")

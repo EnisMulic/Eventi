@@ -1,6 +1,6 @@
 ﻿namespace Eventi.Contracts.V1.Requests
 {
-    public class RegistrationRequest
+    public abstract class RegistrationRequest
     {
         public string Username { get; set; }
         public string Email { get; set; }
