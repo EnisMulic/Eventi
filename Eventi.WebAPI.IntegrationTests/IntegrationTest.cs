@@ -10,6 +10,8 @@ using Eventi.Database;
 using Eventi.Contracts.V1.Responses;
 using Eventi.Contracts.V1;
 using Eventi.Contracts.V1.Requests;
+using Eventi.Domain;
+using System.Collections.Generic;
 
 namespace Eventi.WebAPI.IntegrationTests
 {
@@ -33,7 +35,7 @@ namespace Eventi.WebAPI.IntegrationTests
 
                         services.AddDbContext<EventiContext>(options =>
                         {
-                            options.UseInMemoryDatabase("TestDb");
+                            options.UseInMemoryDatabase("EventiTestDb");
                         });
 
                         var sp = services.BuildServiceProvider();
@@ -42,6 +44,11 @@ namespace Eventi.WebAPI.IntegrationTests
                 });
 
             _serviceProvider = appFactory.Services;
+            using var serviceScope = _serviceProvider.CreateScope();
+
+            var context = serviceScope.ServiceProvider.GetService<EventiContext>();
+            Seed(context);
+
             _httpClient = appFactory.CreateClient();
         }
 
@@ -53,7 +60,7 @@ namespace Eventi.WebAPI.IntegrationTests
 
         private async Task<string> GetJwtAsync()
         {
-            var response = await _httpClient.PostAsJsonAsync(ApiRoutes.Auth.RegisterClient, new RegistrationRequest
+            var response = await _httpClient.PostAsJsonAsync(ApiRoutes.Auth.RegisterClient, new ClientRegistrationRequest
             {
                 Username = "Integrator",
                 Email = "test2@integration.com",
@@ -64,11 +71,26 @@ namespace Eventi.WebAPI.IntegrationTests
             return registrationResponse.Token;
         }
 
+        private void Seed(EventiContext context)
+        {
+            context.Countries.AddRange
+                (
+                    new List<Country>()
+                    {
+                        new Country { Name = "Bosnia and Herzegovina"},
+                        new Country { Name = "Croatia"},
+                        new Country { Name = "Serbia"}
+                    }
+                );
+            context.SaveChanges();
+        }
+
         public void Dispose()
         {
             using var serviceScope = _serviceProvider.CreateScope();
             var context = serviceScope.ServiceProvider.GetService<EventiContext>();
             context.Database.EnsureDeleted();
+            context.Dispose();
         }
     }
 }
