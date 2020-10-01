@@ -31,5 +31,5 @@ stages:
       displayName: "Test"
       inputs:
         command: test
-        projects: '**/*tests/*.csproj'
+        projects: '**/*Tests/*.csproj'
         arguments: '--configuration $(buildConfiguration)'
