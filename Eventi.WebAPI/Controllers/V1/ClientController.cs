@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Eventi.WebAPI.Controllers.V1
 {
-    [Route("api/[controller]")]
+    
     [ApiController]
     public class ClientController : CRUDController<ClientResponse, ClientSearchRequest, object, ClientUpdateRequest>
     {
@@ -18,7 +18,7 @@ namespace Eventi.WebAPI.Controllers.V1
             _service = service;
         }
 
-        [HttpGet("id/Events")]
+        [HttpGet("{id}/Events")]
         public async Task<ActionResult<List<EventResponse>>> GetEvents(int id)
         {
             var response = await _service.GetEvents(id);
