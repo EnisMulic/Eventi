@@ -15,6 +15,7 @@ using Eventi.Database;
 using Eventi.Domain;
 using AutoMapper;
 using Eventi.Core.Helpers;
+using Eventi.Common;
 
 namespace Eventi.Services
 {
@@ -171,7 +172,8 @@ namespace Eventi.Services
                 new Claim(JwtRegisteredClaimNames.Sub, account.Email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Email, account.Email),
-                new Claim("id", account.ID.ToString())
+                new Claim("id", account.ID.ToString()),
+                new Claim("Role", account.AccountCategory.ToString())
             };
 
             
@@ -267,6 +269,20 @@ namespace Eventi.Services
             var account = _mapper.Map<Account>(request);
             account.PasswordSalt = HashHelper.GenerateSalt();
             account.PasswordHash = HashHelper.GenerateHash(account.PasswordSalt, request.Password);
+
+            switch(request)
+            {
+                case AdministratorRegistrationRequest _:
+                    account.AccountCategory = AccountCategory.Administrator;
+                    break;
+                case OrganizerRegistrationRequest _:
+                    account.AccountCategory = AccountCategory.Organizer;
+                    break;
+                case ClientRegistrationRequest _:
+                    account.AccountCategory = AccountCategory.Client;
+                    break;
+            }
+
             _context.Accounts.Add(account);
             await _context.SaveChangesAsync();
 
