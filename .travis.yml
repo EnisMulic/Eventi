@@ -5,4 +5,4 @@ install:
   - nuget install xunit.runners -Version 1.9.2 -OutputDirectory testrunner
 script:
   - msbuild /p:Configuration=Release Eventi.sln
-  - mono ./testrunner/xunit.runners.1.9.2/tools/xunit.console.clr4.exe ./Eventi.WebAPI.IntegrationTests/bin/Debug/netcoreapp3.1/Eventi.WebAPI.IntegrationTests.Tests.dll
+  - mono ./testrunner/xunit.runners.1.9.2/tools/xunit.console.clr4.exe ./Eventi.WebAPI.IntegrationTests/bin/Debug/netcoreapp3.1/Eventi.WebAPI.IntegrationTests.dll
