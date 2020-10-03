@@ -87,7 +87,7 @@ namespace Eventi.WebAPI.IntegrationTests
             // Arrange
             await AuthenticateAsync();
 
-           
+
             // Act
             var response = await _httpClient.DeleteAsync(ApiRoutes.Country.Delete.Replace("{id}", "1"));
 

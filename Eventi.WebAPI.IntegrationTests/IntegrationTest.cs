@@ -12,6 +12,7 @@ using Eventi.Contracts.V1;
 using Eventi.Contracts.V1.Requests;
 using Eventi.Domain;
 using System.Collections.Generic;
+using Eventi.Core.Helpers;
 
 namespace Eventi.WebAPI.IntegrationTests
 {
@@ -27,28 +28,38 @@ namespace Eventi.WebAPI.IntegrationTests
                 {
                     builder.ConfigureServices(services =>
                     {
+                        // Remove the app's ApplicationDbContext registration.
                         var descriptor = services.SingleOrDefault(
                             d => d.ServiceType ==
                                 typeof(DbContextOptions<EventiContext>));
 
-                        services.Remove(descriptor);
+                        if (descriptor != null)
+                        {
+                            services.Remove(descriptor);
+                        }
 
+                        // Add ApplicationDbContext using an in-memory database for testing.
                         services.AddDbContext<EventiContext>(options =>
                         {
-                            options.UseInMemoryDatabase("EventiTestDb");
+                            options.UseInMemoryDatabase(Guid.NewGuid().ToString());
                         });
 
+                        // Build the service provider.
                         var sp = services.BuildServiceProvider();
+
+                        using (var scope = sp.CreateScope())
+                        {
+                            var scopedServices = scope.ServiceProvider;
+
+                            var db = scopedServices.GetRequiredService<EventiContext>();
+
+                            Seed(db);
+                        }
                     });
 
                 });
 
             _serviceProvider = appFactory.Services;
-            using var serviceScope = _serviceProvider.CreateScope();
-
-            var context = serviceScope.ServiceProvider.GetService<EventiContext>();
-            Seed(context);
-
             _httpClient = appFactory.CreateClient();
         }
 
@@ -60,11 +71,10 @@ namespace Eventi.WebAPI.IntegrationTests
 
         private async Task<string> GetJwtAsync()
         {
-            var response = await _httpClient.PostAsJsonAsync(ApiRoutes.Auth.RegisterClient, new ClientRegistrationRequest
+            var response = await _httpClient.PostAsJsonAsync(ApiRoutes.Auth.Login, new LoginRequest
             {
-                Username = "Integrator",
-                Email = "test2@integration.com",
-                Password = "SomePass1234!"
+                Username = "admin",
+                Password = "password1"
             });
 
             var registrationResponse = await response.Content.ReadAsAsync<AuthSuccessResponse>();
@@ -73,6 +83,45 @@ namespace Eventi.WebAPI.IntegrationTests
 
         private void Seed(EventiContext context)
         {
+            context.Database.EnsureDeleted();
+
+            var list = new List<string>();
+            for (int i = 0; i < 3; i++)
+            {
+                list.Add(HashHelper.GenerateSalt());
+            }
+
+            context.Accounts.AddRange
+                (
+                    new List<Account>()
+                    {
+                        new Account
+                        {
+                            AccountCategory = Common.AccountCategory.Administrator,
+                            Email = "admin@test.com",
+                            Username = "admin",
+                            PasswordSalt = list[0],
+                            PasswordHash = HashHelper.GenerateHash(list[0], "password1")
+                        },
+                        new Account
+                        {
+                            AccountCategory = Common.AccountCategory.Organizer,
+                            Email = "organizer@test.com",
+                            Username = "organizer",
+                            PasswordSalt = list[1],
+                            PasswordHash = HashHelper.GenerateHash(list[1], "password1")
+                        },
+                        new Account
+                        {
+                            AccountCategory = Common.AccountCategory.Client,
+                            Email = "client@test.com",
+                            Username = "client",
+                            PasswordSalt = list[2],
+                            PasswordHash = HashHelper.GenerateHash(list[2], "password1")
+                        }
+                    }
+                );
+
             context.Countries.AddRange
                 (
                     new List<Country>()
@@ -82,6 +131,25 @@ namespace Eventi.WebAPI.IntegrationTests
                         new Country { Name = "Serbia"}
                     }
                 );
+
+
+            context.Cities.AddRange
+                (
+                    new List<City>()
+                    {
+                        new City { CountryID = 1, Name = "Sarajevo"},
+                        new City { CountryID = 1, Name = "Mostar"},
+                        new City { CountryID = 1, Name = "Zenica"},
+                        new City { CountryID = 1, Name = "Tuzla"},
+                        new City { CountryID = 1, Name = "Banja Luka"},
+                        new City { CountryID = 1, Name = "Bihać"},
+                        new City { CountryID = 2, Name = "Zagreb"},
+                        new City { CountryID = 2, Name = "Split"},
+                        new City { CountryID = 3, Name = "Beograd"},
+                        new City { CountryID = 3, Name = "Novi Sad"},
+                    }
+                );
+
             context.SaveChanges();
         }
 
@@ -90,7 +158,6 @@ namespace Eventi.WebAPI.IntegrationTests
             using var serviceScope = _serviceProvider.CreateScope();
             var context = serviceScope.ServiceProvider.GetService<EventiContext>();
             context.Database.EnsureDeleted();
-            context.Dispose();
         }
     }
 }
