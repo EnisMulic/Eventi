@@ -32,13 +32,18 @@ namespace Eventi.Services
         public virtual async Task<TModel> Update(int id, TUpdate request)
         {
             var entity = _context.Set<TDatabase>().Find(id);
-            _context.Set<TDatabase>().Attach(entity);
-            _context.Set<TDatabase>().Update(entity);
 
-            _mapper.Map(request, entity);
+            if(entity != null)
+            {
+                _context.Set<TDatabase>().Attach(entity);
+                _context.Set<TDatabase>().Update(entity);
 
-            await _context.SaveChangesAsync();
+                _mapper.Map(request, entity);
 
+                await _context.SaveChangesAsync();
+
+            }
+            
             return _mapper.Map<TModel>(entity);
         }
 
