@@ -18,11 +18,14 @@ namespace Eventi.WebAPI.IntegrationTests
 {
     public class IntegrationTest : IDisposable
     {
-        protected readonly HttpClient _httpClient;
+        public readonly HttpClient _httpClient;
         private readonly IServiceProvider _serviceProvider;
 
         protected IntegrationTest()
         {
+            var dbOptions = new DbContextOptionsBuilder<EventiContext>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString()).Options;
+
             var appFactory = new WebApplicationFactory<Startup>()
                 .WithWebHostBuilder(builder =>
                 {
@@ -41,29 +44,29 @@ namespace Eventi.WebAPI.IntegrationTests
                         // Add ApplicationDbContext using an in-memory database for testing.
                         services.AddDbContext<EventiContext>(options =>
                         {
-                            options.UseInMemoryDatabase(Guid.NewGuid().ToString());
+                            options.UseInMemoryDatabase("TestDb");
                         });
 
                         // Build the service provider.
                         var sp = services.BuildServiceProvider();
 
-                        using (var scope = sp.CreateScope())
-                        {
-                            var scopedServices = scope.ServiceProvider;
-
-                            var db = scopedServices.GetRequiredService<EventiContext>();
-
-                            Seed(db);
-                        }
+                        var context = sp.GetService<EventiContext>();
+                        Seed(context);
                     });
 
                 });
 
             _serviceProvider = appFactory.Services;
+
+            //using var serviceScope = _serviceProvider.CreateScope();
+
+            //var context = serviceScope.ServiceProvider.GetService<EventiContext>();
+            //Seed(context);
+
             _httpClient = appFactory.CreateClient();
         }
 
-        protected async Task AuthenticateAsync()
+        public async Task AuthenticateAsync()
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", await GetJwtAsync());
         }
@@ -83,7 +86,7 @@ namespace Eventi.WebAPI.IntegrationTests
 
         private void Seed(EventiContext context)
         {
-            context.Database.EnsureDeleted();
+            //context.Database.EnsureDeleted();
 
             var list = new List<string>();
             for (int i = 0; i < 3; i++)
@@ -131,7 +134,7 @@ namespace Eventi.WebAPI.IntegrationTests
                         new Country { Name = "Serbia"}
                     }
                 );
-
+            context.SaveChanges();
 
             context.Cities.AddRange
                 (

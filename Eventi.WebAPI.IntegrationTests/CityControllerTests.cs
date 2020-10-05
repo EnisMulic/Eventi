@@ -2,6 +2,7 @@
 using Eventi.Contracts.V1.Requests;
 using Eventi.Contracts.V1.Responses;
 using FluentAssertions;
+using Microsoft.AspNetCore.Mvc.Testing;
 using Newtonsoft.Json;
 using System;
 using System.Net;
@@ -14,12 +15,12 @@ namespace Eventi.WebAPI.IntegrationTests
 {
     public class CityControllerTests : IntegrationTest
     {
-
+        
         [Fact]
         public async Task Get_NoParametars_ReturnStatusCodeOK()
         {
             // Arrange
-            //await AuthenticateAsync();
+            await AuthenticateAsync();
 
             // Act
             var response = await _httpClient.GetAsync(ApiRoutes.City.Get);
@@ -32,7 +33,7 @@ namespace Eventi.WebAPI.IntegrationTests
         public async Task GetById_ID1_ReturnCityWithID1()
         {
             // Arrange
-            //await AuthenticateAsync();
+            await AuthenticateAsync();
 
             // Act
             var response = await _httpClient.GetAsync(ApiRoutes.City.GetById.Replace("{id}", "1"));
@@ -46,7 +47,7 @@ namespace Eventi.WebAPI.IntegrationTests
         public async Task Insert_NameCity_ReturnsStatusCodeCreatedAndCityOuagadougou()
         {
             // Arrange
-            //await AuthenticateAsync();
+            await AuthenticateAsync();
             var city = new CityUpsertRequest()
             {
                 Name = "Ouagadougou",
@@ -67,7 +68,7 @@ namespace Eventi.WebAPI.IntegrationTests
         public async Task Update_ID1NameOuagadougou_ReturnsID1NameOuagadougou()
         {
             // Arrange
-            //await AuthenticateAsync();
+            await AuthenticateAsync();
             var city = new CityUpsertRequest()
             {
                 Name = "Ouagadougou",
@@ -88,11 +89,11 @@ namespace Eventi.WebAPI.IntegrationTests
         public async Task Delete_ID1_ReturnsStatusCodeOK()
         {
             // Arrange
-            //await AuthenticateAsync();
+            await AuthenticateAsync();
 
 
             // Act
-            var response = await _httpClient.DeleteAsync(ApiRoutes.City.Delete.Replace("{id}", "1"));
+            var response = await _httpClient.DeleteAsync(ApiRoutes.City.Delete.Replace("{id}", "2"));
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
