@@ -23,35 +23,42 @@ namespace Eventi.WebAPI.IntegrationTests
 
         protected IntegrationTest()
         {
-            var dbOptions = new DbContextOptionsBuilder<EventiContext>()
-                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString()).Options;
 
             var appFactory = new WebApplicationFactory<Startup>()
                 .WithWebHostBuilder(builder =>
                 {
                     builder.ConfigureServices(services =>
                     {
-                        // Remove the app's ApplicationDbContext registration.
                         var descriptor = services.SingleOrDefault(
                             d => d.ServiceType ==
                                 typeof(DbContextOptions<EventiContext>));
 
-                        if (descriptor != null)
-                        {
-                            services.Remove(descriptor);
-                        }
+                        services.Remove(descriptor);
 
-                        // Add ApplicationDbContext using an in-memory database for testing.
                         services.AddDbContext<EventiContext>(options =>
                         {
-                            options.UseInMemoryDatabase("TestDb");
+                            options.UseInMemoryDatabase("InMemoryDbForTesting");
                         });
 
-                        // Build the service provider.
                         var sp = services.BuildServiceProvider();
 
-                        var context = sp.GetService<EventiContext>();
-                        Seed(context);
+                        using (var scope = sp.CreateScope())
+                        {
+                            var scopedServices = scope.ServiceProvider;
+                            var db = scopedServices.GetRequiredService<EventiContext>();
+                           
+
+                            db.Database.EnsureCreated();
+
+                            try
+                            {
+                                Seed(db);
+                            }
+                            catch
+                            {
+                                
+                            }
+                        }
                     });
 
                 });
