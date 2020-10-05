@@ -34,11 +34,12 @@ namespace Eventi.WebAPI.IntegrationTests
             await AuthenticateAsync();
 
             // Act
-            var response = await _httpClient.GetAsync(ApiRoutes.Country.GetById.Replace("{id}", "1"));
+            var HTTPResponse = await _httpClient.GetAsync(ApiRoutes.Country.GetById.Replace("{id}", "1"));
 
             // Assert
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
-            (await response.Content.ReadAsAsync<CountryResponse>()).ID.Should().Be(1);
+            HTTPResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+            var response = await HTTPResponse.Content.ReadAsAsync<CountryResponse>();
+            response.ID.Should().Be(1);
         }
 
         [Fact]
@@ -54,11 +55,12 @@ namespace Eventi.WebAPI.IntegrationTests
             var stringContent = new StringContent(JsonConvert.SerializeObject(country), Encoding.UTF8, "application/json");
 
             // Act
-            var response = await _httpClient.PostAsync(ApiRoutes.Country.Post, stringContent);
+            var HTTPResponse = await _httpClient.PostAsync(ApiRoutes.Country.Post, stringContent);
 
             // Assert
-            response.StatusCode.Should().Be(HttpStatusCode.Created);
-            (await response.Content.ReadAsAsync<CountryResponse>()).Name.Equals("Burkina Faso");
+            HTTPResponse.StatusCode.Should().Be(HttpStatusCode.Created);
+            var response = await HTTPResponse.Content.ReadAsAsync<CountryResponse>();
+            response.Name.Equals("Burkina Faso");
         }
 
         [Fact]
@@ -74,11 +76,12 @@ namespace Eventi.WebAPI.IntegrationTests
             var stringContent = new StringContent(JsonConvert.SerializeObject(country), Encoding.UTF8, "application/json");
 
             // Act
-            var response = await _httpClient.PutAsync(ApiRoutes.Country.Put.Replace("{id}", "1"), stringContent);
+            var HTTPResponse = await _httpClient.PutAsync(ApiRoutes.Country.Put.Replace("{id}", "1"), stringContent);
 
             // Assert
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
-            (await response.Content.ReadAsAsync<CountryResponse>()).Name.Equals("Burkina Faso");
+            HTTPResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+            var response = await HTTPResponse.Content.ReadAsAsync<CountryResponse>();
+            response.Name.Equals("Burkina Faso");
         }
 
         [Fact]
@@ -89,10 +92,10 @@ namespace Eventi.WebAPI.IntegrationTests
 
 
             // Act
-            var response = await _httpClient.DeleteAsync(ApiRoutes.Country.Delete.Replace("{id}", "1"));
+            var HTTPResponse = await _httpClient.DeleteAsync(ApiRoutes.Country.Delete.Replace("{id}", "3"));
 
             // Assert
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            HTTPResponse.StatusCode.Should().Be(HttpStatusCode.OK);
         }
     }
 }
