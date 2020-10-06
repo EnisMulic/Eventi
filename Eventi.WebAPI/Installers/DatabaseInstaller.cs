@@ -29,6 +29,9 @@ namespace Eventi.WebAPI.Installers
             // Organizer
             services.AddScoped<IOrganizerService, OrganizerService>();
 
+            // Administrator
+            services.AddScoped<IAdministratorService, AdministratorService>();
+
             // City
             services.AddScoped<ICityService, CityService>();
 

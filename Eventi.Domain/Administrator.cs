@@ -4,7 +4,7 @@
     {
         public int ID { get; set; }
         public int PersonID { get; set; }
-        public Person Persone { get; set; }
+        public Person Person { get; set; }
 
     }
 }
