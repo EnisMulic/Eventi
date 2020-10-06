@@ -1,5 +1,0 @@
-{
-  "ConnectionStrings": {
-    "EventiTestDb": "Server=.;Initial Catalog=TestDb;Trusted_Connection=true;MultipleActiveResultSets=True;TrustServerCertificate=true;"
-  }
-}
