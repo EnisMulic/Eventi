@@ -9,22 +9,22 @@ namespace Eventi.Sdk
     //[Headers("Authorization: Bearer")]
     public interface IEventiApi
     {
-        [Get("/" + ApiRoutes.Country.Get)]
+        [Get("/api/v1/Country")]
         Task<ApiResponse<PagedResponse<CountryResponse>>> GetCountryAsync(CountrySearchRequest request, PaginationQuery pagination);
 
-        [Get("/" + ApiRoutes.Country.GetById)]
+        [Get("/api/v1/Country/{id}")]
         Task<ApiResponse<CountryResponse>> GetCountryByIdAsync(int id);
 
-        [Post("/" + ApiRoutes.Country.Post)]
+        [Post("/api/v1/Country")]
         Task<ApiResponse<CountryResponse>> CreateCountryAsync([Body] CountryUpsertRequest request);
 
-        [Put("/" + ApiRoutes.Country.Put)]
+        [Put("/api/v1/Country/{id}")]
         Task<ApiResponse<CountryResponse>> UpdateCountryAsync(int id, [Body] CountryUpsertRequest request);
 
-        [Delete("/" + ApiRoutes.Country.Delete)]
-        Task<ApiResponse<bool>> DeleteCountryAsync(int id);
+        [Delete("/api/v1/Country/{id}")]
+        Task <ApiResponse<bool>> DeleteCountryAsync(int id);
 
-        [Refit.Get("/" + ApiRoutes.Event.Get)]
-        Task<ApiResponse<PagedResponse<EventResponse>>> GetEventAsync(EventSearchRequest request, PaginationQuery pagination);
+        [Refit.Get("/api/v1/Event")]
+        Task <ApiResponse<PagedResponse<EventResponse>>> GetEventAsync(EventSearchRequest request, PaginationQuery pagination);
     }
 }
