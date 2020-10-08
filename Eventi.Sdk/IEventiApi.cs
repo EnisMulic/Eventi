@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Eventi.Sdk
 {
-    [Headers("Authorization: Bearer")]
+    //[Headers("Authorization: Bearer")]
     public interface IEventiApi
     {
         [Get("/" + ApiRoutes.Country.Get)]
@@ -23,5 +23,8 @@ namespace Eventi.Sdk
 
         [Delete("/" + ApiRoutes.Country.Delete)]
         Task<ApiResponse<bool>> DeleteCountryAsync(int id);
+
+        [Refit.Get("/" + ApiRoutes.Event.Get)]
+        Task<ApiResponse<PagedResponse<EventResponse>>> GetEventAsync(EventSearchRequest request, PaginationQuery pagination);
     }
 }
