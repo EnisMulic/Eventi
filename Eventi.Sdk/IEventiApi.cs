@@ -2,9 +2,6 @@
 using Eventi.Contracts.V1.Requests;
 using Eventi.Contracts.V1.Responses;
 using Refit;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Eventi.Sdk
