@@ -8,19 +8,19 @@ namespace Eventi.Sdk
 {
     public interface IAuthApi
     {
-        [Post("/" + ApiRoutes.Auth.RegisterClient)]
+        [Post("/api/v1/Auth/Register/Client")]
         Task<ApiResponse<AuthSuccessResponse>> ClientRegisterAsync([Body] ClientRegistrationRequest registrationRequest);
 
-        [Post("/" + ApiRoutes.Auth.RegisterOrganizer)]
+        [Post("/api/v1/Auth/Register/Organizer")]
         Task<ApiResponse<AuthSuccessResponse>> OrganizerRegisterAsync([Body] ClientRegistrationRequest registrationRequest);
 
-        [Post("/" + ApiRoutes.Auth.RegisterAdministrator)]
+        [Post("/api/v1/Auth/Register/Administrator")]
         Task<ApiResponse<AuthSuccessResponse>> AdministratorRegisterAsync([Body] ClientRegistrationRequest registrationRequest);
 
-        [Post("/" + ApiRoutes.Auth.Login)]
+        [Post("/api/v1/Auth/Login")]
         Task<ApiResponse<AuthSuccessResponse>> LoginAsync([Body] LoginRequest loginRequest);
 
-        [Post("/" + ApiRoutes.Auth.Refresh)]
+        [Post("/api/v1/Auth/Refresh")]
         Task<ApiResponse<AuthSuccessResponse>> RefreshAsync([Body] RefreshTokenRequest refreshRequest);
     }
 }
