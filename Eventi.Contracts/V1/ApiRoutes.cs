@@ -48,7 +48,6 @@
 
         public static class Venue
         {
-            private const string Event = "Venue";
             public const string Get = Base + "/Venue";
             public const string GetById = Base + "/Venue/{id}";
             public const string Post = Base + "/Venue";
