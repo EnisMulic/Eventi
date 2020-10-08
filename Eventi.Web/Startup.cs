@@ -9,6 +9,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ReflectionIT.Mvc.Paging;
 using SignalRChat.Hubs;
+using Refit;
+using Eventi.Sdk;
+using System.Net.Http.Headers;
 
 namespace Eventi.Web
 {
@@ -27,7 +30,7 @@ namespace Eventi.Web
         {
             
             services.AddDbContext<MojContext>(options =>
-               options.UseSqlServer(Configuration.GetConnectionString("proba1"))); // za konstruktor
+               options.UseSqlServer(Configuration.GetConnectionString("lokalni1"))); // za konstruktor
             
             services.AddPaging(options =>
             {
@@ -40,6 +43,12 @@ namespace Eventi.Web
 
             services.AddMvc();
             services.AddSingleton<IConfiguration>(Configuration);
+
+            services.AddRefitClient<IAuthApi>()
+                .ConfigureHttpClient(c => c.BaseAddress = new Uri(Configuration.GetSection("EventiApi").Value));
+
+            services.AddRefitClient<IEventiApi>()
+                .ConfigureHttpClient(c => c.BaseAddress = new Uri(Configuration.GetSection("EventiApi").Value));
         }
 
         

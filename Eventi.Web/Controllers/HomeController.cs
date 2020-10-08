@@ -1,16 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Eventi.Web.Models;
-using Eventi.Data.Models;
 using Eventi.Web.ViewModels;
 using Eventi.Data.EF;
 using Eventi.Web.Helper;
-using Microsoft.EntityFrameworkCore;
+using Eventi.Sdk;
+using Eventi.Contracts.V1.Requests;
+using Refit;
 
 namespace Eventi.Web.Controllers
 {
@@ -18,10 +17,14 @@ namespace Eventi.Web.Controllers
     {  
       
         private readonly MojContext ctx;
+        private readonly IEventiApi _eventiApi;
 
-        public HomeController(MojContext context)
+        public HomeController(MojContext context, IEventiApi eventiApi)
         {
             ctx = context;
+            _eventiApi = eventiApi;
+
+            //_eventiApi = RestService.For<IEventiApi>("http://localhost:53251");
         }
 
         bool IsSoldOut(int EventId)
@@ -34,7 +37,7 @@ namespace Eventi.Web.Controllers
             return BrojProdanihKarti == MaxKarti;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
              HttpContext.SetLogiraniUser(null);
             // kada se otvori stranica, modul je guest, i nijedan user jos nije logiran
@@ -42,13 +45,22 @@ namespace Eventi.Web.Controllers
             PretragaEventaVM model = new PretragaEventaVM();
             
             DateTime date = DateTime.Now;
-            model.Eventi = ctx.Event.Where(e => e.IsOdobren == true).Where(e => e.IsOtkazan == false)
-                .Where(e => e.DatumOdrzavanja.CompareTo(date) == 1)
-                .Select(e=>new PretragaEventaVM.Rows { 
-                     EventId=e.Id,
-                     Naziv=e.Naziv,
-                     Kategorija=e.Kategorija.ToString(),
-                     Slika=e.Slika
+            var Events = await _eventiApi.GetEventAsync(
+                new EventSearchRequest()
+                {
+                    IsApproved = true,
+                    IsCanceled = false,
+                    Start = DateTime.Now
+                },
+                new PaginationQuery()
+            );
+            model.Eventi = Events.Content.Data
+                .Select(e => new PretragaEventaVM.Rows
+                {
+                    EventId = e.ID,
+                    Naziv = e.Name,
+                    Kategorija = e.EventCategory.ToString(),
+                    Slika = e.Image
                 }).ToList();
 
             foreach (var Event in model.Eventi)
