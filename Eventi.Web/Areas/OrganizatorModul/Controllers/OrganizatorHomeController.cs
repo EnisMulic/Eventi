@@ -19,7 +19,7 @@ using Nexmo.Api;
 
 namespace Eventi.Web.Controllers
 {
-    [Autorizacija(korisnik: false, organizator: true, administrator: false, radnik: false)]
+    //[Autorizacija(korisnik: false, organizator: true, administrator: false, radnik: false)]
     [Area("OrganizatorModul")]
     public class OrganizatorHomeController : Controller
     {
