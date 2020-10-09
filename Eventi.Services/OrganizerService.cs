@@ -62,7 +62,12 @@ namespace Eventi.Services
         {
             if(search != null)
             {
-                if(!string.IsNullOrEmpty(search.Name))
+                if (search.AccountID != null)
+                {
+                    return query.Where(i => i.AccountID == search.AccountID);
+                }
+
+                if (!string.IsNullOrEmpty(search.Name))
                 {
                     query = query.Where(i => i.Name.StartsWith(search.Name));
                 }
