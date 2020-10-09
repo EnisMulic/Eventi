@@ -9,7 +9,6 @@ using Eventi.Data.EF;
 using Eventi.Web.Helper;
 using Eventi.Sdk;
 using Eventi.Contracts.V1.Requests;
-using Refit;
 
 namespace Eventi.Web.Controllers
 {
@@ -23,8 +22,6 @@ namespace Eventi.Web.Controllers
         {
             ctx = context;
             _eventiApi = eventiApi;
-
-            //_eventiApi = RestService.For<IEventiApi>("http://localhost:53251");
         }
 
         bool IsSoldOut(int EventId)
