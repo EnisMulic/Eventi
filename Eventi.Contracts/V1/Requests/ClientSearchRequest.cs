@@ -11,5 +11,7 @@ namespace Eventi.Contracts.V1.Requests
         public string Username { get; set; }
         public string Email { get; set; }
         public string Address { get; set; }
+
+        public int? AccountID { get; set; }
     }
 }

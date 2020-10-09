@@ -29,6 +29,11 @@ namespace Eventi.Services
         {
             if (search != null)
             {
+                if (search.AccountID != null)
+                {
+                    return query.Where(i => i.Person.AccountID == search.AccountID);
+                }
+
                 if (!string.IsNullOrEmpty(search.FirstName))
                 {
                     query = query.Where(i => i.Person.FirstName == search.FirstName);
