@@ -49,7 +49,10 @@ namespace Eventi.Web.Helper
             }
 
             MojContext ctx = context.HttpContext.RequestServices.GetService<MojContext>();
-            
+
+            //Temp
+            await next();
+            return;
 
             if (_korisnik && ctx.Korisnik.Where(k => k.Osoba.LogPodaciId == logPodaci.Id).Any())
             {

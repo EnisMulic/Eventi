@@ -8,22 +8,18 @@
   <ItemGroup>
     <Compile Remove="Areas\ModulGuest\Data\**" />
     <Compile Remove="Areas\ModulKorisnik\Data\**" />
-    <Compile Remove="Areas\ModulRadnik\Data\**" />
     <Compile Remove="Areas\OrganizatorModul\Data\**" />
     <Compile Remove="Views\Organizator\**" />
     <Content Remove="Areas\ModulGuest\Data\**" />
     <Content Remove="Areas\ModulKorisnik\Data\**" />
-    <Content Remove="Areas\ModulRadnik\Data\**" />
     <Content Remove="Areas\OrganizatorModul\Data\**" />
     <Content Remove="Views\Organizator\**" />
     <EmbeddedResource Remove="Areas\ModulGuest\Data\**" />
     <EmbeddedResource Remove="Areas\ModulKorisnik\Data\**" />
-    <EmbeddedResource Remove="Areas\ModulRadnik\Data\**" />
     <EmbeddedResource Remove="Areas\OrganizatorModul\Data\**" />
     <EmbeddedResource Remove="Views\Organizator\**" />
     <None Remove="Areas\ModulGuest\Data\**" />
     <None Remove="Areas\ModulKorisnik\Data\**" />
-    <None Remove="Areas\ModulRadnik\Data\**" />
     <None Remove="Areas\OrganizatorModul\Data\**" />
     <None Remove="Views\Organizator\**" />
   </ItemGroup>
@@ -44,6 +40,7 @@
     <PackageReference Include="Refit.HttpClientFactory" Version="5.2.1" />
     <PackageReference Include="ReflectionIT.Mvc.Paging" Version="4.0.0" />
     <PackageReference Include="SendGrid" Version="9.12.7" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.7.1" />
   </ItemGroup>
 
   <ItemGroup>

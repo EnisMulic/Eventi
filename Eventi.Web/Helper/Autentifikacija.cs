@@ -26,6 +26,7 @@ namespace Eventi.Web.Helper
         }
         public static  LogPodaci GetLogiraniUser(this HttpContext context)
         {
+
             MojContext ctx = context.RequestServices.GetService<MojContext>();
 
 
