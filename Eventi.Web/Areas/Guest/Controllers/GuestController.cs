@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Eventi.Web.Areas.ModulGuest.Controllers
 {   
-    [Area("ModulGuest")]
+    [Area("Guest")]
     public class GuestController : Controller
     {
         private readonly MojContext ctx;

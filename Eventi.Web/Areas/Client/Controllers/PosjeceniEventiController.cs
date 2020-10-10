@@ -14,7 +14,7 @@ using ReflectionIT.Mvc.Paging;
 namespace Eventi.Web.Areas.ModulKorisnik.Controllers
 {
     [Authorization(AccountCategory: AccountCategory.Client)]
-    [Area("ModulKorisnik")]
+    [Area("Client")]
     public class PosjeceniEventiController : Controller
     {
         private readonly MojContext ctx;

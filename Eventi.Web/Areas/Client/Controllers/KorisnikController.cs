@@ -19,7 +19,7 @@ using Eventi.Common;
 namespace Eventi.Web.Areas.ModulKorisnik.Controllers
 {
     [Authorization(AccountCategory: AccountCategory.Client)]
-    [Area("ModulKorisnik")]
+    [Area("Client")]
     public class KorisnikController : Controller
     {
         private readonly MojContext ctx;

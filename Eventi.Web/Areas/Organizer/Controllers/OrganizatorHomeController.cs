@@ -21,7 +21,7 @@ using Eventi.Common;
 namespace Eventi.Web.Controllers
 {
     [Authorization(AccountCategory: AccountCategory.Organizer)]
-    [Area("OrganizatorModul")]
+    [Area("Organizer")]
     public class OrganizatorHomeController : Controller
     {
         private readonly MojContext ctx;
