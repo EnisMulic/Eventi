@@ -17,7 +17,7 @@ using MimeKit;
 
 namespace Eventi.Web.Areas.ModulKorisnik.Controllers
 {   
-    [Autorizacija(korisnik:true,organizator:false,administrator:false,radnik:false)]
+    //[Autorizacija(korisnik:true,organizator:false,administrator:false,radnik:false)]
     [Area("ModulKorisnik")]
     public class KorisnikController : Controller
     {
@@ -27,14 +27,14 @@ namespace Eventi.Web.Areas.ModulKorisnik.Controllers
         {
             ctx = context;
         }
-        public IActionResult Index(string filter)
+        public async Task<IActionResult> Index(string filter)
         {   
             PretragaEventaVM model = new PretragaEventaVM();
            
-            LogPodaci l = HttpContext.GetLogiraniUser();
+            var l = await HttpContext.GetLoggedInUser();
             if (l != null)
             {
-                Korisnik k = ctx.Korisnik.Where(k => k.Osoba.LogPodaciId == l.Id).Include(k => k.Osoba).SingleOrDefault();
+                Korisnik k = ctx.Korisnik.Where(k => k.Osoba.LogPodaciId == l.ID).Include(k => k.Osoba).SingleOrDefault();
                 model.KorisnikId = k.Id;
             }
         
@@ -395,14 +395,14 @@ namespace Eventi.Web.Areas.ModulKorisnik.Controllers
                 client.Disconnect(true);
             }
         }
-        public IActionResult UserPodaci() 
+        public async Task<IActionResult> UserPodaci() 
         {
-            LogPodaci l = HttpContext.GetLogiraniUser();
+            var l = await HttpContext.GetLoggedInUser();
             if (l == null)
             {
                 return Redirect("Index");   // filter null
             }
-            Korisnik kor = ctx.Korisnik.Where(k => k.Osoba.LogPodaciId == l.Id).Include(k => k.Osoba)
+            Korisnik kor = ctx.Korisnik.Where(k => k.Osoba.LogPodaciId == l.ID).Include(k => k.Osoba)
                 .Include(k => k.Osoba.Grad).Include(k=>k.Osoba.LogPodaci)
                 .Include(k => k.Osoba.Grad.Drzava).SingleOrDefault();
             if (kor == null)

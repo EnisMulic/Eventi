@@ -15,7 +15,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Eventi.Web.Areas.Administrator.Controllers
 {
-    [Autorizacija(korisnik: false, organizator: false, administrator: true, radnik: false)]
+    //[Autorizacija(korisnik: false, organizator: false, administrator: true, radnik: false)]
     [Area("Administrator")]
     public class HomeController : Controller
     {
@@ -27,15 +27,15 @@ namespace Eventi.Web.Areas.Administrator.Controllers
             uow = new EventAttenderUnitOfWork(ctx);
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            LogPodaci user = HttpContext.GetLogiraniUser();
+            var user = await HttpContext.GetLoggedInUser();
             AdministratorVM model = new AdministratorVM();
             if (user != null)
             {
                 model = uow.AdministratorRepository.GetAll()
                     .Include(i => i.Osoba)
-                    .Where(i => i.Osoba.LogPodaciId == user.Id)
+                    .Where(i => i.Osoba.LogPodaciId == user.ID)
                     .Select
                     (
                         i => new AdministratorVM

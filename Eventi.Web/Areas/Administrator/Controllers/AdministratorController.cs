@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Eventi.Web.Areas.Administrator.Controllers
 {
-    [Autorizacija(korisnik: false, organizator: false, administrator: true, radnik: false)]
+    //[Autorizacija(korisnik: false, organizator: false, administrator: true, radnik: false)]
     [Area("Administrator")]
     public class AdministratorController : Controller
     {
@@ -131,15 +131,15 @@ namespace Eventi.Web.Areas.Administrator.Controllers
         public bool MatchNewPassword(string NewPasswordConfirmed, string NewPassword) =>
             NewPasswordConfirmed == NewPassword;
 
-        public IActionResult Poruke()
+        public async Task<IActionResult> Poruke()
         {
             var Osoba = uow.OsobaRepository.GetAll()
-                .Where(i => i.LogPodaci.Id == HttpContext.GetLogiraniUser().Id)
+                .Where(i => i.LogPodaci.Id == HttpContext.GetLoggedInUser().Id)
                 .SingleOrDefault();
 
             var model = new ChatVM
             {
-                Username = HttpContext.GetLogiraniUser().Username,
+                Username = (await HttpContext.GetLoggedInUser()).Username,
                 AdministratorId = Osoba.Id,
                 Rows = uow.ChatPorukeRepository.GetAll()
                     .Select

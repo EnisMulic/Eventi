@@ -1,5 +1,4 @@
-﻿using Eventi.Contracts.V1;
-using Eventi.Contracts.V1.Requests;
+﻿using Eventi.Contracts.V1.Requests;
 using Eventi.Contracts.V1.Responses;
 using Refit;
 using System.Threading.Tasks;
@@ -22,5 +21,8 @@ namespace Eventi.Sdk
 
         [Post("/api/v1/Auth/Refresh")]
         Task<ApiResponse<AuthSuccessResponse>> RefreshAsync([Body] RefreshTokenRequest refreshRequest);
+
+        [Get("/api/v1/Auth/Account/{id}")]
+        Task<ApiResponse<AccountResponse>> GetAsync(int id);
     }
 }

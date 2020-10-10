@@ -12,7 +12,7 @@ using ReflectionIT.Mvc.Paging;
 
 namespace Eventi.Web.Areas.ModulKorisnik.Controllers
 {
-    [Autorizacija(korisnik: true, organizator: false, administrator: false, radnik: false)]
+    //[Autorizacija(korisnik: true, organizator: false, administrator: false, radnik: false)]
     [Area("ModulKorisnik")]
     public class PosjeceniEventiController : Controller
     {
@@ -26,10 +26,10 @@ namespace Eventi.Web.Areas.ModulKorisnik.Controllers
         [Obsolete]   
         public async Task<IActionResult> Index(int page=1)
         {
-            LogPodaci l = HttpContext.GetLogiraniUser();
+            var l = await HttpContext.GetLoggedInUser();
             if (l != null)
             {
-                Korisnik k = ctx.Korisnik.Where(k => k.Osoba.LogPodaciId == l.Id).Include(k => k.Osoba).SingleOrDefault();
+                Korisnik k = ctx.Korisnik.Where(k => k.Osoba.LogPodaciId == l.ID).Include(k => k.Osoba).SingleOrDefault();
 
                 var posjeceni = ctx.Kupovina.Where(p => p.KorisnikId == k.Id)
                     .Select(p => new PrikazPosjeceniEventiVM
