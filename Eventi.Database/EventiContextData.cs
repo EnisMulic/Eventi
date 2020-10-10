@@ -3,6 +3,8 @@ using Eventi.Domain;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
+using System.Runtime.InteropServices.ComTypes;
 
 namespace Eventi.Database
 {
@@ -10,6 +12,11 @@ namespace Eventi.Database
     {
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder)
         {
+            var salt = new List<string>();
+            for(int i = 0; i < 3; i++)
+            {
+                salt.Add(HashHelper.GenerateSalt());
+            }
             var tempSalt = HashHelper.GenerateSalt();
             modelBuilder.Entity<Account>()
                 .HasData
@@ -21,13 +28,54 @@ namespace Eventi.Database
                             ID = 1,
                             AccountCategory = Common.AccountCategory.Organizer,
                             Email = "org@eventi.com",
-                            PasswordSalt = tempSalt,
-                            PasswordHash = HashHelper.GenerateHash(tempSalt, "testtest"),
+                            PasswordSalt = salt[0],
+                            PasswordHash = HashHelper.GenerateHash(salt[0], "test"),
                             Username = "org"
+                        },
+                        new Account
+                        {
+                            ID = 2,
+                            AccountCategory = Common.AccountCategory.Administrator,
+                            Email = "admin@eventi.com",
+                            PasswordSalt = salt[1],
+                            PasswordHash = HashHelper.GenerateHash(salt[1], "test"),
+                            Username = "adm"
+                        },
+                        new Account
+                        {
+                            ID = 3,
+                            AccountCategory = Common.AccountCategory.Client,
+                            Email = "client@eventi.com",
+                            PasswordSalt = salt[2],
+                            PasswordHash = HashHelper.GenerateHash(salt[2], "test"),
+                            Username = "cli"
                         }
                     }
                 );
 
+
+            modelBuilder.Entity<Person>()
+                .HasData
+                (
+                    new List<Person>()
+                    {
+                        new Person()
+                        {
+                            ID = 1,
+                            AccountID = 2,
+                            FirstName = "Admin",
+                            LastName = "Admin"
+                        },
+                        new Person()
+                        {
+                            ID = 2,
+                            AccountID = 3,
+                            FirstName = "Person",
+                            LastName = "Person"
+                        }
+
+                    }
+                );
 
             modelBuilder.Entity<Organizer>()
                 .HasData
@@ -36,7 +84,35 @@ namespace Eventi.Database
                     {
                         new Organizer
                         {
-                            ID = 1, AccountID = 1
+                            ID = 1, 
+                            AccountID = 1,
+                            Name = "Organizer"
+                        }
+                    }
+                );
+
+            modelBuilder.Entity<Administrator>()
+                .HasData
+                (
+                    new List<Administrator>()
+                    {
+                        new Administrator
+                        {
+                            ID = 1, 
+                            PersonID = 1
+                        }
+                    }
+                );
+
+            modelBuilder.Entity<Client>()
+                .HasData
+                (
+                    new List<Client>()
+                    {
+                        new Client
+                        {
+                            ID = 1, 
+                            PersonID = 2
                         }
                     }
                 );
