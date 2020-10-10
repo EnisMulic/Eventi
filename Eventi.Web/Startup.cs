@@ -7,7 +7,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ReflectionIT.Mvc.Paging;
-using SignalRChat.Hubs;
 using Refit;
 using Eventi.Sdk;
 using AutoMapper;
@@ -79,8 +78,6 @@ namespace Eventi.Web
                 endpoints.MapControllerRoute(   
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
-
-                endpoints.MapHub<ChatHub>("/chatHub");
             });
         }
     }
