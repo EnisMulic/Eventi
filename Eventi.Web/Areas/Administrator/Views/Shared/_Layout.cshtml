@@ -2,7 +2,7 @@
 @using Eventi.Web.Helper
 @*@model Eventi.Web.Areas.Administrator.Models.AdministratorVM*@
 @{ 
-    LogPodaci user = Context.GetLogiraniUser();
+    var user = await Context.GetLoggedInUser();
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -23,7 +23,7 @@
                     <li>
                         <a class="navbar-brand" id="AdminUsername"
                            asp-area="Administrator" asp-controller="Administrator"
-                           asp-action="AdminProfil" asp-route-id="@user.Id">@user.Username</a>
+                           asp-action="AdminProfil" asp-route-id="@user.ID">@user.Username</a>
                     </li>
                     <li>
                         <a class="navbar-brand" id="AdminUsername"

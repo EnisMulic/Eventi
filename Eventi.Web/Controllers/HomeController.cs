@@ -36,7 +36,7 @@ namespace Eventi.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-             HttpContext.SetLogiraniUser(null);
+            HttpContext.SetLoggedInUser(null);
             // kada se otvori stranica, modul je guest, i nijedan user jos nije logiran
 
             PretragaEventaVM model = new PretragaEventaVM();
@@ -60,8 +60,8 @@ namespace Eventi.Web.Controllers
                     Slika = e.Image
                 }).ToList();
 
-            foreach (var Event in model.Eventi)
-                Event.SoldOut = IsSoldOut(Event.EventId);
+            //foreach (var Event in model.Eventi)
+            //    Event.SoldOut = IsSoldOut(Event.EventId);
             return View(model);
 
         }

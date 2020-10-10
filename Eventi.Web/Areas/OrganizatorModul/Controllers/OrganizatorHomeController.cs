@@ -16,10 +16,11 @@ using SendGrid;
 using SendGrid.Helpers.Mail;
 using Microsoft.Extensions.Configuration;
 using Nexmo.Api;
+using Eventi.Common;
 
 namespace Eventi.Web.Controllers
 {
-    //[Autorizacija(korisnik: false, organizator: true, administrator: false, radnik: false)]
+    [Authorization(AccountCategory: AccountCategory.Organizer)]
     [Area("OrganizatorModul")]
     public class OrganizatorHomeController : Controller
     {
@@ -51,15 +52,15 @@ namespace Eventi.Web.Controllers
             }).Where(g => g.OrganizatorID == orgId && g.DatumOdrzavanja > DateTime.Today).ToList();
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             Organizator org = new Organizator();
-            LogPodaci l = HttpContext.GetLogiraniUser();
-            if (l != null)
-            {
-                 org = ctx.Organizator.Where(o => o.LogPodaciId == l.Id).SingleOrDefault();
+            var l = await HttpContext.GetLoggedInUser();
+            //if (l != null)
+            //{
+            //     org = ctx.Organizator.Where(o => o.LogPodaciId == l.ID).SingleOrDefault();
                 
-            }
+            //}
 
             List<OrganizatorEventVM> eventi = getListuEvenata(org.Id);
 

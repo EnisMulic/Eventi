@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace Eventi.Web.Helper
 {
-    public static class MyCookieExtension
+    public static class CookieExtension
     {
         public static T GetCookieJson<T>(this HttpRequest request, string key)
         {
             string strValue = request.Cookies[key];
             return strValue == null
-                ? default(T)
+                ? default
                 : JsonConvert.DeserializeObject<T>(strValue);
         }
 

@@ -11,6 +11,7 @@ using Eventi.Web.ViewModels;
 using Eventi.Sdk;
 using Eventi.Contracts.V1.Requests;
 using System.IdentityModel.Tokens.Jwt;
+using Eventi.Contracts.V1.Responses;
 
 namespace Eventi.Web.Controllers
 {
@@ -65,7 +66,7 @@ namespace Eventi.Web.Controllers
                 }
             }
          
-            TempData["error_poruka"] = "Niste unijeli ispravne podatke za prijavu";
+            TempData["error_message"] = "Niste unijeli ispravne podatke za prijavu";
             //return RedirectToAction("Index");
 
             return Redirect("/ModulKorisnik/Korisnik/Index");
@@ -77,9 +78,9 @@ namespace Eventi.Web.Controllers
             var response = await _eventiApi.GetClientAsync(new ClientSearchRequest() { AccountID = accountID });
             var client = response.Content.Data.ToList()[0];
 
-            HttpContext.SetLogiraniUser(new LogPodaci() 
+            HttpContext.SetLoggedInUser(new AccountResponse() 
             {
-                Id = client.ID,
+                ID = client.ID,
                 Username = client.Username,
                 Email = client.Email
             });
@@ -92,9 +93,9 @@ namespace Eventi.Web.Controllers
             var response = await _eventiApi.GetAdministratorAsync(new AdministratorSearchRequest() { AccountID = accountID });
             var administrator = response.Content.Data.ToList()[0];
 
-            HttpContext.SetLogiraniUser(new LogPodaci()
+            HttpContext.SetLoggedInUser(new AccountResponse()
             {
-                Id = administrator.ID,
+                ID = administrator.ID,
                 Username = administrator.Username,
                 Email = administrator.Email
             });
@@ -107,9 +108,9 @@ namespace Eventi.Web.Controllers
             var response = await _eventiApi.GetOrganizerAsync(new OrganizerSearchRequest() { AccountID = accountID });
             var organizer = response.Content.Data.ToList()[0];
 
-            HttpContext.SetLogiraniUser(new LogPodaci()
+            HttpContext.SetLoggedInUser(new AccountResponse()
             {
-                Id = organizer.ID,
+                ID = organizer.ID,
                 Username = organizer.Username,
                 Email = organizer.Email
             });
