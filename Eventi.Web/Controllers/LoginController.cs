@@ -14,6 +14,7 @@ using System.IdentityModel.Tokens.Jwt;
 using Eventi.Contracts.V1.Responses;
 using AutoMapper;
 using Eventi.Web.Models;
+using Newtonsoft.Json.Linq;
 
 namespace Eventi.Web.Controllers
 {
@@ -44,15 +45,16 @@ namespace Eventi.Web.Controllers
                 return View("Index", input);
             }
 
-            var account = await _authApi.LoginAsync(new LoginRequest()
+            var response = await _authApi.LoginAsync(new LoginRequest()
             {
                 Username = input.Username,
                 Password = input.Password
             });
 
-            if(account.Content != null)
+
+            if(response.Content != null)
             {
-                var jwt = account.Content.Token;
+                var jwt = response.Content.Token;
                 var handler = new JwtSecurityTokenHandler();
                 var token = handler.ReadJwtToken(jwt);
 
@@ -69,11 +71,11 @@ namespace Eventi.Web.Controllers
                         return await HandleOrganizerLogin(accountID);
                 }
             }
-         
-            TempData["error_message"] = "Niste unijeli ispravne podatke za prijavu";
-            //return RedirectToAction("Index");
 
-            return Redirect("/ModulKorisnik/Korisnik/Index");
+
+            TempData["error_message"] = response.Error.Content;
+
+            return Redirect("/Index");
 
         }
 
@@ -86,7 +88,7 @@ namespace Eventi.Web.Controllers
 
             HttpContext.SetLoggedInUser(account);
 
-            return Redirect("/ModulKorisnik/Korisnik/Index");
+            return Redirect("/Client/Korisnik/Index");
         }
 
         private async Task<IActionResult> HandleAdministratorLogin(int accountID)
@@ -108,7 +110,7 @@ namespace Eventi.Web.Controllers
             var account = _mapper.Map<Account>(organizer);
             HttpContext.SetLoggedInUser(account);
 
-            return Redirect("/OrganizatorModul/OrganizatorHome/Index");
+            return Redirect("/Organizer/OrganizatorHome/Index");
         }
 
         public IActionResult LogOut()

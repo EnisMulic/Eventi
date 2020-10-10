@@ -1,5 +1,6 @@
 ﻿using Eventi.Contracts.V1.Requests;
 using Eventi.Contracts.V1.Responses;
+using Newtonsoft.Json.Linq;
 using Refit;
 using System.Threading.Tasks;
 
