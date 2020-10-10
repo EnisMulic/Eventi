@@ -14,10 +14,11 @@ using Microsoft.EntityFrameworkCore;
 using MailKit.Net.Smtp;
 using MailKit;
 using MimeKit;
+using Eventi.Common;
 
 namespace Eventi.Web.Areas.ModulKorisnik.Controllers
-{   
-    //[Autorizacija(korisnik:true,organizator:false,administrator:false,radnik:false)]
+{
+    [Authorization(AccountCategory: AccountCategory.Client)]
     [Area("ModulKorisnik")]
     public class KorisnikController : Controller
     {
@@ -32,11 +33,11 @@ namespace Eventi.Web.Areas.ModulKorisnik.Controllers
             PretragaEventaVM model = new PretragaEventaVM();
            
             var l = await HttpContext.GetLoggedInUser();
-            if (l != null)
-            {
-                Korisnik k = ctx.Korisnik.Where(k => k.Osoba.LogPodaciId == l.ID).Include(k => k.Osoba).SingleOrDefault();
-                model.KorisnikId = k.Id;
-            }
+            //if (l != null)
+            //{
+            //    Korisnik k = ctx.Korisnik.Where(k => k.Osoba.LogPodaciId == l.ID).Include(k => k.Osoba).SingleOrDefault();
+            //    model.KorisnikId = k.Id;
+            //}
         
             DateTime date = DateTime.Now;
            

@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Eventi.Common;
 using Eventi.Data.EF;
 using Eventi.Data.Models;
 using Eventi.Data.Repository;
@@ -15,7 +15,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Eventi.Web.Areas.Administrator.Controllers
 {
-    //[Autorizacija(korisnik: false, organizator: false, administrator: true, radnik: false)]
+    [Authorization(AccountCategory: AccountCategory.Administrator)]
     [Area("Administrator")]
     public class HomeController : Controller
     {
@@ -31,28 +31,28 @@ namespace Eventi.Web.Areas.Administrator.Controllers
         {
             var user = await HttpContext.GetLoggedInUser();
             AdministratorVM model = new AdministratorVM();
-            if (user != null)
-            {
-                model = uow.AdministratorRepository.GetAll()
-                    .Include(i => i.Osoba)
-                    .Where(i => i.Osoba.LogPodaciId == user.ID)
-                    .Select
-                    (
-                        i => new AdministratorVM
-                        {
-                            Id       = i.Id,
-                            Ime      = i.Osoba.Ime,
-                            Prezime  = i.Osoba.Prezime,
-                            Email    = i.Osoba.LogPodaci.Email,
-                            Username = i.Osoba.LogPodaci.Username,
-                            Password = i.Osoba.LogPodaci.Password,
-                            Telefon  = i.Osoba.Telefon,
-                            Grad     = i.Osoba.Grad.Naziv
-                        }
-                    )
-                    .SingleOrDefault();
+            //if (user != null)
+            //{
+            //    model = uow.AdministratorRepository.GetAll()
+            //        .Include(i => i.Osoba)
+            //        .Where(i => i.Osoba.LogPodaciId == user.ID)
+            //        .Select
+            //        (
+            //            i => new AdministratorVM
+            //            {
+            //                Id       = i.Id,
+            //                Ime      = i.Osoba.Ime,
+            //                Prezime  = i.Osoba.Prezime,
+            //                Email    = i.Osoba.LogPodaci.Email,
+            //                Username = i.Osoba.LogPodaci.Username,
+            //                Password = i.Osoba.LogPodaci.Password,
+            //                Telefon  = i.Osoba.Telefon,
+            //                Grad     = i.Osoba.Grad.Naziv
+            //            }
+            //        )
+            //        .SingleOrDefault();
                 
-            }
+            //}
             return View(model);
         }
 

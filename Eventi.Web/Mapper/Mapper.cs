@@ -9,9 +9,12 @@ namespace Eventi.Web.Mapper
         public Mapper()
         {
             CreateMap<AccountResponse, Account>();
-            CreateMap<ClientResponse, Account>();
-            CreateMap<AdministratorResponse, Account>();
-            CreateMap<OrganizerResponse, Account>();
+            CreateMap<ClientResponse, Account>()
+                .ForMember(dest => dest.ID, opt => opt.MapFrom(src => src.AccountID));
+            CreateMap<AdministratorResponse, Account>()
+                .ForMember(dest => dest.ID, opt => opt.MapFrom(src => src.AccountID));
+            CreateMap<OrganizerResponse, Account>()
+                .ForMember(dest => dest.ID, opt => opt.MapFrom(src => src.AccountID));
         }
     }
 }

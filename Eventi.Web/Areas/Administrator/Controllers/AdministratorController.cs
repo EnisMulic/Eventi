@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Eventi.Common;
 using Eventi.Data.EF;
 using Eventi.Data.Models;
 using Eventi.Data.Repository;
@@ -12,7 +13,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Eventi.Web.Areas.Administrator.Controllers
 {
-    //[Autorizacija(korisnik: false, organizator: false, administrator: true, radnik: false)]
+    [Authorization(AccountCategory: AccountCategory.Administrator)]
     [Area("Administrator")]
     public class AdministratorController : Controller
     {

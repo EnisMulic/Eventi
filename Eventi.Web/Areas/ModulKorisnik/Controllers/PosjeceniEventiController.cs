@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Eventi.Common;
 using Eventi.Data.EF;
 using Eventi.Data.Models;
 using Eventi.Web.Areas.ModulKorisnik.Models;
@@ -12,7 +13,7 @@ using ReflectionIT.Mvc.Paging;
 
 namespace Eventi.Web.Areas.ModulKorisnik.Controllers
 {
-    //[Autorizacija(korisnik: true, organizator: false, administrator: false, radnik: false)]
+    [Authorization(AccountCategory: AccountCategory.Client)]
     [Area("ModulKorisnik")]
     public class PosjeceniEventiController : Controller
     {
