@@ -14,6 +14,7 @@
             public const string RegisterOrganizer = Base + "/Auth/Register/Organizer";
             public const string Login = Base + "/Auth/Login";
             public const string Refresh = Base + "/Auth/Refresh";
+            public const string Get = Base + "/Auth/Account/{id}";
         }
 
         public static class Client

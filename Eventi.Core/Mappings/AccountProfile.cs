@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
 using Eventi.Contracts.V1.Requests;
+using Eventi.Contracts.V1.Responses;
 using Eventi.Domain;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Eventi.Core.Mappings
 {
@@ -11,6 +9,7 @@ namespace Eventi.Core.Mappings
     {
         public AccountProfile()
         {
+            CreateMap<Account, AccountResponse>();
             CreateMap<RegistrationRequest, Account>();
             CreateMap<ClientRegistrationRequest, Account>();
             CreateMap<AdministratorRegistrationRequest, Account>();
