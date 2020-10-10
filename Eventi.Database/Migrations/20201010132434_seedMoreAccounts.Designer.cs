@@ -4,14 +4,16 @@ using Eventi.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Eventi.Database.Migrations
 {
     [DbContext(typeof(EventiContext))]
-    partial class EventiContextModelSnapshot : ModelSnapshot
+    [Migration("20201010132434_seedMoreAccounts")]
+    partial class seedMoreAccounts
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
