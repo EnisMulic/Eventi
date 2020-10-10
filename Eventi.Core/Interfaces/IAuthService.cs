@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Eventi.Contracts.V1.Requests;
+using Eventi.Contracts.V1.Responses;
 using Eventi.Domain;
 
 namespace Eventi.Core.Interfaces
@@ -11,5 +12,6 @@ namespace Eventi.Core.Interfaces
         Task<AuthenticationResult> RegisterOrganizerAsync(OrganizerRegistrationRequest request);
         Task<AuthenticationResult> LoginAsync(LoginRequest request);
         Task<AuthenticationResult> RefreshTokenAsync(RefreshTokenRequest request);
+        Task<AccountResponse> GetAsync(int id);
     }
 }

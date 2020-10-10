@@ -16,6 +16,7 @@ using Eventi.Domain;
 using AutoMapper;
 using Eventi.Core.Helpers;
 using Eventi.Common;
+using Eventi.Contracts.V1.Responses;
 
 namespace Eventi.Services
 {
@@ -334,6 +335,12 @@ namespace Eventi.Services
                 .AsNoTracking()
                 .Where(i => i.Username == Username)
                 .SingleOrDefaultAsync();
+        }
+
+        public async Task<AccountResponse> GetAsync(int id)
+        {
+            var account = await _context.Accounts.FindAsync(id);
+            return _mapper.Map<AccountResponse>(account);
         }
     }
 }

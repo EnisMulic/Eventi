@@ -13,10 +13,10 @@ namespace Eventi.WebAPI.Controllers.V1
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly IAuthService _userAccountService;
-        public AuthController(IAuthService userAccountService)
+        private readonly IAuthService _authService;
+        public AuthController(IAuthService authService)
         {
-            _userAccountService = userAccountService;
+            _authService = authService;
         }
 
         [HttpPost(ApiRoutes.Auth.RegisterClient)]
@@ -30,7 +30,7 @@ namespace Eventi.WebAPI.Controllers.V1
                 });
             }
 
-            var authResponse = await _userAccountService.RegisterClientAsync(request);
+            var authResponse = await _authService.RegisterClientAsync(request);
 
             if (!authResponse.Success)
             {
@@ -64,7 +64,7 @@ namespace Eventi.WebAPI.Controllers.V1
                 });
             }
 
-            var authResponse = await _userAccountService.RegisterAdministratorAsync(request);
+            var authResponse = await _authService.RegisterAdministratorAsync(request);
 
             if (!authResponse.Success)
             {
@@ -98,7 +98,7 @@ namespace Eventi.WebAPI.Controllers.V1
                 });
             }
 
-            var authResponse = await _userAccountService.RegisterOrganizerAsync(request);
+            var authResponse = await _authService.RegisterOrganizerAsync(request);
 
             if (!authResponse.Success)
             {
@@ -124,7 +124,7 @@ namespace Eventi.WebAPI.Controllers.V1
         [HttpPost(ApiRoutes.Auth.Login)]
         public async Task<IActionResult> Authenticate([FromBody] LoginRequest request)
         {
-            var authResponse = await _userAccountService.LoginAsync(request);
+            var authResponse = await _authService.LoginAsync(request);
 
             if (!authResponse.Success)
             {
@@ -150,7 +150,7 @@ namespace Eventi.WebAPI.Controllers.V1
         [HttpPost(ApiRoutes.Auth.Refresh)]
         public async Task<IActionResult> Refresh([FromBody] RefreshTokenRequest request)
         {
-            var authResponse = await _userAccountService.RefreshTokenAsync(request);
+            var authResponse = await _authService.RefreshTokenAsync(request);
 
             if (!authResponse.Success)
             {
@@ -172,5 +172,19 @@ namespace Eventi.WebAPI.Controllers.V1
                 }
             );
         }
+
+        [HttpGet(ApiRoutes.Auth.Get)]
+        public async Task<IActionResult> Get(int id)
+        {
+            var response = await _authService.GetAsync(id);
+
+            if(response == null)
+            {
+                return NoContent();
+            }
+
+            return Ok(response);
+        }
+
     }
 }
