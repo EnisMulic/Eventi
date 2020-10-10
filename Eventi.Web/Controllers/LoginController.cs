@@ -12,6 +12,8 @@ using Eventi.Sdk;
 using Eventi.Contracts.V1.Requests;
 using System.IdentityModel.Tokens.Jwt;
 using Eventi.Contracts.V1.Responses;
+using AutoMapper;
+using Eventi.Web.Models;
 
 namespace Eventi.Web.Controllers
 {
@@ -20,12 +22,14 @@ namespace Eventi.Web.Controllers
         private MojContext ctx;
         private readonly IAuthApi _authApi;
         private readonly IEventiApi _eventiApi;
+        private readonly IMapper _mapper;
 
-        public LoginController(MojContext context, IAuthApi authApi, IEventiApi eventiApi)
+        public LoginController(MojContext context, IAuthApi authApi, IEventiApi eventiApi, IMapper mapper)
         {
             ctx = context;
             _authApi = authApi;
             _eventiApi = eventiApi;
+            _mapper = mapper;
         }
         public IActionResult Index()
         {
@@ -78,12 +82,9 @@ namespace Eventi.Web.Controllers
             var response = await _eventiApi.GetClientAsync(new ClientSearchRequest() { AccountID = accountID });
             var client = response.Content.Data.ToList()[0];
 
-            HttpContext.SetLoggedInUser(new AccountResponse() 
-            {
-                ID = client.ID,
-                Username = client.Username,
-                Email = client.Email
-            });
+            var account = _mapper.Map<Account>(client);
+
+            HttpContext.SetLoggedInUser(account);
 
             return Redirect("/ModulKorisnik/Korisnik/Index");
         }
@@ -93,12 +94,8 @@ namespace Eventi.Web.Controllers
             var response = await _eventiApi.GetAdministratorAsync(new AdministratorSearchRequest() { AccountID = accountID });
             var administrator = response.Content.Data.ToList()[0];
 
-            HttpContext.SetLoggedInUser(new AccountResponse()
-            {
-                ID = administrator.ID,
-                Username = administrator.Username,
-                Email = administrator.Email
-            });
+            var account = _mapper.Map<Account>(administrator);
+            HttpContext.SetLoggedInUser(account);
 
             return Redirect("/Administrator/Home/Index");
         }
@@ -108,12 +105,8 @@ namespace Eventi.Web.Controllers
             var response = await _eventiApi.GetOrganizerAsync(new OrganizerSearchRequest() { AccountID = accountID });
             var organizer = response.Content.Data.ToList()[0];
 
-            HttpContext.SetLoggedInUser(new AccountResponse()
-            {
-                ID = organizer.ID,
-                Username = organizer.Username,
-                Email = organizer.Email
-            });
+            var account = _mapper.Map<Account>(organizer);
+            HttpContext.SetLoggedInUser(account);
 
             return Redirect("/OrganizatorModul/OrganizatorHome/Index");
         }

@@ -2,7 +2,6 @@ using System;
 using Eventi.Data.EF;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,7 +10,7 @@ using ReflectionIT.Mvc.Paging;
 using SignalRChat.Hubs;
 using Refit;
 using Eventi.Sdk;
-using System.Net.Http.Headers;
+using AutoMapper;
 
 namespace Eventi.Web
 {
@@ -31,7 +30,9 @@ namespace Eventi.Web
             
             services.AddDbContext<MojContext>(options =>
                options.UseSqlServer(Configuration.GetConnectionString("lokalni1"))); // za konstruktor
-            
+
+            services.AddAutoMapper(typeof(Startup));
+
             services.AddPaging(options =>
             {
                 options.ViewName = "Bootstrap4";
