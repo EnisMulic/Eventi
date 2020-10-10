@@ -13,7 +13,8 @@ namespace Eventi.Core.Mappings
             CreateMap<Organizer, OrganizerUpdateRequest>().ReverseMap();
             CreateMap<Organizer, OrganizerResponse>()
                 .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.Account.Username))
-                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Account.Email));
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Account.Email))
+                .ForMember(dest => dest.AccountID, opt => opt.MapFrom(src => src.Account.ID));
             CreateMap<OrganizerRegistrationRequest, Organizer>();
         }
     }
