@@ -11,7 +11,7 @@ namespace Eventi.Sdk
     {
         #region Country
         [Get("/api/v1/Country")]
-        Task<ApiResponse<PagedResponse<CountryResponse>>> GetCountryAsync(CountrySearchRequest request, PaginationQuery pagination = default);
+        Task<ApiResponse<PagedResponse<CountryResponse>>> GetCountryAsync(CountrySearchRequest request = default, PaginationQuery pagination = default);
 
         [Get("/api/v1/Country/{id}")]
         Task<ApiResponse<CountryResponse>> GetCountryByIdAsync(int id);
@@ -33,18 +33,21 @@ namespace Eventi.Sdk
 
         #region Client
         [Get("/api/v1/Client")]
-        Task<ApiResponse<PagedResponse<ClientResponse>>> GetClientAsync(ClientSearchRequest request, PaginationQuery pagination = default);
+        Task<ApiResponse<PagedResponse<ClientResponse>>> GetClientAsync(ClientSearchRequest request = default, PaginationQuery pagination = default);
+
+        [Delete("/api/v1/Client/{id}")]
+        Task<ApiResponse<bool>> DeleteClientAsync(int id);
         #endregion
 
         #region Administrator
         [Get("/api/v1/Administrator")]
-        Task<ApiResponse<PagedResponse<AdministratorResponse>>> GetAdministratorAsync(AdministratorSearchRequest request, PaginationQuery pagination = default);
+        Task<ApiResponse<PagedResponse<AdministratorResponse>>> GetAdministratorAsync(AdministratorSearchRequest request = default, PaginationQuery pagination = default);
         #endregion
 
 
         #region Organizer
         [Get("/api/v1/Organizer")]
-        Task<ApiResponse<PagedResponse<OrganizerResponse>>> GetOrganizerAsync(OrganizerSearchRequest request, PaginationQuery pagination = default);
+        Task<ApiResponse<PagedResponse<OrganizerResponse>>> GetOrganizerAsync(OrganizerSearchRequest request = default, PaginationQuery pagination = default);
         #endregion
     }
 }

@@ -4,10 +4,10 @@
         $.get("../" + e.target.id + "/" + e.target.id + "List", function (response) {
             $("#Main-Display").html(response);
 
-            SetActionsInfo(e.target.id);
-            SetActionsUredi(e.target.id);
-            SetActionDodaj(e.target.id);
-            SetActionUkloni(e.target.id, response);
+            SetActionInfo(e.target.id);
+            SetActionEdit(e.target.id);
+            SetActionCreate(e.target.id);
+            SetActionRemove(e.target.id);
         });
     });
 
@@ -15,7 +15,7 @@
         $("#Main-Display").html("");
     });
 
-    function SetActionsInfo(type) {
+    function SetActionInfo(type) {
         $("button[for=\"Info\"]").on('click', function (e) {
             $.get("../" + type + "/" + type + "Info?id=" + e.target.id, function (response) {
                 $("#Main-Display").html(response);
@@ -25,27 +25,27 @@
         });
     }
 
-    function SetActionsUredi(type) {
-        $("button[for=\"Uredi\"]").on('click', function (e) {
-            $.get("../" + type + "/" + type + "Uredi?id=" + e.target.id, function (response) {
+    function SetActionEdit(type) {
+        $("button[for=\"Edit\"]").on('click', function (e) {
+            $.get("../" + type + "/" + type + "Edit?id=" + e.target.id, function (response) {
                 $("#Main-Display").html(response);
                 $.validator.unobtrusive.parse(".ea-form");
             });
         });
     }
 
-    function SetActionDodaj(type) {
-        $("button[for=\"Dodaj\"]").on('click', function (e) {
-            $.get("../" + type + "/" + type + "Dodaj", function (response) {
+    function SetActionCreate(type) {
+        $("button[for=\"Create\"]").on('click', function (e) {
+            $.get("../" + type + "/" + type + "Create", function (response) {
                 $("#Main-Display").html(response);
                 $.validator.unobtrusive.parse(".ea-form");
             });
         });
     }
 
-    function SetActionUkloni(type) {
-        $("button[for=\"Ukloni\"]").on('click', function (e) {
-            $.get("../" + type + "/" + type + "Ukloni?id=" + e.target.id, function () {
+    function SetActionRemove(type) {
+        $("button[for=\"Remove\"]").on('click', function (e) {
+            $.get("../" + type + "/" + type + "Remove?id=" + e.target.id, function () {
                 $("#Main-Display").html("");  
             });
         });
