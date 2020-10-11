@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Eventi.Common;
+using Eventi.Contracts.V1.Requests;
 using Eventi.Data.EF;
 using Eventi.Data.Models;
 using Eventi.Data.Repository;
+using Eventi.Sdk;
 using Eventi.Web.Areas.Administrator.Models;
 using Eventi.Web.Helper;
 using Microsoft.AspNetCore.Mvc;
@@ -20,28 +22,28 @@ namespace Eventi.Web.Areas.Administrator.Controllers
     {
         private readonly MojContext ctx;
         private readonly EventAttenderUnitOfWork uow;
-        public ClientController(MojContext context)
+        private readonly IEventiApi _eventiApi;
+        public ClientController(MojContext context, IEventiApi eventiApi)
         {
             ctx = context;
             uow = new EventAttenderUnitOfWork(ctx);
+            _eventiApi = eventiApi;
         }
-        public IActionResult ClientList()
+        public async Task<IActionResult> ClientList()
         {
-            var model = uow.KorisnikRepository.GetAll()
+            var response = await _eventiApi.GetClientAsync();
+            var model = response.Content.Data
                 .Select
                 (
                     i => new KorisnikVM
                     {
-                        Id = i.Id,
-                        Ime = i.Osoba.Ime,
-                        Prezime = i.Osoba.Prezime,
-                        Username = i.Osoba.LogPodaci.Username,
-                        Email = i.Osoba.LogPodaci.Email,
-                        Telefon = i.Osoba.Telefon,
-                        Adresa = i.Adresa,
-                        GradId = i.Osoba.Grad.Id,
-                        GradNaziv = i.Osoba.Grad.Naziv,
-                        PostanskiBroj = i.PostanskiBroj
+                        Id = i.ID,
+                        Ime = i.FirstName,
+                        Prezime = i.LastName,
+                        Username = i.Username,
+                        Email = i.Email,
+                        Telefon = i.PhoneNumber,
+                        Adresa = i.Address
                     }
                 )
                 .ToList();
@@ -49,15 +51,9 @@ namespace Eventi.Web.Areas.Administrator.Controllers
             return View(model);
         }
 
-        public IActionResult ClientUkloni(int Id)
+        public async Task<IActionResult> ClientRemove(int Id)
         {
-            var item = uow.KorisnikRepository.Get(Id);
-
-            if (item != null)
-            {
-                uow.KorisnikRepository.Remove(Id);
-            }
-
+            await _eventiApi.DeleteClientAsync(Id); 
             return Redirect("Index");
         }
 
@@ -87,7 +83,7 @@ namespace Eventi.Web.Areas.Administrator.Controllers
             return View(model);
         }
 
-        public IActionResult ClientUredi(int Id)
+        public IActionResult ClientEdit(int Id)
         {
             var model = uow.KorisnikRepository.GetAll()
                 .Select
@@ -118,7 +114,7 @@ namespace Eventi.Web.Areas.Administrator.Controllers
             return View(model);
         }
 
-        public IActionResult ClientSnimi(KorisnikVM model)
+        public IActionResult ClientSave(KorisnikVM model)
         {
             var item = uow.KorisnikRepository.GetAll()
                 .Include(i => i.Osoba)
@@ -143,7 +139,7 @@ namespace Eventi.Web.Areas.Administrator.Controllers
             return Redirect("Index");
         }
 
-        public IActionResult ClientDodaj()
+        public IActionResult ClientCreate()
         {
             var model = new KorisnikVM
             {
