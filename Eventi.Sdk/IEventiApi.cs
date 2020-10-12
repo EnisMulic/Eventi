@@ -65,6 +65,19 @@ namespace Eventi.Sdk
         #region Organizer
         [Get("/api/v1/Organizer")]
         Task<ApiResponse<PagedResponse<OrganizerResponse>>> GetOrganizerAsync(OrganizerSearchRequest request = default, PaginationQuery pagination = default);
+
+        [Get("/api/v1/Organizer/{id}")]
+        Task<ApiResponse<OrganizerResponse>> GetOrganizerAsync(int id);
+
+        [Post("/api/v1/Organizer")]
+        Task<ApiResponse<OrganizerResponse>> CreateOrganizerAsync(OrganizerInsertRequest request);
+
+        [Put("/api/v1/Organizer/{id}")]
+        Task<ApiResponse<OrganizerResponse>> UpdateOrganizerAsync(int id, OrganizerUpdateRequest request);
+
+        [Delete("/api/v1/Organizer/{id}")]
+        Task<ApiResponse<bool>> DeleteOrganizerAsync(int id);
+
         #endregion
 
         #region Performer
