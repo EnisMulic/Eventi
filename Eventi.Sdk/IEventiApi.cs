@@ -66,5 +66,23 @@ namespace Eventi.Sdk
         [Delete("/api/v1/Performer/{id}")]
         Task<ApiResponse<bool>> DeletePerformerAsync(int id);
         #endregion
+
+        #region Sponsor
+        [Get("/api/v1/Sponsor")]
+        Task<ApiResponse<PagedResponse<SponsorResponse>>> GetSponsorAsync(SponsorSearchRequest request = default, PaginationQuery pagination = default);
+
+        [Get("/api/v1/Sponsor/{id}")]
+        Task<ApiResponse<SponsorResponse>> GetSponsorAsync(int id);
+
+        [Post("/api/v1/Sponsor")]
+        Task<ApiResponse<SponsorResponse>> CreateSponsorAsync(SponsorUpsertRequest request);
+
+        [Put("/api/v1/Sponsor/{id}")]
+        Task<ApiResponse<SponsorResponse>> UpdateSponsorAsync(int id, SponsorUpsertRequest request);
+
+        [Delete("/api/v1/Sponsor/{id}")]
+        Task<ApiResponse<bool>> DeleteSponsorAsync(int id);
+        #endregion
+
     }
 }
