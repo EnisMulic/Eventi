@@ -1,12 +1,12 @@
 ﻿using Eventi.Common;
-using Eventi.Data.EF;
-using Eventi.Data.Models;
-using Eventi.Data.Repository;
+using Eventi.Contracts.V1.Requests;
+using Eventi.Sdk;
 using Eventi.Web.Areas.Administrator.Models;
 using Eventi.Web.Helper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Eventi.Web.Areas.Administrator.Controllers
 {
@@ -14,26 +14,24 @@ namespace Eventi.Web.Areas.Administrator.Controllers
     [Area("Administrator")]
     public class VenueController : Controller
     {
-        private readonly MojContext ctx;
-        private readonly EventAttenderUnitOfWork uow;
-        public VenueController(MojContext context)
+        private readonly IEventiApi _eventiApi;
+        public VenueController(IEventiApi eventiApi)
         {
-            ctx = context;
-            uow = new EventAttenderUnitOfWork(ctx);
+            _eventiApi = eventiApi;
         }
-        public IActionResult VenueList()
+        public async Task<IActionResult> VenueList()
         {
-            var model = uow.ProstorOdrzavanjaRepository.GetAll()
+            var response = await _eventiApi.GetVenueAsync();
+            var model = response.Content.Data
                 .Select
                 (
-                    i => new ProstorOdrzavanjaVM
+                    i => new VenueVM
                     {
-                        Id = i.Id,
-                        Naziv = i.Naziv,
-                        Adresa = i.Adresa,
-                        GradId = i.Grad.Id,
-                        GradNaziv = i.Grad.Naziv,
-                        TipProstoraOdrzavanja = i.TipProstoraOdrzavanja
+                        ID = i.ID,
+                        Name = i.Name,
+                        Address = i.Address,
+                        VenueCategory = i.VenueCategory,
+                        CityID = i.CityID
                     }
                 )
                 .ToList();
@@ -41,109 +39,75 @@ namespace Eventi.Web.Areas.Administrator.Controllers
             return View(model);
         }
 
-        public IActionResult VenueUkloni(int Id)
+        public async Task<IActionResult> VenueRemove(int ID)
         {
-            var item = uow.ProstorOdrzavanjaRepository.Get(Id);
-
-            if (item != null)
-            {
-                uow.ProstorOdrzavanjaRepository.Remove(Id);
-            }
-
+            await _eventiApi.DeleteVenueAsync(ID);
             return Redirect("Index");
         }
 
-        public IActionResult VenueInfo(int Id)
+        public async Task<IActionResult> VenueDetails(int ID)
         {
-            var model = uow.ProstorOdrzavanjaRepository.GetAll()
-                .Select
-                (
-                    i => new ProstorOdrzavanjaVM
-                    {
-                        Id = i.Id,
-                        Naziv = i.Naziv,
-                        Adresa = i.Adresa,
-                        TipProstoraOdrzavanja = i.TipProstoraOdrzavanja,
-                        GradId = i.Grad.Id,
-                        GradNaziv = i.Grad.Naziv
-                    }
-                )
-                .Where(i => i.Id == Id)
-                .SingleOrDefault();
-
-            return View(model);
-        }
-
-        public IActionResult VenueUredi(int Id)
-        {
-            var model = uow.ProstorOdrzavanjaRepository.GetAll()
-                .Select
-                (
-                    i => new ProstorOdrzavanjaVM
-                    {
-                        Id = i.Id,
-                        Naziv = i.Naziv,
-                        Adresa = i.Adresa,
-                        TipProstoraOdrzavanja = i.TipProstoraOdrzavanja,
-                        GradId = i.Grad.Id,
-                        GradNaziv = i.Grad.Naziv
-                    }
-                )
-                .Where(i => i.Id == Id)
-                .SingleOrDefault();
-            model.Gradovi = uow.GradRepository.GetAll().Select(
-                i => new SelectListItem(i.Naziv, i.Id.ToString())).ToList();
-
-            return View(model);
-        }
-
-        public IActionResult VenueSnimi(ProstorOdrzavanjaVM model)
-        {
-            var item = uow.ProstorOdrzavanjaRepository.Get(model.Id);
-
-
-            item.Naziv = model.Naziv;
-            item.Adresa = model.Adresa;
-            item.TipProstoraOdrzavanja = model.TipProstoraOdrzavanja;
-            item.GradId = model.GradId;
-
-
-            ctx.SaveChanges();
-
-            return Redirect("Index");
-        }
-
-        public IActionResult VenueDodaj()
-        {
-            var model = new ProstorOdrzavanjaVM
+            var response = await _eventiApi.GetVenueAsync(ID);
+            var entity = response.Content;
+            var model = new VenueVM
             {
-                Gradovi = uow.GradRepository.GetAll().Select(
-                    i => new SelectListItem(i.Naziv, i.Id.ToString())).ToList()
-            };
-            return View(model);
-        }
-
-        public IActionResult ProstorDodajSnimi(ProstorOdrzavanjaVM model)
-        {
-            var item = new ProstorOdrzavanja
-            {
-                Naziv = model.Naziv,
-                Adresa = model.Adresa,
-                TipProstoraOdrzavanja = model.TipProstoraOdrzavanja,
-                GradId = model.GradId
+                ID = entity.ID,
+                Name = entity.Name,
+                Address = entity.Address,
+                VenueCategory = entity.VenueCategory,
+                CityID = entity.CityID
             };
 
-            try
-            {
-                uow.ProstorOdrzavanjaRepository.Add(item);
-            }
-            catch //(Exception e)
-            {
-                //Console.WriteLine("{0} Exception caught.", e);
-            }
+            return View(model);
+        }
 
+        public async Task<IActionResult> VenueEdit(int ID)
+        {
+            var response = await _eventiApi.GetVenueAsync(ID);
+            var entity = response.Content;
+            var model = new VenueVM
+            {
+                ID = entity.ID,
+                Name = entity.Name,
+                Address = entity.Address,
+                VenueCategory = entity.VenueCategory,
+                CityID = entity.CityID
+            };
+
+            return View(model);
+        }
+
+        public async Task<IActionResult> VenueSave(VenueVM model)
+        {
+            var request = new VenueUpsertRequest()
+            {
+                Name = model.Name,
+                Address = model.Address,
+                VenueCategory = model.VenueCategory,
+                CityID = model.CityID
+            };
+
+            if(model.ID == 0)
+            {
+                await _eventiApi.CreateVenueAsync(request);
+            }
+            else
+            {
+                await _eventiApi.UpdateVenueAsync(model.ID, request);
+            }
 
             return Redirect("Index");
+        }
+
+        public async Task<IActionResult> VenueCreate()
+        {
+            var response = await _eventiApi.GetCityAsync();
+            var Cities = response.Content.Data;
+            var model = new VenueVM
+            {
+                Cities = Cities.Select(i => new SelectListItem(i.Name, i.ID.ToString())).ToList()
+            };
+            return View(model);
         }
     }
 }
