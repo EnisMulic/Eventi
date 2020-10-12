@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Eventi.Common;
-using Eventi.Data.EF;
-using Eventi.Data.Models;
-using Eventi.Data.Repository;
+using Eventi.Contracts.V1.Requests;
+using Eventi.Sdk;
 using Eventi.Web.Areas.Administrator.Models;
 using Eventi.Web.Helper;
 using Microsoft.AspNetCore.Mvc;
@@ -16,23 +13,23 @@ namespace Eventi.Web.Areas.Administrator.Controllers
     [Area("Administrator")]
     public class PerformerController : Controller
     {
-        private readonly MojContext ctx;
-        private readonly EventAttenderUnitOfWork uow;
-        public PerformerController(MojContext context)
+        private readonly IEventiApi _eventiApi;
+        public PerformerController(IEventiApi eventiApi)
         {
-            ctx = context;
-            uow = new EventAttenderUnitOfWork(ctx);
+            _eventiApi = eventiApi;
         }
-        public IActionResult PerformerList()
+
+        public async Task<IActionResult> PerformerList()
         {
-            var model = uow.IzvodjacRepository.GetAll()
+            var response = await _eventiApi.GetPerformerAsync();
+            var model = response.Content.Data
                 .Select
                 (
-                    i => new IzvodjacVM
+                    i => new PerformerVM
                     {
-                        Id = i.Id,
-                        Naziv = i.Naziv,
-                        TipIzvodjaca = i.TipIzvodjaca
+                        ID = i.ID,
+                        Name = i.Name,
+                        PerformerCategory = i.PerformerCategory
                     }
                 )
                 .ToList();
@@ -40,85 +37,68 @@ namespace Eventi.Web.Areas.Administrator.Controllers
             return View(model);
         }
 
-        public IActionResult PerformerUkloni(int Id)
+        public async Task<IActionResult> PerformerRemove(int ID)
         {
-            var item = uow.IzvodjacRepository.Get(Id);
+            await _eventiApi.DeletePerformerAsync(ID);
 
-            if (item != null)
-            {
-                uow.IzvodjacRepository.Remove(Id);
-            }
-
-            return Redirect("Index");
+            return Redirect("/Administrator/Home/Index");
         }
 
-        public IActionResult PerformerInfo(int Id)
+        public async Task<IActionResult> PerformerDetails(int ID)
         {
-            var i = uow.IzvodjacRepository.Get(Id);
-            var model = new IzvodjacVM
+            var response = await _eventiApi.GetPerformerAsync(ID);
+            var entity = response.Content;
+            var model = new PerformerVM
             {
-                Id = i.Id,
-                Naziv = i.Naziv,
-                TipIzvodjaca = i.TipIzvodjaca
+                ID = entity.ID,
+                Name = entity.Name,
+                PerformerCategory = entity.PerformerCategory
             };
 
             return View(model);
         }
 
-        public IActionResult PerformerUredi(int Id)
+        public async Task<IActionResult> PerformerEdit(int ID)
         {
-            var i = uow.IzvodjacRepository.Get(Id);
-            var model = new IzvodjacVM
+            var response = await _eventiApi.GetPerformerAsync(ID);
+            var entity = response.Content;
+            var model = new PerformerVM
             {
-                Id = i.Id,
-                Naziv = i.Naziv,
-                TipIzvodjaca = i.TipIzvodjaca
+                ID = entity.ID,
+                Name = entity.Name,
+                PerformerCategory = entity.PerformerCategory
             };
 
 
             return View(model);
         }
 
-        public IActionResult IzvodjacSnimi(IzvodjacVM model)
+        public async Task<IActionResult> PerformerSave(PerformerVM model)
         {
-            var item = uow.IzvodjacRepository.Get(model.Id);
-
-
-            item.Naziv = model.Naziv;
-            item.TipIzvodjaca = model.TipIzvodjaca;
-
-
-            ctx.SaveChanges();
-
-            return Redirect("Index");
-        }
-
-        public IActionResult PerformerDodaj()
-        {
-            var model = new IzvodjacVM();
-
-            return View(model);
-        }
-
-        public IActionResult IzvodjacDodajSnimi(IzvodjacVM model)
-        {
-            var item = new Izvodjac
+            var request = new PerformerUpsertRequest()
             {
-                Naziv = model.Naziv,
-                TipIzvodjaca = model.TipIzvodjaca
+                Name = model.Name,
+                PerformerCategory = model.PerformerCategory
             };
 
-            try
+
+            if(model.ID == 0)
             {
-                uow.IzvodjacRepository.Add(item);
+                await _eventiApi.CreatePerformerAsync(request);
             }
-            catch //(Exception e)
+            else
             {
-                //Console.WriteLine("{0} Exception caught.", e);
+                await _eventiApi.UpdatePerformerAsync(model.ID, request);
             }
 
+            return Redirect("/Administrator/Home/Index");
+        }
 
-            return Redirect("Index");
+        public IActionResult PerformerCreate()
+        {
+            var model = new PerformerVM();
+
+            return View(model);
         }
     }
 }

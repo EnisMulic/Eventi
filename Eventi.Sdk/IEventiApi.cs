@@ -49,5 +49,22 @@ namespace Eventi.Sdk
         [Get("/api/v1/Organizer")]
         Task<ApiResponse<PagedResponse<OrganizerResponse>>> GetOrganizerAsync(OrganizerSearchRequest request = default, PaginationQuery pagination = default);
         #endregion
+
+        #region Performer
+        [Get("/api/v1/Performer")]
+        Task<ApiResponse<PagedResponse<PerformerResponse>>> GetPerformerAsync(PerformerSearchRequest request = default, PaginationQuery pagination = default);
+
+        [Get("/api/v1/Performer/{id}")]
+        Task<ApiResponse<PerformerResponse>> GetPerformerAsync(int id);
+
+        [Post("/api/v1/Performer")]
+        Task<ApiResponse<PerformerResponse>> CreatePerformerAsync(PerformerUpsertRequest request);
+
+        [Put("/api/v1/Performer/{id}")]
+        Task<ApiResponse<PerformerResponse>> UpdatePerformerAsync(int id, PerformerUpsertRequest request);
+
+        [Delete("/api/v1/Performer/{id}")]
+        Task<ApiResponse<bool>> DeletePerformerAsync(int id);
+        #endregion
     }
 }

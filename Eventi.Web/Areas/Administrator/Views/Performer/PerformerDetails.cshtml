@@ -1,0 +1,30 @@
+﻿@model Eventi.Web.Areas.Administrator.Models.PerformerVM
+@{ 
+    Layout = null;
+}
+<div>
+    <h4>@Model.Name</h4>
+    <hr />
+    <form>
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="ID" class="control-label"></label>
+            <input asp-for="ID" class="form-control" readonly />
+            <span asp-validation-for="ID" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Name" class="control-label"></label>
+            <input asp-for="Name" class="form-control" readonly/>
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="PerformerCategory" class="control-label"></label>
+            <input asp-for="PerformerCategory" class="form-control" readonly/>
+            <span asp-validation-for="PerformerCategory" class="text-danger"></span>
+        </div>
+    </form>
+</div>
+<div>
+    <button class="btn btn-primary" id="@Model.ID" for="Edit">Edit</button>
+    @*<a asp-area="Administrator" asp-controller="Home" asp-action="Index">Back to List</a>*@
+</div>
