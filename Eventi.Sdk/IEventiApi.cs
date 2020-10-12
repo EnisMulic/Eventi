@@ -14,7 +14,7 @@ namespace Eventi.Sdk
         Task<ApiResponse<PagedResponse<CountryResponse>>> GetCountryAsync(CountrySearchRequest request = default, PaginationQuery pagination = default);
 
         [Get("/api/v1/Country/{id}")]
-        Task<ApiResponse<CountryResponse>> GetCountryByIdAsync(int id);
+        Task<ApiResponse<CountryResponse>> GetCountryAsync(int id);
 
         [Post("/api/v1/Country")]
         Task<ApiResponse<CountryResponse>> CreateCountryAsync([Body] CountryUpsertRequest request);
@@ -24,6 +24,23 @@ namespace Eventi.Sdk
 
         [Delete("/api/v1/Country/{id}")]
         Task <ApiResponse<bool>> DeleteCountryAsync(int id);
+        #endregion
+
+        #region City
+        [Get("/api/v1/City")]
+        Task<ApiResponse<PagedResponse<CityResponse>>> GetCityAsync(CitySearchRequest request = default, PaginationQuery pagination = default);
+
+        [Get("/api/v1/City/{id}")]
+        Task<ApiResponse<CityResponse>> GetCityAsync(int id);
+
+        [Post("/api/v1/City")]
+        Task<ApiResponse<CityResponse>> CreateCityAsync([Body] CityUpsertRequest request);
+
+        [Put("/api/v1/City/{id}")]
+        Task<ApiResponse<CityResponse>> UpdateCityAsync(int id, [Body] CityUpsertRequest request);
+
+        [Delete("/api/v1/City/{id}")]
+        Task<ApiResponse<bool>> DeleteCityAsync(int id);
         #endregion
 
         #region Event
@@ -82,6 +99,23 @@ namespace Eventi.Sdk
 
         [Delete("/api/v1/Sponsor/{id}")]
         Task<ApiResponse<bool>> DeleteSponsorAsync(int id);
+        #endregion
+
+        #region Venue
+        [Get("/api/v1/Venue")]
+        Task<ApiResponse<PagedResponse<VenueResponse>>> GetVenueAsync(VenueSearchRequest request = default, PaginationQuery pagination = default);
+
+        [Get("/api/v1/Venue/{id}")]
+        Task<ApiResponse<VenueResponse>> GetVenueAsync(int id);
+
+        [Post("/api/v1/Venue")]
+        Task<ApiResponse<VenueResponse>> CreateVenueAsync(VenueUpsertRequest request);
+
+        [Put("/api/v1/Venue/{id}")]
+        Task<ApiResponse<VenueResponse>> UpdateVenueAsync(int id, VenueUpsertRequest request);
+
+        [Delete("/api/v1/Venue/{id}")]
+        Task<ApiResponse<bool>> DeleteVenueAsync(int id);
         #endregion
 
     }
