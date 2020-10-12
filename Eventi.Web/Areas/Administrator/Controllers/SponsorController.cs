@@ -1,11 +1,14 @@
 ﻿using Eventi.Common;
+using Eventi.Contracts.V1.Requests;
 using Eventi.Data.EF;
 using Eventi.Data.Models;
 using Eventi.Data.Repository;
+using Eventi.Sdk;
 using Eventi.Web.Areas.Administrator.Models;
 using Eventi.Web.Helper;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Eventi.Web.Areas.Administrator.Controllers
 {
@@ -13,24 +16,23 @@ namespace Eventi.Web.Areas.Administrator.Controllers
     [Area("Administrator")]
     public class SponsorController : Controller
     {
-        private readonly MojContext ctx;
-        private readonly EventAttenderUnitOfWork uow;
-        public SponsorController(MojContext context)
+        private readonly IEventiApi _eventiApi;
+        public SponsorController(IEventiApi eventiApi)
         {
-            ctx = context;
-            uow = new EventAttenderUnitOfWork(ctx);
+            _eventiApi = eventiApi;
         }
 
-        public IActionResult SponsorList()
+        public async Task<IActionResult> SponsorList()
         {
-            var model = uow.SponzorRepository.GetAll()
+            var response = await _eventiApi.GetSponsorAsync();
+            var model = response.Content.Data
                 .Select
                 (
-                    i => new SponzorVM
+                    i => new SponsorVM
                     {
-                        Id = i.Id,
-                        Naziv = i.Naziv,
-                        Telefon = i.Telefon,
+                        ID = i.ID,
+                        Name = i.Name,
+                        PhoneNumber = i.PhoneNumber,
                         Email = i.Email
                     }
                 )
@@ -39,80 +41,68 @@ namespace Eventi.Web.Areas.Administrator.Controllers
             return View(model);
         }
 
-        public IActionResult SponsorUkloni(int Id)
+        public async Task<IActionResult> SponsorRemove(int ID)
         {
-            var item = uow.SponzorRepository.Get(Id);
-
-            if (item != null)
-            {
-                uow.SponzorRepository.Remove(Id);
-            }
-
-            return Redirect("Index");
+            await _eventiApi.DeleteSponsorAsync(ID);
+            return Redirect("/Administrator/Home/Index");
         }
 
-        public IActionResult SponsorInfo(int Id)
+        public async Task<IActionResult> SponsorDetails(int ID)
         {
-            var i = uow.SponzorRepository.Get(Id);
-            var model = new SponzorVM
+            var response = await _eventiApi.GetSponsorAsync(ID);
+            var entity = response.Content;
+            var model = new SponsorVM
             {
-                Id = i.Id,
-                Naziv = i.Naziv,
-                Telefon = i.Telefon,
-                Email = i.Email
+                ID = entity.ID,
+                Name = entity.Name,
+                PhoneNumber = entity.PhoneNumber,
+                Email = entity.Email
             };
 
             return View(model);
         }
 
-        public IActionResult SponsorUredi(int Id)
+        public async Task<IActionResult> SponsorEdit(int ID)
         {
-            var i = uow.SponzorRepository.Get(Id);
-            var model = new SponzorVM
+            var response = await _eventiApi.GetSponsorAsync(ID);
+            var entity = response.Content;
+            var model = new SponsorVM
             {
-                Id = i.Id,
-                Naziv = i.Naziv,
-                Telefon = i.Telefon,
-                Email = i.Email
+                ID = entity.ID,
+                Name = entity.Name,
+                PhoneNumber = entity.PhoneNumber,
+                Email = entity.Email
             };
 
             return View(model);
         }
 
-        public IActionResult SponsorSnimi(SponzorVM model)
+        public async Task<IActionResult> SponsorSave(SponsorVM model)
         {
-            var item = uow.SponzorRepository.Get(model.Id);
-            item.Naziv = model.Naziv;
-            item.Telefon = model.Telefon;
-            item.Email = model.Email;
-
-            ctx.SaveChanges();
-
-            return Redirect("Index");
-        }
-
-        public IActionResult SponsorDodaj() => View();
-
-        public IActionResult SponzorDodajSnimi(SponzorVM model)
-        {
-            var item = new Sponzor
+            var request = new SponsorUpsertRequest()
             {
-                Naziv = model.Naziv,
-                Telefon = model.Telefon,
+                Name = model.Name,
+                PhoneNumber = model.PhoneNumber,
                 Email = model.Email
             };
 
-            try
+
+            if (model.ID == 0)
             {
-                uow.SponzorRepository.Add(item);
+                await _eventiApi.CreateSponsorAsync(request);
             }
-            catch //(Exception e)
+            else
             {
-                //Console.WriteLine("{0} Exception caught.", e);
+                await _eventiApi.UpdateSponsorAsync(model.ID, request);
             }
 
+            return Redirect("/Administrator/Home/Index");
+        }
 
-            return Redirect("Index");
+        public IActionResult SponsorCreate()
+        {
+            SponsorVM model = new SponsorVM();
+            return View(model);
         }
     }
 }

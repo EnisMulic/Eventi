@@ -1,0 +1,41 @@
+﻿@model Eventi.Web.Areas.Administrator.Models.SponsorVM
+@{ 
+    Layout = null;
+}
+<h4>SponzorVM</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="SponsorCreate" class="ea-form">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group" hidden>
+                <label asp-for="ID" class="control-label"></label>
+                <input asp-for="ID" class="form-control" readonly />
+                <span asp-validation-for="ID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PhoneNumber" class="control-label"></label>
+                <input asp-for="PhoneNumber" class="form-control" />
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Dodaj" class="btn btn-primary"
+                       asp-area="Administrator" asp-controller="Sponsor" asp-action="SponsorSave" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@*<div>
+    <a asp-area="Administrator" asp-controller="Home" asp-action="Index">Back to List</a>
+</div>*@
