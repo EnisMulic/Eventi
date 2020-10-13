@@ -52,6 +52,12 @@ namespace Eventi.Sdk
         [Get("/api/v1/Client")]
         Task<ApiResponse<PagedResponse<ClientResponse>>> GetClientAsync(ClientSearchRequest request = default, PaginationQuery pagination = default);
 
+        [Get("/api/v1/Client/{id}")]
+        Task<ApiResponse<ClientResponse>> GetClientAsync(int id);
+
+        [Put("/api/v1/Client/{id}")]
+        Task<ApiResponse<ClientResponse>> UpdateClientAsync(int id, ClientUpdateRequest request);
+
         [Delete("/api/v1/Client/{id}")]
         Task<ApiResponse<bool>> DeleteClientAsync(int id);
         #endregion

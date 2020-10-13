@@ -1,29 +1,29 @@
-﻿@model Eventi.Web.Areas.Administrator.Models.KorisnikVM
+﻿@model Eventi.Web.Areas.Administrator.Models.ClientVM
 @{
     Layout = null;
 }
 
-<h4>@Model.ImePrezime</h4>
+<h4>@Model.FirstName @Model.LastName</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="KorisnikSnimi" class="ea-form">
+        <form asp-action="ClientSave" class="ea-form">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input asp-for="LogPodaciId" value="@Model.LogPodaciId" hidden />
+            <input asp-for="AccountID" value="@Model.AccountID" hidden />
             <div class="form-group">
-                <label asp-for="Id" class="control-label"></label>
-                <input asp-for="Id" class="form-control" readonly />
-                <span asp-validation-for="Id" class="text-danger"></span>
+                <label asp-for="ID" class="control-label"></label>
+                <input asp-for="ID" class="form-control" readonly />
+                <span asp-validation-for="ID" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Ime" class="control-label"></label>
-                <input asp-for="Ime" class="form-control" />
-                <span asp-validation-for="Ime" class="text-danger"></span>
+                <label asp-for="FirstName" class="control-label"></label>
+                <input asp-for="FirstName" class="form-control" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Prezime" class="control-label"></label>
-                <input asp-for="Prezime" class="form-control" />
-                <span asp-validation-for="Prezime" class="text-danger"></span>
+                <label asp-for="LastName" class="control-label"></label>
+                <input asp-for="LastName" class="form-control" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Username" class="control-label"></label>
@@ -36,38 +36,23 @@
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger"></span>
+                <label asp-for="PhoneNumber" class="control-label"></label>
+                <input asp-for="PhoneNumber" class="form-control" />
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Telefon" class="control-label"></label>
-                <input asp-for="Telefon" class="form-control" />
-                <span asp-validation-for="Telefon" class="text-danger"></span>
+                <label asp-for="Address" class="control-label"></label>
+                <input asp-for="Address" class="form-control" />
+                <span asp-validation-for="Address" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Adresa" class="control-label"></label>
-                <input asp-for="Adresa" class="form-control" />
-                <span asp-validation-for="Adresa" class="text-danger"></span>
+                <label asp-for="CityName" class="control-label"></label>
+                <select asp-for="CityID" asp-items="Model.Cities" class="form-control"></select>
+                <span asp-validation-for="CityName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="PostanskiBroj" class="control-label"></label>
-                <input asp-for="PostanskiBroj" class="form-control" />
-                <span asp-validation-for="PostanskiBroj" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="BrojKreditneKartice" class="control-label"></label>
-                <input asp-for="BrojKreditneKartice" class="form-control" />
-                <span asp-validation-for="BrojKreditneKartice" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="GradNaziv" class="control-label"></label>
-                <select asp-for="GradId" asp-items="Model.Gradovi" class="form-control"></select>
-                <span asp-validation-for="GradNaziv" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Snimi" class="btn btn-primary"
-                       asp-area="Administrator" asp-controller="Home" asp-action="KorisnikSnimi" />
+                <input type="submit" value="Save" class="btn btn-primary"
+                       asp-area="Administrator" asp-controller="Client" asp-action="ClientSave" />
             </div>
         </form>
     </div>
