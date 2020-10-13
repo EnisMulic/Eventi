@@ -1,0 +1,96 @@
+﻿@model Eventi.Web.Areas.Administrator.Models.EventVM
+@using Eventi.Common
+@{
+    Layout = null;
+}
+<h4>EventVM</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="EventCreate" method="post" enctype="multipart/form-data" class="ea-form">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="ID" class="control-label"></label>
+                <input asp-for="ID" class="form-control" />
+                <span asp-validation-for="ID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Image" class="control-label"></label>
+                <input asp-for="Image" type="file" class="form-control" />
+                <span asp-validation-for="Image" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Start" class="control-label"></label>
+                <input asp-for="Start" class="form-control" />
+                <span asp-validation-for="Start" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="End" class="control-label"></label>
+                <input asp-for="End" class="form-control" />
+                <span asp-validation-for="End" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EventCategory" class="control-label"></label>
+                <select asp-for="EventCategory" class="form-control">
+                    @{var categories = new SelectList(Enum.GetValues(typeof(EventCategory)));}
+                    @foreach (var category in categories)
+                    {
+                        if (Model.EventCategory.ToString() == category.Text)
+                        {
+                            <option value="@category.Text" selected>@category.Text</option>
+                        }
+                        else
+                        {
+                            <option value="@category.Text">@category.Text</option>
+                        }
+                    }
+                </select>
+                <span asp-validation-for="EventCategory" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsApproved" /> @Html.DisplayNameFor(model => model.IsApproved)
+                </label>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsCanceled" /> @Html.DisplayNameFor(model => model.IsCanceled)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="OrganizerName" class="control-label"></label>
+                <select asp-for="OrganizerID" asp-items="Model.Organizers" class="form-control"></select>
+                <span asp-validation-for="OrganizerName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AdministratorName" class="control-label"></label>
+                <select asp-for="AdministratorID" asp-items="Model.Administrators" class="form-control"></select>
+                <span asp-validation-for="AdministratorName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="VenueName" class="control-label"></label>
+                <select asp-for="VenueID" asp-items="Model.Venues" class="form-control"></select>
+                <span asp-validation-for="VenueName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Dodaj" class="btn btn-primary"
+                       asp-area="Administrator" asp-controller="Event" asp-action="EventSave" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@*<div>
+    <a asp-area="Administrator" asp-controller="Home" asp-action="Index">Back to List</a>
+</div>*@
+

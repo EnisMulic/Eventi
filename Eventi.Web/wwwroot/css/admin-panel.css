@@ -53,7 +53,7 @@ a:hover
     text-decoration: none;
 }
 
-button[for="Ukloni"], button[for="Uredi"], button[for="Info"]
+button[for="Remove"], button[for="Edit"], button[for="Details"]
 {
     width: 33%;
 }

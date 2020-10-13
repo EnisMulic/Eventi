@@ -15,5 +15,6 @@ namespace Eventi.Contracts.V1.Requests
         public string Image { get; set; }
         public int VenueID { get; set; }
         public int? AdministratorID { get; set; }
+        public int OrganizerID { get; set; }
     }
 }

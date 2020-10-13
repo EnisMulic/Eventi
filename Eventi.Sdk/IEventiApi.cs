@@ -1,5 +1,4 @@
-﻿using Eventi.Contracts.V1;
-using Eventi.Contracts.V1.Requests;
+﻿using Eventi.Contracts.V1.Requests;
 using Eventi.Contracts.V1.Responses;
 using Refit;
 using System.Threading.Tasks;
@@ -45,12 +44,30 @@ namespace Eventi.Sdk
 
         #region Event
         [Get("/api/v1/Event")]
-        Task <ApiResponse<PagedResponse<EventResponse>>> GetEventAsync(EventSearchRequest request, PaginationQuery pagination);
+        Task <ApiResponse<PagedResponse<EventResponse>>> GetEventAsync(EventSearchRequest request = default, PaginationQuery pagination = default);
+
+        [Get("/api/v1/Event/{id}")]
+        Task<ApiResponse<EventResponse>> GetEventAsync(int id);
+
+        [Post("/api/v1/Event")]
+        Task<ApiResponse<EventResponse>> CreateEventAsync([Body] EventInsertRequest request);
+
+        [Put("/api/v1/Event/{id}")]
+        Task<ApiResponse<EventResponse>> UpdateEventAsync(int id, [Body] EventUpdateRequest request);
+
+        [Delete("/api/v1/Event/{id}")]
+        Task<ApiResponse<bool>> DeleteEventAsync(int id);
         #endregion
 
         #region Client
         [Get("/api/v1/Client")]
         Task<ApiResponse<PagedResponse<ClientResponse>>> GetClientAsync(ClientSearchRequest request = default, PaginationQuery pagination = default);
+
+        [Get("/api/v1/Client/{id}")]
+        Task<ApiResponse<ClientResponse>> GetClientAsync(int id);
+
+        [Put("/api/v1/Client/{id}")]
+        Task<ApiResponse<ClientResponse>> UpdateClientAsync(int id, ClientUpdateRequest request);
 
         [Delete("/api/v1/Client/{id}")]
         Task<ApiResponse<bool>> DeleteClientAsync(int id);
@@ -59,6 +76,14 @@ namespace Eventi.Sdk
         #region Administrator
         [Get("/api/v1/Administrator")]
         Task<ApiResponse<PagedResponse<AdministratorResponse>>> GetAdministratorAsync(AdministratorSearchRequest request = default, PaginationQuery pagination = default);
+
+        [Get("/api/v1/Administrator/{id}")]
+        Task<ApiResponse<AdministratorResponse>> GetAdministratorAsync(int id);
+
+        [Put("/api/v1/Administrator/{id}")]
+        Task<ApiResponse<AdministratorResponse>> UpdateAdministratorAsync(int id, AdministratorUpdateRequest request);
+
+
         #endregion
 
 

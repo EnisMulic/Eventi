@@ -3,27 +3,27 @@
 <link href="~/css/admin-profil.css" rel="stylesheet" />
 
 <div>
-    <h4>@Model.Ime @Model.Prezime</h4>
+    <h4>@Model.FirstName @Model.LastName</h4>
     <hr />
     <div class="col-md-4">
-        <form asp-action="Snimi">
+        <form asp-action="Save">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input asp-for="Id" value="@Model.Id" hidden />
-            <input asp-for="LogPodaciId" value="@Model.LogPodaciId" hidden />
+            <input asp-for="ID" value="@Model.ID" hidden />
+            <input asp-for="AccountID" value="@Model.AccountID" hidden />
             <div class="form-group">
-                <label asp-for="Ime" class="control-label"></label>
-                <input asp-for="Ime" class="form-control" />
-                <span asp-validation-for="Ime" class="text-danger"></span>
+                <label asp-for="FirstName" class="control-label"></label>
+                <input asp-for="FirstName" class="form-control" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Prezime" class="control-label"></label>
-                <input asp-for="Prezime" class="form-control" />
-                <span asp-validation-for="Prezime" class="text-danger"></span>
+                <label asp-for="LastName" class="control-label"></label>
+                <input asp-for="LastName" class="form-control" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Telefon" class="control-label"></label>
-                <input asp-for="Telefon" class="form-control" />
-                <span asp-validation-for="Telefon" class="text-danger"></span>
+                <label asp-for="PhoneNumber" class="control-label"></label>
+                <input asp-for="PhoneNumber" class="form-control" />
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Email" class="control-label"></label>
@@ -36,7 +36,7 @@
                 <span asp-validation-for="Username" class="text-danger"></span>
             </div>
             <div>
-                <input class="btn btn-secondary" type="submit" value="Snimi" />
+                <input class="btn btn-secondary" type="submit" value="Save" />
             </div>
         </form>
     </div>

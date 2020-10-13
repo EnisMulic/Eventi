@@ -1,57 +1,55 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Eventi.Common;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Eventi.Web.Areas.Administrator.Models
 {
     public class EventVM
     {
-        public int Id { get; set; }
+        public int ID { get; set; }
 
-        [Required(ErrorMessage = "Obavezno polje")]
-        public string Naziv { get; set; }
-        public string Opis { get; set; }
+        [Required]
+        public string Name { get; set; }
+        public string Description { get; set; }
 
-        [Required(ErrorMessage = "Obavezno polje")]
-        [DisplayName("Datum održavanja")]
-        public DateTime DatumOdrzavanja { get; set; }
+        [Required]
+        [DisplayName("Start Date")]
+        public DateTime Start { get; set; }
 
-        [Required(ErrorMessage = "Obavezno polje")]
-        [DisplayName("Vrijeme održavanja")]
-        public string VrijemeOdrzavanja { get; set; }
+        [Required]
+        [DisplayName("End Date")]
+        public DateTime End { get; set; }
 
-        [Required(ErrorMessage = "Obavezno polje")]
-        public Kategorija Kategorija { get; set; }
-        public bool IsOdobren { get; set; }
-        public bool IsOtkazan { get; set; }
+        [Required]
+        public EventCategory EventCategory { get; set; }
+        public bool IsApproved { get; set; }
+        public bool IsCanceled { get; set; }
 
-        
-        public string Slika { get; set; }
+        public string Image { get; set; }
 
-        [Required(ErrorMessage = "Obavezno polje")]
-        public int OrganizatorId { get; set; }
+        [Required]
+        public int OrganizerID { get; set; }
 
-        [DisplayName("Naziv organizatora")]
-        public string OrganizatorNaziv { get; set; }
+        [DisplayName("Organizer Name")]
+        public string OrganizerName { get; set; }
 
-        public int AdministratorId { get; set; }
+        [Required]
+        public int? AdministratorID { get; set; }
 
-        public string AdministratorNaziv { get; set; }
-        public string AdministratorIme { get; set; }
+        [DisplayName("Administrator Name")]
+        public string AdministratorName { get; set; }
 
-        public string AdministratorPrezime { get; set; }
-        public int ProstorOdrzavanjaId { get; set; }
+        [Required]
+        public int VenueID { get; set; }
 
         [DisplayName("Prostor održavanja")]
-        [Required]
-        public string ProstorOdrzavanjaNaziv { get; set; }
+        public string VenueName { get; set; }
 
-        public List<SelectListItem> Organizatori { get; set; }
-        public List<SelectListItem> Administratori { get; set; }
-        public List<SelectListItem> Prostori { get; set; }
+        public List<SelectListItem> Organizers { get; set; }
+        public List<SelectListItem> Administrators { get; set; }
+        public List<SelectListItem> Venues { get; set; }
     }
 }

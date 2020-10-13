@@ -5,26 +5,26 @@
 }
 
     <p>
-        <button class="btn btn-primary" for="Dodaj">Dodaj</button>
+        <button class="btn btn-primary" for="Create">Create</button>
     </p>
 
 <table id="myTable" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Id)
+                @Html.DisplayNameFor(model => model.ID)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Naziv)
+                @Html.DisplayNameFor(model => model.Name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DatumOdrzavanja)
+                @Html.DisplayNameFor(model => model.Start)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.VrijemeOdrzavanja)
+                @Html.DisplayNameFor(model => model.End)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Kategorija)
+                @Html.DisplayNameFor(model => model.EventCategory)
             </th>
             @*<th>
                 @Html.DisplayNameFor(model => model.IsOdobren)
@@ -40,31 +40,31 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Id)
+                    @Html.DisplayFor(modelItem => item.ID)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Naziv)
-                    @if (item.IsOdobren)
+                    @Html.DisplayFor(modelItem => item.Name)
+                    @if (item.IsApproved)
                     {
-                        <span class="badge badge-success">Odobren</span>
+                        <span class="badge badge-success">Approved</span>
                     }
                     else
                     {
                         <span class="badge badge-primary">Neodobren</span>
                     }
-                    @if (item.IsOtkazan)
+                    @if (item.IsCanceled)
                     {
-                        <span class="badge badge-danger">Otkazan</span>
+                        <span class="badge badge-danger">Canceled</span>
                     }
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.DatumOdrzavanja)
+                    @Html.DisplayFor(modelItem => item.Start)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.VrijemeOdrzavanja)
+                    @Html.DisplayFor(modelItem => item.End)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Kategorija)
+                    @Html.DisplayFor(modelItem => item.EventCategory)
                 </td>
                 @*<td>
                     @item.IsOdobren
@@ -73,9 +73,9 @@
                     @item.IsOtkazan
                 </td>*@
                 <td id="Action-Buttons">
-                    <button class="btn btn-primary" id="@item.Id" for="Uredi">Uredi</button>
-                    <button class="btn btn-info" id="@item.Id" for="Info">Detalji</button>
-                    <button class="btn btn-danger" id="@item.Id" for="Ukloni">Ukloni</button>
+                    <button class="btn btn-primary" id="@item.ID" for="Edit">Edit</button>
+                    <button class="btn btn-info" id="@item.ID" for="Details">Details</button>
+                    <button class="btn btn-danger" id="@item.ID" for="Remove">Remove</button>
                     @*<a class="btn btn-danger"
                        asp-area="Administrator" asp-controller="Home"
                        asp-action="EventUkloni" asp-route-id="@item.Id">Ukloni</a>*@
