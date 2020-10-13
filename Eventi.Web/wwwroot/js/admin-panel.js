@@ -4,7 +4,7 @@
         $.get("../" + e.target.id + "/" + e.target.id + "List", function (response) {
             $("#Main-Display").html(response);
 
-            SetActionInfo(e.target.id);
+            SetActionDetails(e.target.id);
             SetActionEdit(e.target.id);
             SetActionCreate(e.target.id);
             SetActionRemove(e.target.id);
@@ -15,12 +15,12 @@
         $("#Main-Display").html("");
     });
 
-    function SetActionInfo(type) {
-        $("button[for=\"Info\"]").on('click', function (e) {
-            $.get("../" + type + "/" + type + "Info?id=" + e.target.id, function (response) {
+    function SetActionDetails(type) {
+        $("button[for=\"Details\"]").on('click', function (e) {
+            $.get("../" + type + "/" + type + "Details?id=" + e.target.id, function (response) {
                 $("#Main-Display").html(response);
 
-                SetActionsUredi(type);
+                SetActionEdit(type);
             });
         });
     }

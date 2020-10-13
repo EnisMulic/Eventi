@@ -1,0 +1,70 @@
+﻿@model Eventi.Web.Areas.Administrator.Models.EventVM
+@{ 
+    Layout = null;
+}
+<div>
+    <h4>@Model.Name</h4>
+    <hr />
+    <form>
+        <img src=@Url.Content("~/images/items/" + @Model.Image) alt="@Model.Name" height="550"/>
+        <div class="form-group">
+            <label asp-for="ID" class="control-label"></label>
+            <input asp-for="ID" class="form-control" readonly />
+            <span asp-validation-for="ID" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Name" class="control-label"></label>
+            <input asp-for="Name" class="form-control" readonly />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Description" class="control-label"></label>
+            <input asp-for="Description" class="form-control" readonly />
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Start" class="control-label"></label>
+            <input asp-for="Start" class="form-control" readonly />
+            <span asp-validation-for="Start" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="End" class="control-label"></label>
+            <input asp-for="End" class="form-control" readonly />
+            <span asp-validation-for="End" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="EventCategory" class="control-label"></label>
+            <input asp-for="EventCategory" class="form-control" readonly />
+            <span asp-validation-for="EventCategory" class="text-danger"></span>
+        </div>
+        <div class="form-group form-check">
+            <label class="form-check-label">
+                <input class="form-check-input" asp-for="IsApproved" readonly /> @Html.DisplayNameFor(model => model.IsApproved)
+            </label>
+        </div>
+        <div class="form-group form-check">
+            <label class="form-check-label">
+                <input class="form-check-input" asp-for="IsCanceled" readonly /> @Html.DisplayNameFor(model => model.IsCanceled)
+            </label>
+        </div>
+        <div class="form-group">
+            <label asp-for="OrganizerName" class="control-label"></label>
+            <input asp-for="OrganizerName" class="form-control" readonly />
+            <span asp-validation-for="OrganizerName" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="AdministratorName" class="control-label"></label>
+            <input asp-for="AdministratorName" class="form-control" readonly />
+            <span asp-validation-for="AdministratorName" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="VenueName" class="control-label"></label>
+            <input asp-for="VenueName" class="form-control" readonly />
+            <span asp-validation-for="VenueName" class="text-danger"></span>
+        </div>
+    </form>
+</div>
+<div>
+    <button class="btn btn-primary" id="@Model.ID" for="Edit">Edit</button>
+    @*<a asp-area="Administrator" asp-controller="Home" asp-action="Index">Back to List</a>*@
+</div>
