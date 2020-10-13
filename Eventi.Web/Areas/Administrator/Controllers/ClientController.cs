@@ -1,18 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Eventi.Common;
 using Eventi.Contracts.V1.Requests;
 using Eventi.Data.EF;
-using Eventi.Data.Models;
-using Eventi.Data.Repository;
 using Eventi.Sdk;
 using Eventi.Web.Areas.Administrator.Models;
 using Eventi.Web.Helper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 
 namespace Eventi.Web.Areas.Administrator.Controllers
 {
@@ -20,13 +14,9 @@ namespace Eventi.Web.Areas.Administrator.Controllers
     [Area("Administrator")]
     public class ClientController : Controller
     {
-        private readonly MojContext ctx;
-        private readonly EventAttenderUnitOfWork uow;
         private readonly IEventiApi _eventiApi;
         public ClientController(MojContext context, IEventiApi eventiApi)
         {
-            ctx = context;
-            uow = new EventAttenderUnitOfWork(ctx);
             _eventiApi = eventiApi;
         }
         public async Task<IActionResult> ClientList()
@@ -35,15 +25,15 @@ namespace Eventi.Web.Areas.Administrator.Controllers
             var model = response.Content.Data
                 .Select
                 (
-                    i => new KorisnikVM
+                    i => new ClientVM
                     {
-                        Id = i.ID,
-                        Ime = i.FirstName,
-                        Prezime = i.LastName,
+                        ID = i.ID,
+                        FirstName = i.FirstName,
+                        LastName = i.LastName,
                         Username = i.Username,
                         Email = i.Email,
-                        Telefon = i.PhoneNumber,
-                        Adresa = i.Address
+                        PhoneNumber = i.PhoneNumber,
+                        Address = i.Address
                     }
                 )
                 .ToList();
@@ -51,143 +41,68 @@ namespace Eventi.Web.Areas.Administrator.Controllers
             return View(model);
         }
 
-        public async Task<IActionResult> ClientRemove(int Id)
+        public async Task<IActionResult> ClientRemove(int ID)
         {
-            await _eventiApi.DeleteClientAsync(Id); 
-            return Redirect("Index");
+            await _eventiApi.DeleteClientAsync(ID);
+            return Redirect("/Administrator/Home/Index");
         }
 
-        public IActionResult ClientInfo(int Id)
+        public async Task<IActionResult> ClientDetails(int ID)
         {
-            var model = uow.KorisnikRepository.GetAll()
-                .Select
-                (
-                    i => new KorisnikVM
-                    {
-                        Id = i.Id,
-                        Ime = i.Osoba.Ime,
-                        Prezime = i.Osoba.Prezime,
-                        Telefon = i.Osoba.Telefon,
-                        GradId = i.Osoba.Grad.Id,
-                        GradNaziv = i.Osoba.Grad.Naziv,
-                        Username = i.Osoba.LogPodaci.Username,
-                        Email = i.Osoba.LogPodaci.Email,
-                        Password = i.Osoba.LogPodaci.Password,
-                        Adresa = i.Adresa
-
-                    }
-                )
-                .Where(i => i.Id == Id)
-                .SingleOrDefault();
-
-            return View(model);
-        }
-
-        public IActionResult ClientEdit(int Id)
-        {
-            var model = uow.KorisnikRepository.GetAll()
-                .Select
-                (
-                    i => new KorisnikVM
-                    {
-                        Id = i.Id,
-                        Ime = i.Osoba.Ime,
-                        Prezime = i.Osoba.Prezime,
-                        Telefon = i.Osoba.Telefon,
-                        GradId = i.Osoba.Grad.Id,
-                        GradNaziv = i.Osoba.Grad.Naziv,
-                        Username = i.Osoba.LogPodaci.Username,
-                        Email = i.Osoba.LogPodaci.Email,
-                        Password = i.Osoba.LogPodaci.Password,
-                        Adresa = i.Adresa,
-                        PostanskiBroj = i.PostanskiBroj,
-                        BrojKreditneKartice = i.BrojKreditneKartice,
-                        LogPodaciId = i.Osoba.LogPodaci.Id
-
-                    }
-                )
-                .Where(i => i.Id == Id)
-                .SingleOrDefault();
-            model.Gradovi = uow.GradRepository.GetAll().Select(
-                i => new SelectListItem(i.Naziv, i.Id.ToString())).ToList();
-
-            return View(model);
-        }
-
-        public IActionResult ClientSave(KorisnikVM model)
-        {
-            var item = uow.KorisnikRepository.GetAll()
-                .Include(i => i.Osoba)
-                    .ThenInclude(i => i.LogPodaci)
-                .Where(i => i.Id == model.Id)
-                .SingleOrDefault();
-
-            item.Osoba.Ime = model.Ime;
-            item.Osoba.Prezime = model.Prezime;
-            item.Osoba.LogPodaci.Username = model.Username;
-            item.Osoba.LogPodaci.Email = model.Email;
-            item.Osoba.LogPodaci.Password = model.Password;
-            item.Osoba.GradId = model.GradId;
-            item.Osoba.Telefon = model.Telefon;
-            item.PostanskiBroj = model.PostanskiBroj;
-            item.BrojKreditneKartice = model.BrojKreditneKartice;
-            item.Adresa = model.Adresa;
-
-
-            ctx.SaveChanges();
-
-            return Redirect("Index");
-        }
-
-        public IActionResult ClientCreate()
-        {
-            var model = new KorisnikVM
+            var response = await _eventiApi.GetClientAsync(ID);
+            var entity = response.Content;
+            var model = new ClientVM()
             {
-                Gradovi = uow.GradRepository.GetAll().Select(
-                    i => new SelectListItem(i.Naziv, i.Id.ToString())).ToList()
+                ID = entity.ID,
+                AccountID = entity.AccountID,
+                FirstName = entity.FirstName,
+                LastName = entity.LastName,
+                Username = entity.Username,
+                Email = entity.Email,
+                Address = entity.Address,
+                PhoneNumber = entity.PhoneNumber
             };
 
             return View(model);
         }
 
-        public IActionResult KorisnikDodajSnimi(KorisnikVM model)
+        public async Task<IActionResult> ClientEdit(int ID)
         {
-            var log = new LogPodaci
+            var response = await _eventiApi.GetClientAsync(ID);
+            var entity = response.Content;
+            var model = new ClientVM()
             {
-                Username = model.Username,
-                Email = model.Email,
-                Password = model.Password
+                ID = entity.ID,
+                AccountID = entity.AccountID,
+                FirstName = entity.FirstName,
+                LastName = entity.LastName,
+                Username = entity.Username,
+                Email = entity.Email,
+                Address = entity.Address,
+                PhoneNumber = entity.PhoneNumber
             };
 
-            uow.LogPodaciRepository.Add(log);
+            return View(model);
+        }
 
-            var o = new Osoba
+        public async Task<IActionResult> ClientSave(ClientVM model)
+        {
+            if(model.ID != 0)
             {
-                Ime = model.Ime,
-                Prezime = model.Prezime,
-                Telefon = model.Telefon,
-                GradId = model.GradId,
-                LogPodaci = log
-            };
+                var request = new ClientUpdateRequest()
+                {
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    Username = model.Username,
+                    Email = model.Email,
+                    Address = model.LastName,
+                    CreditCardNumber = model.CreditCardNumber
+                };
 
-            uow.OsobaRepository.Add(o);
-
-            var item = new Korisnik
-            {
-                Osoba = o
-            };
-
-            try
-            {
-                uow.KorisnikRepository.Add(item);
-            }
-            catch //(Exception e)
-            {
-                //Console.WriteLine("{0} Exception caught.", e);
+                await _eventiApi.UpdateClientAsync(model.ID, request);
             }
 
-
-            return Redirect("Index");
+            return Redirect("/Administrator/Home/Index");
         }
     }
 }
