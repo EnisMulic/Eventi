@@ -76,6 +76,14 @@ namespace Eventi.Sdk
         #region Administrator
         [Get("/api/v1/Administrator")]
         Task<ApiResponse<PagedResponse<AdministratorResponse>>> GetAdministratorAsync(AdministratorSearchRequest request = default, PaginationQuery pagination = default);
+
+        [Get("/api/v1/Administrator/{id}")]
+        Task<ApiResponse<AdministratorResponse>> GetAdministratorAsync(int id);
+
+        [Put("/api/v1/Administrator/{id}")]
+        Task<ApiResponse<AdministratorResponse>> UpdateAdministratorAsync(int id, AdministratorUpdateRequest request);
+
+
         #endregion
 
 
