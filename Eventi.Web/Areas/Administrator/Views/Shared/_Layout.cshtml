@@ -23,21 +23,11 @@
                     <li>
                         <a class="navbar-brand" id="AdminUsername"
                            asp-area="Administrator" asp-controller="Administrator"
-                           asp-action="AdminProfil" asp-route-id="@user.ID">@user.Username</a>
-                    </li>
-                    <li>
-                        <a class="navbar-brand" id="AdminUsername"
-                           asp-area="Administrator" asp-controller="Home"
-                           asp-action="Index">Administrator</a>
-                    </li>
-                    <li>
-                        <a class="navbar-brand" id="AdminUsername"
-                           asp-area="Administrator" asp-controller="Administrator"
-                           asp-action="Poruke">Poruke</a>
+                           asp-action="AdminProfile" asp-route-id="@user.ID">@user.Username</a>
                     </li>
                     <li>
                         <a class="navbar-brand"
-                           asp-area="" asp-controller="Prijava" asp-action="LogOut">Odjava</a>
+                           asp-area="" asp-controller="Login" asp-action="Logout">Logout</a>
                     </li>
                 </ul>
             </div>

@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Eventi.Common;
+using Eventi.Contracts.V1.Requests;
 using Eventi.Data.EF;
 using Eventi.Data.Models;
 using Eventi.Data.Repository;
+using Eventi.Sdk;
 using Eventi.Web.Areas.Administrator.Models;
 using Eventi.Web.Helper;
 using Microsoft.AspNetCore.Mvc;
@@ -17,119 +19,98 @@ namespace Eventi.Web.Areas.Administrator.Controllers
     [Area("Administrator")]
     public class AdministratorController : Controller
     {
-        private readonly MojContext ctx;
-        private readonly EventAttenderUnitOfWork uow;
-        public AdministratorController(MojContext context)
+        private readonly IEventiApi _eventiApi;
+        public AdministratorController(MojContext context, IEventiApi eventiApi)
         {
-            ctx = context;
-            uow = new EventAttenderUnitOfWork(ctx);
-        }
-        //public IActionResult Index()
-        //{
-        //    return View();
-        //}
+            _eventiApi = eventiApi;
 
-        public IActionResult AdminProfil(int Id)
-        {
-            AdministratorVM model = uow.AdministratorRepository.GetAll()
-                .Select
-                (
-                    i => new AdministratorVM
-                    {
-                        Id          = i.Id,
-                        Ime         = i.Osoba.Ime,
-                        Prezime     = i.Osoba.Prezime,
-                        LogPodaciId = i.Osoba.LogPodaci.Id,
-                        Email       = i.Osoba.LogPodaci.Email,
-                        Username    = i.Osoba.LogPodaci.Username,
-                        Password    = i.Osoba.LogPodaci.Password,
-                        Telefon     = i.Osoba.Telefon,
-                        Grad        = i.Osoba.Grad.Naziv
-                        
-                    }
-                )
-                .Where(i => i.Id == Id)
-                .SingleOrDefault();
-
-            return View(model);
         }
 
-        public IActionResult Uredi(int id)
+        public async Task<IActionResult> AdminProfile(int ID)
         {
-            return AdminProfil(id);
-        }
-
-        public IActionResult Snimi(AdministratorVM model)
-        {
-            var Admin = uow.AdministratorRepository.GetAll()
-                .Include(i => i.Osoba)
-                .Include(i => i.Osoba.LogPodaci)
-                .Where(i => i.Id == model.Id)
-                .SingleOrDefault();
-
-            Admin.Osoba.Ime = model.Ime;
-            Admin.Osoba.Prezime = model.Prezime;
-            Admin.Osoba.LogPodaci.Email = model.Email;
-            Admin.Osoba.LogPodaci.Username = model.Username;
-            Admin.Osoba.Telefon = model.Telefon;
-
-            ctx.SaveChanges();
-            return Redirect("AdminProfil?id=" + model.Id);
-        }
-
-        public IActionResult PromijeniPassword(int id)
-        {
-            var Admin = uow.AdministratorRepository.GetAll()
-                .Include(i => i.Osoba)
-                .Include(i => i.Osoba.LogPodaci)
-                .Where(i => i.Id == id)
-                .SingleOrDefault();
-
-            var model = new AdministratorVM
+            var response = await _eventiApi.GetAdministratorAsync(new AdministratorSearchRequest() { AccountID = ID });
+            var entity = response.Content.Data.ToList()[0];
+            AdministratorVM model = new AdministratorVM()
             {
-                Id = id,
-                LogPodaciId = Admin.Osoba.LogPodaci.Id,
-                Username = Admin.Osoba.LogPodaci.Username,
-                OldPassword = Admin.Osoba.LogPodaci.Password
+                ID = entity.ID,
+                AccountID = entity.AccountID,
+                FirstName = entity.FirstName,
+                LastName = entity.LastName,
+                Email = entity.Email,
+                Username = entity.Username,
+                PhoneNumber = entity.PhoneNumber
             };
 
             return View(model);
         }
 
-
-        public IActionResult SnimiPassword(AdministratorVM model)
+        public async Task<IActionResult> Edit(int ID)
         {
-            var LogPodaci = uow.LogPodaciRepository.Get(model.LogPodaciId);
-            LogPodaci.Password = model.NewPassword;
-            ctx.SaveChanges();
-            return Redirect("AdminProfil?id=" + model.Id);
-        }      
+            var response = await _eventiApi.GetAdministratorAsync(ID);
+            var entity = response.Content;
+            AdministratorVM model = new AdministratorVM()
+            {
+                ID = entity.ID,
+                AccountID = entity.AccountID,
+                FirstName = entity.FirstName,
+                LastName = entity.LastName,
+                Email = entity.Email,
+                Username = entity.Username,
+                PhoneNumber = entity.PhoneNumber
+            };
 
-
-        public bool IsUsernameUnique(string Username, int LogPodaciId)
-        {
-            List<LogPodaci> logPodaci = uow.LogPodaciRepository.GetAll().ToList();
-            foreach (LogPodaci l in logPodaci)
-                if (l.Username == Username && l.Id != LogPodaciId)
-                    return false;
-
-            return true;
+            return View(model);
         }
 
-        public bool IsEmailUnique(string Email, int LogPodaciId)
+        public async Task<IActionResult> Save(AdministratorVM model)
         {
-            List<LogPodaci> logPodaci = uow.LogPodaciRepository.GetAll().ToList();
-            foreach (LogPodaci l in logPodaci)
-                if (l.Email == Email && l.Id != LogPodaciId)
-                    return false;
+            var request = new AdministratorUpdateRequest()
+            {
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                Email = model.Email,
+                Username = model.Username
+            };
 
-            return true;
+            try
+            {
+                await _eventiApi.UpdateAdministratorAsync(model.ID, request);
+                
+            }
+            catch
+            {
+
+            }
+
+            return Redirect("AdminProfile?id=" + model.ID);
         }
 
-        public bool IsOldPassword(string OldPassword, int LogPodaciId) => 
-            OldPassword == uow.LogPodaciRepository.Get(LogPodaciId).Password;
+        //public IActionResult PromijeniPassword(int id)
+        //{
+        //    var Admin = uow.AdministratorRepository.GetAll()
+        //        .Include(i => i.Osoba)
+        //        .Include(i => i.Osoba.LogPodaci)
+        //        .Where(i => i.Id == id)
+        //        .SingleOrDefault();
 
-        public bool MatchNewPassword(string NewPasswordConfirmed, string NewPassword) =>
-            NewPasswordConfirmed == NewPassword;
+        //    var model = new AdministratorVM
+        //    {
+        //        ID = id,
+        //        LogPodaciId = Admin.Osoba.LogPodaci.Id,
+        //        Username = Admin.Osoba.LogPodaci.Username,
+        //        OldPassword = Admin.Osoba.LogPodaci.Password
+        //    };
+
+        //    return View(model);
+        //}
+
+
+        //public IActionResult SnimiPassword(AdministratorVM model)
+        //{
+        //    var LogPodaci = uow.LogPodaciRepository.Get(model.LogPodaciId);
+        //    LogPodaci.Password = model.NewPassword;
+        //    ctx.SaveChanges();
+        //    return Redirect("AdminProfil?id=" + model.ID);
+        //}      
     }
 }

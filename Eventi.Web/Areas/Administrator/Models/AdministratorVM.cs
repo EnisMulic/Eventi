@@ -9,55 +9,44 @@ namespace Eventi.Web.Areas.Administrator.Models
 {
     public class AdministratorVM
     {
-        public int Id { get; set; }
-
-        [Required(ErrorMessage = "Obavezno polje")]
-        [MaxLength(20)]
-        public string Ime { get; set; }
-
-        [Required(ErrorMessage = "Obavezno polje")]
-        [MaxLength(30)]
-        public string Prezime { get; set; }
-
-        [Required(ErrorMessage = "Obavezno polje")]
-        [RegularExpression(@"\+[0-9]{3}[\s][0-9]{2}[\s][0-9]{3}[\s][0-9]{3}", 
-                ErrorMessage = "U formatu +387 xx xxx xxx")]
-        public string Telefon { get; set; }
+        public int ID { get; set; }
 
         [Required]
-        [Remote(action: "IsEmailUnique", controller: "Administrator", areaName: "Administrator",
-                AdditionalFields = "LogPodaciId",
-                ErrorMessage = "Email Vec postoji")]
+        [MaxLength(20)]
+        public string FirstName { get; set; }
+
+        [Required]
+        [MaxLength(30)]
+        public string LastName { get; set; }
+
+        [Required]
+        [RegularExpression(@"\+[0-9]{3}[\s][0-9]{2}[\s][0-9]{3}[\s][0-9]{3}", 
+                ErrorMessage = "In format +387 xx xxx xxx")]
+        public string PhoneNumber { get; set; }
+
+
+        //[Remote(action: "IsEmailUnique", controller: "Administrator", areaName: "Administrator",
+        //        AdditionalFields = "LogPodaciId",
+        //        ErrorMessage = "Email Vec postoji")]
+        [Required]
+        [EmailAddress]
         public string Email { get; set; }
 
+        //[Remote(action: "IsUsernameUnique", controller: "Administrator", areaName: "Administrator",
+        //        AdditionalFields = "LogPodaciId",
+        //        ErrorMessage = "Username Vec postoji")]
         [Required]
-        [Remote(action: "IsUsernameUnique", controller: "Administrator", areaName: "Administrator",
-                AdditionalFields = "LogPodaciId",
-                ErrorMessage = "Username Vec postoji")]
         public string Username { get; set; }
         public string Password { get; set; }
-        public string Grad { get; set; }
-        public int LogPodaciId { get; set; }
+        public string City { get; set; }
+        public int AccountID { get; set; }
 
-        [Required(ErrorMessage = "Obavezno polje")]
-        [MinLength(8, ErrorMessage = "Minimalno 8 znakova")]
+        [Required]
+        [MinLength(8)]
         [MaxLength(25)]
-        [Remote(action: "IsOldPassword", controller: "Administrator", areaName: "Administrator",
-                AdditionalFields = "LogPodaciId",
-                ErrorMessage = "Password nije ispravan")]
         public string OldPassword { get; set; }
-
-        [Required(ErrorMessage = "Obavezno polje")]
-        [MinLength(8, ErrorMessage = "Minimalno 8 znakova")]
-        [MaxLength(25)]
         public string NewPassword { get; set; }
 
-        [Required(ErrorMessage = "Obavezno polje")]
-        [MinLength(8, ErrorMessage = "Minimalno 8 znakova")]
-        [MaxLength(25)]
-        [Remote(action: "MatchNewPassword", controller: "Administrator", areaName: "Administrator",
-                AdditionalFields = "NewPassword",
-                ErrorMessage = "Password se ne podudara")]
         public string NewPasswordConfirmed { get; set; }
     }
 }
