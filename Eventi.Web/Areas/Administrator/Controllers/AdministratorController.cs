@@ -131,33 +131,5 @@ namespace Eventi.Web.Areas.Administrator.Controllers
 
         public bool MatchNewPassword(string NewPasswordConfirmed, string NewPassword) =>
             NewPasswordConfirmed == NewPassword;
-
-        public async Task<IActionResult> Poruke()
-        {
-            var Osoba = uow.OsobaRepository.GetAll()
-                .Where(i => i.LogPodaci.Id == HttpContext.GetLoggedInUser().Id)
-                .SingleOrDefault();
-
-            var model = new ChatVM
-            {
-                Username = (await HttpContext.GetLoggedInUser()).Username,
-                AdministratorId = Osoba.Id,
-                Rows = uow.ChatPorukeRepository.GetAll()
-                    .Select
-                    (
-                        i => new ChatVM.Row
-                        {
-                            ChatPorukaId = i.Id,
-                            AutorId = i.Osoba.Id,
-                            Autor = i.Osoba.LogPodaci.Username,
-                            Poruka = i.Poruka,
-                            Kreirana = i.Kreirana.ToString("dd/MM/yyyy HH:mm")
-                        }
-                    )
-                    .ToList()
-            };
-
-            return View(model);
-        }
     }
 }
