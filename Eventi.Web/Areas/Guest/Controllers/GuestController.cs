@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Eventi.Web.Areas.ModulGuest.Models;
+using Eventi.Web.Areas.Guest.Models;
 using Eventi.Data.EF;
 using Microsoft.AspNetCore.Mvc;
 using Eventi.Data.Models;
@@ -10,8 +9,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 
-namespace Eventi.Web.Areas.ModulGuest.Controllers
-{   
+namespace Eventi.Web.Areas.Guest.Controllers
+{
     [Area("Guest")]
     public class GuestController : Controller
     {

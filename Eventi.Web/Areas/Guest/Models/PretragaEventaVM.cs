@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Eventi.Web.Areas.ModulGuest.Models
+namespace Eventi.Web.Areas.Guest.Models
 {
     public class PretragaEventaVM
     {

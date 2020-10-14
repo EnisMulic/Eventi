@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace Eventi.Web.ViewModels
+namespace Eventi.Web.Areas.Organizer.ViewModels
 {
     public class OrganizatorEventVM
     {

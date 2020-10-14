@@ -5,13 +5,13 @@ using System.Threading.Tasks;
 using Eventi.Common;
 using Eventi.Data.EF;
 using Eventi.Data.Models;
-using Eventi.Web.Areas.ModulKorisnik.Models;
+using Eventi.Web.Areas.Client.Models;
 using Eventi.Web.Helper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ReflectionIT.Mvc.Paging;
 
-namespace Eventi.Web.Areas.ModulKorisnik.Controllers
+namespace Eventi.Web.Areas.Client.Controllers
 {
     [Authorization(AccountCategory: AccountCategory.Client)]
     [Area("Client")]

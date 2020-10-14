@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Eventi.Web.ViewModels;
 using Eventi.Data.EF;
 using Eventi.Data.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -11,24 +10,27 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using System.IO;
 using Microsoft.AspNetCore.Http;
 using Eventi.Web.Helper;
-using Eventi.Web.Areas.OrganizatorModul.ViewModels;
+using Eventi.Web.Areas.Organizer.ViewModels;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 using Microsoft.Extensions.Configuration;
 using Nexmo.Api;
 using Eventi.Common;
+using Eventi.Sdk;
 
-namespace Eventi.Web.Controllers
+namespace Eventi.Web.Areas.Organizer.Controllers
 {
     [Authorization(AccountCategory: AccountCategory.Organizer)]
     [Area("Organizer")]
-    public class OrganizatorHomeController : Controller
+    public class HomeController : Controller
     {
         private readonly MojContext ctx;
         private readonly IConfiguration _configuration;
+        private readonly IEventiApi _eventiApi;
 
-        public OrganizatorHomeController(MojContext context,IConfiguration configuration)
+        public HomeController(MojContext context,IConfiguration configuration, IEventiApi eventiApi)
         {
+            _eventiApi = eventiApi;
             ctx = context;
             _configuration = configuration;
         }
@@ -234,7 +236,7 @@ namespace Eventi.Web.Controllers
             var Nexmo_Api_Key = _configuration.GetSection("NEXMO_API_KEY").Value;
             var Nexmo_Api_Secret = _configuration.GetSection("NEXMO_API_SECRET").Value;
 
-            var client = new Client(creds: new Nexmo.Api.Request.Credentials(nexmoApiKey: Nexmo_Api_Key, nexmoApiSecret: Nexmo_Api_Secret));
+            var client = new Nexmo.Api.Client(creds: new Nexmo.Api.Request.Credentials(nexmoApiKey: Nexmo_Api_Key, nexmoApiSecret: Nexmo_Api_Secret));
                 client.SMS.Send(new SMS.SMSRequest
                 {
                     from = "NEXMO_Zinedin",

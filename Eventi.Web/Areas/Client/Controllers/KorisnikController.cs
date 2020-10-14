@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Eventi.Data.EF;
 using Eventi.Data.Models;
-using Eventi.Web.Areas.ModulKorisnik.Models;
+using Eventi.Web.Areas.Client.Models;
 using Eventi.Web.Helper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -16,7 +16,7 @@ using MailKit;
 using MimeKit;
 using Eventi.Common;
 
-namespace Eventi.Web.Areas.ModulKorisnik.Controllers
+namespace Eventi.Web.Areas.Client.Controllers
 {
     [Authorization(AccountCategory: AccountCategory.Client)]
     [Area("Client")]

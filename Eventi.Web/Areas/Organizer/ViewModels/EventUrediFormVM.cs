@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 
-namespace Eventi.Web.Areas.OrganizatorModul.ViewModels
+namespace Eventi.Web.Areas.Organizer.ViewModels
 {
 
     public class EventUrediFormVM
