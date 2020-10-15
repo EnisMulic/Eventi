@@ -1,6 +1,7 @@
 ﻿using Eventi.Contracts.V1.Requests;
 using Eventi.Contracts.V1.Responses;
 using Refit;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Eventi.Sdk
@@ -102,6 +103,9 @@ namespace Eventi.Sdk
 
         [Delete("/api/v1/Organizer/{id}")]
         Task<ApiResponse<bool>> DeleteOrganizerAsync(int id);
+
+        [Get("/api/v1/Organizer/id/Events")]
+        Task<ApiResponse<List<EventResponse>>> GetOrganizerEventsAsync(int id, EventSearchRequest request = default, PaginationQuery pagination = default);
 
         #endregion
 

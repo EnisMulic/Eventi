@@ -1,0 +1,41 @@
+﻿@model Eventi.Web.Areas.Organizer.ViewModels.EventEditVM
+
+
+    <div class="modal-content">
+        <span class="close2">&times;</span>
+        <form method="post" asp-action="EditEventSave" asp-controller="OrganizatorHome">
+            <input type="hidden" asp-for="ID" value="@Model.ID" />
+
+            <div class="form-group">
+                <label for="nazivEventa">Naziv eventa</label>
+                <input required type="text" class="form-control inputBox inputi" id="nazivEventa" asp-for="Name" value="@Model.Name">
+            </div>
+
+            <div class="form-group">
+                <label for="opisEventa">Opis</label>
+                <textarea type="text" class="form-control inputBox inputi" id="opisEventa" asp-for="Description"></textarea>
+            </div>
+
+
+           
+            <div class="form-group">
+                <label for="vrijemeEventa">Vrijeme odrzavanja</label>
+                <input style="width:200px;" required type="time" class="form-control inputBox" id="vrijemeEventa" asp-for="End" value="@Model.End">
+            </div>
+
+            <div class="form-group">
+                <label>Kategorija eventa</label>
+                <select asp-for="EventCategorySelected" asp-items="@Model.EventCategory"></select>
+            </div>
+
+            <div class="form-group">
+                <label>Sponzor eventa</label>
+                <select asp-for="SponsorSelected" asp-items="@Model.Sponsors"></select>
+            </div>
+
+            <br />
+
+            <br />
+            <button type="submit" class="btn btn-default">Submit</button>
+        </form>
+    </div>

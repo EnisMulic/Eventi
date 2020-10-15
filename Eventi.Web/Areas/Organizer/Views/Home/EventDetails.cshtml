@@ -2,7 +2,7 @@
 
 @{
     Layout = null;
-    var eventInfo = (OrganizatorEventVM) ViewData["eventInfo"];
+    var eventInfo = (EventVM) ViewData["eventInfo"];
     var prodajaTipInfo = (List<OrganizatorProdajaTipVM>) ViewData["_prodajaTipInfo"];
 }
 
@@ -160,44 +160,44 @@ font-family: 'Roboto', sans-serif;
         <div class="row">
             <div id="mojWell" class="col-md-6 well">
                 <div class="imageCenter">
-                    <img class="img-responsive slikaEventa" style="width: 500px; height: 150px;" src="@Url.Content("~/images/items/" + eventInfo.Slika)" alt="">
+                    <img class="img-responsive slikaEventa" style="width: 500px; height: 150px;" src="@Url.Content("~/images/items/" + eventInfo.Image)" alt="">
                 </div>
                 <br />
                 <div >
-                    <h4 class="textEventa">Naziv : @eventInfo.Naziv</h4>
+                    <h4 class="textEventa">Naziv : @eventInfo.Name</h4>
                 </div>
                 <div >
-                    <h4 class="textEventa">Kategorija : @eventInfo.Kategorija.ToString()</h4>
+                    <h4 class="textEventa">Kategorija : @eventInfo.EventCategory.ToString()</h4>
                 </div>
                 <div>
-                    <h4 class="textEventa">Opis eventa : @eventInfo.Opis</h4>
+                    <h4 class="textEventa">Opis eventa : @eventInfo.Description</h4>
                 </div>
                 <div >
-                    <h4 class="textEventa">Mjesto odrzavanja : @eventInfo.ProstorOdrzavanjaNaziv</h4>
+                    <h4 class="textEventa">Mjesto odrzavanja : @eventInfo.VenueName</h4>
                 </div>
                 <div >
-                    <h4 class="textEventa">Datum odrzavanja :  @eventInfo.DatumOdrzavanja.ToShortDateString()</h4>
+                    <h4 class="textEventa">Datum odrzavanja :  @eventInfo.Start</h4>
                 </div>
                 <div>
-                    <h4 class="textEventa">Vrijeme odrzavanja : @eventInfo.VrijemeOdrzavanja</h4>
+                    <h4 class="textEventa">Vrijeme odrzavanja : @eventInfo.End</h4>
                 </div>
                 <div >
-                    @if (eventInfo.IsOdobren)
-                    {<h4 class="textEventa">Odobren : Da</h4> }
+                    @if (eventInfo.IsApproved)
+                    {<h4 class="textEventa">Approved : Yes</h4> }
                     else
-                    { <h4 class="textEventa">Odobren : Ne</h4>}
+                    { <h4 class="textEventa">Approved : No</h4>}
                 </div>
                 <div >
-                    @if (eventInfo.IsOtkazan)
-                    {<h4 class="textEventa">Otkazan : Da</h4> }
+                    @if (eventInfo.IsCanceled)
+                    {<h4 class="textEventa">Canceled : Yes</h4> }
                     else
-                    { <h4 class="textEventa">Otkazan : Ne</h4>}
+                    { <h4 class="textEventa">Canceled : No</h4>}
                 </div>
                 <div class="textEventa mojeDugme">
-                    @if (eventInfo.IsOtkazan)
-                    { <a href="OdobriEvent?EventID=@eventInfo.Id">Ukini otkazivanje</a> }
+                    @if (eventInfo.IsCanceled)
+                    { <a href="OdobriEvent?EventID=@eventInfo.ID">Ukini otkazivanje</a> }
                     else
-                    { <a href="OtkaziEvent?EventID=@eventInfo.Id">Otkazi event</a>}
+                    { <a href="OtkaziEvent?EventID=@eventInfo.ID">Otkazi event</a>}
                 </div>
             </div>
     
@@ -242,7 +242,7 @@ font-family: 'Roboto', sans-serif;
                 <span class="close">&times;</span>
                 <form asp-action="SnimiProdajaTip" method="post">
 
-                    <input hidden asp-for="_eventID" value="@eventInfo.Id" />
+                    <input hidden asp-for="_eventID" value="@eventInfo.ID" />
 
                     <label for="tipKarteCmb">Tip karte : </label>
                     <select required id="tipKarteCmb" asp-for="_tipKarteCombo">

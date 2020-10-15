@@ -3,7 +3,7 @@
 @{
     Layout = null;
     var prostori = (List<SelectListItem>) ViewData["ProstoriOdrzavanja"];
-    var eventiOrganizatora = (List<OrganizatorEventVM>) ViewData["EventiOrganizatora"];
+    var eventiOrganizatora = (List<EventVM>) ViewData["EventiOrganizatora"];
     var orgId = (int)ViewData["OrganizatorID"];
     var model = (StatistickiPodaciVM)ViewData["StatistickiPodaci"];
 
@@ -374,31 +374,31 @@
 
             @foreach (var i in eventiOrganizatora)
             {
-                @if (i.IsOdobren)
+                @if (i.IsApproved)
                 {
                     <div class="box" style="background-color: #62aaf0; ">
                         <div class="littleBox box1">
-                            <a class="naslovA" href="EventInfoPrikaz?EventID=@i.Id">
-                                <h4 style="display: inline-block;margin-left:20px;" class="nazivEventa">@i.Naziv</h4>
+                            <a class="naslovA" href="EventInfoPrikaz?EventID=@i.ID">
+                                <h4 style="display: inline-block;margin-left:20px;" class="nazivEventa">@i.Name</h4>
                             </a>
-                            <a class="dugmeEdit" data-vrijednost="@i.Id"><img style="margin-left:2px;margin-bottom:5px;" src="@Url.Content("~/images/ikonice/pen.png")" /></a>
+                            <a class="dugmeEdit" data-vrijednost="@i.ID"><img style="margin-left:2px;margin-bottom:5px;" src="@Url.Content("~/images/ikonice/pen.png")" /></a>
 
                         </div>
                         <div class="littleBox">
                             <p class="labels">Prostor odrzavanja</p>
-                            <p>@i.ProstorOdrzavanjaNaziv</p>
+                            <p>@i.VenueName</p>
                         </div>
                         <div class="littleBox">
                             <p class="labels">Datum odrzavanja</p>
-                            <p>@i.DatumOdrzavanja.ToShortDateString()</p>
+                            <p>@i.Start</p>
                         </div>
                         <div class="littleBox">
                             <p class="labels">Vrijeme odrzavanja</p>
-                            <p>@i.VrijemeOdrzavanja</p>
+                            <p>@i.End</p>
                         </div>
                         <div class="littleBox">
                             <p class="labels">Kategorija eventa</p>
-                            <p>@i.Kategorija.ToString()</p>
+                            <p>@i.EventCategory.ToString()</p>
                         </div>
 
                     </div>
@@ -407,25 +407,25 @@
                 {
                     <div class="box" style=" background-color: #FF839C;">
                         <div class="littleBox">
-                            <a class="naslovA" href="EventInfoPrikaz?EventID=@i.Id">
-                                <h4 style="display: inline-block;" class="nazivEventa">@i.Naziv</h4>
+                            <a class="naslovA" href="EventInfoPrikaz?EventID=@i.ID">
+                                <h4 style="display: inline-block;" class="nazivEventa">@i.Name</h4>
                             </a>
                         </div>
                         <div class="littleBox">
                             <p class="labels">Prostor odrzavanja</p>
-                            <p>@i.ProstorOdrzavanjaNaziv</p>
+                            <p>@i.VenueName</p>
                         </div>
                         <div class="littleBox">
                             <p class="labels">Datum odrzavanja</p>
-                            <p>@i.DatumOdrzavanja.ToShortDateString()</p>
+                            <p>@i.Start</p>
                         </div>
                         <div class="littleBox">
                             <p class="labels">Vrijeme odrzavanja</p>
-                            <p>@i.VrijemeOdrzavanja</p>
+                            <p>@i.End</p>
                         </div>
                         <div class="littleBox">
                             <p class="labels">Kategorija eventa</p>
-                            <p>@i.Kategorija.ToString()</p>
+                            <p>@i.EventCategory.ToString()</p>
                         </div>
                     </div>
                 }

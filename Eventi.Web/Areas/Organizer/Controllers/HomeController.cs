@@ -17,6 +17,7 @@ using Microsoft.Extensions.Configuration;
 using Nexmo.Api;
 using Eventi.Common;
 using Eventi.Sdk;
+using Eventi.Contracts.V1.Requests;
 
 namespace Eventi.Web.Areas.Organizer.Controllers
 {
@@ -28,47 +29,51 @@ namespace Eventi.Web.Areas.Organizer.Controllers
         private readonly IConfiguration _configuration;
         private readonly IEventiApi _eventiApi;
 
-        public HomeController(MojContext context,IConfiguration configuration, IEventiApi eventiApi)
+        public HomeController(MojContext context, IConfiguration configuration, IEventiApi eventiApi)
         {
             _eventiApi = eventiApi;
             ctx = context;
             _configuration = configuration;
         }
 
-        List<OrganizatorEventVM> getListuEvenata(int orgId)
+        private async Task<List<EventVM>> GetEvents(int orgId)
         {
-            return ctx.Event.Select(s => new OrganizatorEventVM
-            {
-                Id = s.Id,
-                OrganizatorID = s.OrganizatorId,
-                Naziv = s.Naziv,
-                Opis = s.Opis,
-                Slika = s.Slika,
-                DatumOdrzavanja = s.DatumOdrzavanja,
-                VrijemeOdrzavanja = s.VrijemeOdrzavanja,
-                Kategorija = s.Kategorija,
-                OrganizatorNaziv = s.Organizator.Naziv,
-                ProstorOdrzavanjaNaziv = s.ProstorOdrzavanja.Naziv,
-                IsOdobren = s.IsOdobren,
-                IsOtkazan = s.IsOtkazan
-            }).Where(g => g.OrganizatorID == orgId && g.DatumOdrzavanja > DateTime.Today).ToList();
+            var response = await _eventiApi.GetOrganizerEventsAsync(orgId);
+            return response.Content.Select
+                (
+                    i => new EventVM
+                    {
+                        ID = i.ID,
+                        Name = i.Name,
+                        Description = i.Description,
+                        Image = i.Image,
+                        Start = i.Start,
+                        End = i.End,
+                        EventCategory = i.EventCategory,
+                        IsApproved = i.IsApproved,
+                        IsCanceled = i.IsCanceled,
+                        OrganizerID = i.OrganizerID,
+                        VenueID = i.VenueID
+                    }
+                ).ToList();
+            
         }
 
         public async Task<IActionResult> Index()
         {
-            Organizator org = new Organizator();
-            var l = await HttpContext.GetLoggedInUser();
-            //if (l != null)
-            //{
-            //     org = ctx.Organizator.Where(o => o.LogPodaciId == l.ID).SingleOrDefault();
-                
-            //}
+            var account = await HttpContext.GetLoggedInUser();
+            var response = await _eventiApi.GetOrganizerAsync(new OrganizerSearchRequest()
+            {
+                AccountID = account.ID
+            });
 
-            List<OrganizatorEventVM> eventi = getListuEvenata(org.Id);
+            var organizer = response.Content.Data.ToList()[0];
+
+            List<EventVM> events = await GetEvents(organizer.ID);
 
             var model = new StatistickiPodaciVM
             {
-                Redovi = ctx.Event.Where(x => x.OrganizatorId == org.Id).Select(x => new StatistickiPodaciVM.Rows
+                Redovi = ctx.Event.Where(x => x.OrganizatorId == organizer.ID).Select(x => new StatistickiPodaciVM.Rows
                 {
                     NazivEventa = x.Naziv,
                     UkupnoBrojProdatihKarata = ctx.ProdajaTip.Where(y => y.EventId == x.Id).Select(y => y.BrojProdatihKarataTip).Sum(),
@@ -77,16 +82,18 @@ namespace Eventi.Web.Areas.Organizer.Controllers
                    }).ToList()
             };
 
+            var venueResponse = await _eventiApi.GetVenueAsync();
+
             ViewData["StatistickiPodaci"] = model;
-            ViewData["OrganizatorID"] = org.Id;
-                ViewData["EventiOrganizatora"] = eventi;
-                ViewData["ProstoriOdrzavanja"] = ctx.ProstorOdrzavanja.Select(s => new SelectListItem
-                {
-                    Value = s.Id.ToString(),
-                    Text = s.Naziv
-                }).ToList(); 
-                return View();
-            
+            ViewData["OrganizatorID"] = organizer.ID;
+            ViewData["EventiOrganizatora"] = events;
+            ViewData["ProstoriOdrzavanja"] = venueResponse.Content.Data.Select(s => new SelectListItem
+            {
+                Value = s.ID.ToString(),
+                Text = s.Name
+            }).ToList(); 
+
+            return View();
         }
 
         bool provjeraTipKarte(int eventID,TipKarte tip)
@@ -133,7 +140,7 @@ namespace Eventi.Web.Areas.Organizer.Controllers
             return Redirect("EventInfoPrikaz?EventID=" + data._eventID.ToString());
         }
 
-        public async Task<IActionResult> SnimiEvent(SnimiEventVM data,IFormFile slika)
+        public async Task<IActionResult> SaveEvent(SnimiEventVM data, IFormFile slika)
         {
             if (slika != null && slika.Length > 0)
             {
@@ -180,44 +187,42 @@ namespace Eventi.Web.Areas.Organizer.Controllers
             return Redirect("Index");
         }
 
-        public IActionResult EventInfoPrikaz(int EventID)    
+        public async Task<IActionResult> EventInfoPrikaz(int EventID)    
         {
-                var e = ctx.Event.Where(e => e.Id == EventID)
-                    .Include(e => e.Organizator)
-                    .Include(e => e.ProstorOdrzavanja)
-                    .FirstOrDefault();
+            var response = await _eventiApi.GetEventAsync(EventID);
+            var e = response.Content;
 
-                var eventInfo = new OrganizatorEventVM {
-                   Id=e.Id,
-                   Naziv=e.Naziv,
-                   Slika=e.Slika,
-                   Opis=e.Opis,
-                   DatumOdrzavanja=new DateTime(e.DatumOdrzavanja.Year,e.DatumOdrzavanja.Month,e.DatumOdrzavanja.Day),
-                   VrijemeOdrzavanja=e.VrijemeOdrzavanja,
-                   Kategorija=e.Kategorija,
-                   IsOdobren=e.IsOdobren,
-                   IsOtkazan=e.IsOtkazan,
-                   OrganizatorNaziv=e.Organizator.Naziv,
-                   OrganizatorID=e.OrganizatorId,
-                   ProstorOdrzavanjaNaziv=e.ProstorOdrzavanja.Naziv
-               };
-
-            List<OrganizatorProdajaTipVM> prodajaTipInfo = new List<OrganizatorProdajaTipVM>();
-             prodajaTipInfo = ctx.ProdajaTip.Select(p => new OrganizatorProdajaTipVM
+            var eventInfo = new EventVM
             {
-                _tipKarte = p.TipKarte,
-                _ukupnoKarataTip = p.UkupnoKarataTip.ToString(),
-                _cijenaTip = p.CijenaTip.ToString(),
-                _postojeSjedista = p.PostojeSjedista.ToString(),
-                _brojProdatihKarataTip = p.BrojProdatihKarataTip.ToString(),
-                _eventID = p.EventId
+                ID = e.ID,
+                Name = e.Name,
+                Image = e.Image,
+                Description = e.Description,
+                Start = e.Start,
+                End = e.End,
+                EventCategory = e.EventCategory,
+                IsApproved = e.IsApproved,
+                IsCanceled = e.IsCanceled,
+                OrganizerID = e.OrganizerID,
+                VenueID = e.VenueID
+            };
 
-            }).Where(e => e._eventID == EventID).ToList();
+            //List<OrganizatorProdajaTipVM> prodajaTipInfo = new List<OrganizatorProdajaTipVM>();
+            // prodajaTipInfo = ctx.ProdajaTip.Select(p => new OrganizatorProdajaTipVM
+            //{
+            //    _tipKarte = p.TipKarte,
+            //    _ukupnoKarataTip = p.UkupnoKarataTip.ToString(),
+            //    _cijenaTip = p.CijenaTip.ToString(),
+            //    _postojeSjedista = p.PostojeSjedista.ToString(),
+            //    _brojProdatihKarataTip = p.BrojProdatihKarataTip.ToString(),
+            //    _eventID = p.EventId
+
+            //}).Where(e => e._eventID == EventID).ToList();
 
 
-                ViewData["_prodajaTipInfo"] = prodajaTipInfo;
-                ViewData["eventInfo"] = eventInfo;
-                return View("EventInfo");                
+            //    ViewData["_prodajaTipInfo"] = prodajaTipInfo;
+            ViewData["eventInfo"] = eventInfo;
+            return View("EventDetails");
         }
 
         public IActionResult OtkaziEvent(int EventID)
@@ -231,7 +236,6 @@ namespace Eventi.Web.Areas.Organizer.Controllers
                 _event.IsOtkazan = true;
             }
 
-            ctx.SaveChanges();
 
             var Nexmo_Api_Key = _configuration.GetSection("NEXMO_API_KEY").Value;
             var Nexmo_Api_Secret = _configuration.GetSection("NEXMO_API_SECRET").Value;
@@ -240,72 +244,51 @@ namespace Eventi.Web.Areas.Organizer.Controllers
                 client.SMS.Send(new SMS.SMSRequest
                 {
                     from = "NEXMO_Zinedin",
-                    to = "387603022082",
+                    to = "387111111111",
                     text = "Ovo je test poruka preko Nexmo"
                 });
 
             return Redirect("EventInfoPrikaz?EventID=" + EventID.ToString());
         }
 
-        public IActionResult OdobriEvent(int EventID)
+        
+        public async Task<IActionResult> EventEdit(int EventID)
         {
-            var query =
-                from ev in ctx.Event
-                where ev.Id == EventID
-                select ev;
-            foreach (var _event in query)
+            var response = await _eventiApi.GetEventAsync(EventID);
+            var Event = response.Content;
+
+            var model = new EventEditVM()
             {
-                _event.IsOtkazan = false;
-            }
-
-            ctx.SaveChanges();
-
-            return Redirect("EventInfoPrikaz?EventID=" + EventID.ToString());
-        }
-
-        public IActionResult UrediEvent(int EventId)
-        {
-            var _event = ctx.Event.Where(x => x.Id == EventId).FirstOrDefault();
-
-            var model = new EventUrediFormVM
-            {
-                EventId = _event.Id,
-                Sponzori = ctx.Sponzor.Select(x => new SelectListItem
-                {
-                    Text = x.Naziv,
-                    Value = x.Id.ToString()
-                }).ToList(),
-                NazivEventaOd =_event.Naziv,
-                OpisEventaOd = _event.Opis,
-                VrijemeOdrzavanjaOd = _event.VrijemeOdrzavanja
+                ID = Event.ID,
+                Name = Event.Name,
+                Description = Event.Description,
+                Start = Event.Start,
+                End = Event.Start,
+                EventCategorySelected = (int)Event.EventCategory
             };
 
             return View(model);
         }
 
         [HttpPost]
-        public IActionResult UrediSnimiEvent(EventUrediFormVM model)
+        public async Task<IActionResult> EditEventSave(EventEditVM model)
         {
-            
-            var _event = ctx.Event.Where(x => x.Id == model.EventId).FirstOrDefault();
-            _event.Naziv = model.NazivEventaOd;
-            _event.Opis = model.OpisEventaOd;
-            _event.VrijemeOdrzavanja = model.VrijemeOdrzavanjaOd;
-            if(model.SponzorOdabir != 0)
+            var response = await _eventiApi.GetEventAsync(model.ID);
+            var e = response.Content;
+
+            var request = new EventUpdateRequest()
             {
-                var noviSponzor = new SponzorEvent
-                {
-                    EventId = model.EventId,
-                    SponzorId = model.SponzorOdabir,
-                    Prioritet = Prioritet.Silver
+                Name = model.Name,
+                Description = model.Description,
+                Start = model.Start,
+                End = model.End,
+                EventCategory = (EventCategory)model.EventCategorySelected
+            };
 
-                };
+            await _eventiApi.UpdateEventAsync(model.ID, request);
 
-                ctx.SponzorEvent.Add(noviSponzor);
-            }
-
-            ctx.SaveChanges();
-            return Redirect("EventInfoPrikaz?EventID=" + model.EventId.ToString());
+            
+            return Redirect("EventInfoPrikaz?EventID=" + model.ID.ToString());
 
         }
 

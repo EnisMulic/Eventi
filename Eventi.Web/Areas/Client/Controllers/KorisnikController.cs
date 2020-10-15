@@ -12,7 +12,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MailKit.Net.Smtp;
-using MailKit;
 using MimeKit;
 using Eventi.Common;
 
