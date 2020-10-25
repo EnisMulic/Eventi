@@ -7,7 +7,10 @@ using Microsoft.AspNetCore.Mvc;
 using Eventi.Data.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-
+using Eventi.Sdk;
+using System.Threading.Tasks;
+using AspNetCore;
+using Eventi.Contracts.V1.Requests;
 
 namespace Eventi.Web.Areas.Guest.Controllers
 {
@@ -15,9 +18,13 @@ namespace Eventi.Web.Areas.Guest.Controllers
     public class GuestController : Controller
     {
         private readonly MojContext ctx;
+        private readonly IEventiApi _eventiApi;
+        private readonly IAuthApi _authApi;
 
-        public GuestController(MojContext context)
+        public GuestController(MojContext context, IEventiApi eventiApi, IAuthApi authApi)
         {
+            _eventiApi = eventiApi;
+            _authApi = authApi;
             ctx = context;
         }
         public IActionResult PretraziPoNazivu(string filter)  // v1- odvojena pretraga po nazivu
@@ -71,90 +78,65 @@ namespace Eventi.Web.Areas.Guest.Controllers
          
             return View(model);
         }
-        public IActionResult RegistracijaForma()
+        public async Task<IActionResult> Registration()
         {
-          
-            RegistracijaVM model = new RegistracijaVM();
-            model.Drzave = ctx.Drzava.Select(d => new SelectListItem(d.Naziv, d.Id.ToString())).ToList();
+            var countriesResponse = await _eventiApi.GetCountryAsync();
+            var citiesResponse = await _eventiApi.GetCityAsync();
+
+            var countries = countriesResponse.Content.Data
+                .Select
+                (
+                    i => new SelectListItem()
+                    {
+                        Value = i.ID.ToString(),
+                        Text = i.Name
+                    }
+                )
+                .ToList();
+
+            var cities = citiesResponse.Content.Data
+                .Select
+                (
+                    i => new SelectListItem()
+                    {
+                        Value = i.ID.ToString(),
+                        Text = i.Name
+                    }
+                )
+                .ToList();
+
+            RegistrationVM model = new RegistrationVM()
+            {
+                Cities = cities,
+                Countries = countries
+            };
 
             return View(model);
         }
 
-        public bool VerifyUserName(string username)
-        {
-            // trebali bi se povuci svi username iz baze, pa provjeravati da li vec postoji isti
-        
-            List<LogPodaci> logPodaci = ctx.LogPodaci.ToList();
-            if (logPodaci == null)
-            {
-                return true;// prazna lista
-            }
-            else
-            {
-                foreach (LogPodaci l in logPodaci)
-                {
-                    if (l.Username.Equals(username))
-                        return false;
-                }
-            }
-         
-            return true;
-        }
-        public IActionResult RegistracijaSnimi(RegistracijaVM model)
+        public async Task<IActionResult> Registrater(RegistrationVM model)
         {
             if (!ModelState.IsValid)
             {
-                model.Drzave = ctx.Drzava.Select(d => new SelectListItem(d.Naziv, d.Id.ToString())).ToList();
+                model.Countries = ctx.Drzava.Select(d => new SelectListItem(d.Naziv, d.Id.ToString())).ToList();
                 return View("RegistracijaForma", model);
             }
-          
-            Korisnik k = new Korisnik();
-            k.Osoba = new Osoba
-            {
-                Ime = model.Ime,
-                Prezime = model.Prezime,
-                Telefon = model.Telefon
-            };
 
-            k.Osoba.LogPodaci = new LogPodaci
+            var registration = new ClientRegistrationRequest()
             {
-                Username = model.Username,
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                Address = model.LastName,
+                CreditCardNumber = model.CreditCardNumber,
+                Email = model.Email,
                 Password = model.Password,
-                Email = model.Email
+                PhoneNumber = model.PhoneNumber,
+                Username = model.Username
             };
 
-            List<Grad> gradovi = ctx.Grad.ToList();
 
-            model.Grad = model.Grad.Replace("ć", "c");
-            model.Grad = model.Grad.Replace("č", "c");
-            model.Grad = model.Grad.Replace("š", "s");
-            model.Grad = model.Grad.Replace("đ", "d");
-            model.Grad = model.Grad.Replace("ž", "z");
-            model.Grad = model.Grad.Replace("Ć", "C");
-            model.Grad = model.Grad.Replace("Č", "C");
-            model.Grad = model.Grad.Replace("Š", "S");
-            model.Grad = model.Grad.Replace("Đ", "D");
-            model.Grad = model.Grad.Replace("Ž", "Z");
-            foreach (Grad g in gradovi)
-            {
-                if (model.Grad.ToLower().Equals(g.Naziv.ToLower()))
-                {
-                    k.Osoba.GradId = g.Id;
-                    break;
-                }
-            }
-            if (k.Osoba.GradId == 0)  // znaci da nema u bazi, 
-            {
-                k.Osoba.Grad = new Grad { Naziv = model.Grad, DrzavaId = model.DrzavaId };
-            }
-            k.Adresa = model.Adresa;
-            k.PostanskiBroj = model.PostanskiBroj;
-            k.BrojKreditneKartice = model.BrojKreditneKartice;
-
-            ctx.Korisnik.Add(k);
-            ctx.SaveChanges();
-           
-            return Redirect("/Prijava/Index");
+            await _authApi.ClientRegisterAsync(registration);
+            return Redirect("/Login/Index");
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿@model Eventi.Web.Areas.Guest.Models.RegistracijaVM
+﻿@model Eventi.Web.Areas.Guest.Models.RegistrationVM
 
 @{
     ViewData["Title"] = "RegistracijaForma";
@@ -18,42 +18,34 @@
     Registrovati se mogu samo državljani država ponuđenih u izborniku.
     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 </div>
-<form asp-area="ModulGuest" asp-controller="Guest" asp-action="RegistracijaSnimi">
+<form asp-area="Guest" asp-controller="Guest" asp-action="Register">
     <div class="form-group">
         <label for="ime">Ime</label>
-        <input asp-for="Ime" type="text" class="form-control" id="ime" />
-        <span asp-validation-for="Ime" class="text-danger"></span>
+        <input asp-for="FirstName" type="text" class="form-control" id="ime" />
+        <span asp-validation-for="FirstName" class="text-danger"></span>
     </div>
     <div class="form-group">
         <label for="prezime">Prezime</label>
-        <input asp-for="Prezime" type="text" class="form-control" id="prezime" />
-        <span asp-validation-for="Prezime" class="text-danger"></span>
+        <input asp-for="LastName" type="text" class="form-control" id="prezime" />
+        <span asp-validation-for="LastName" class="text-danger"></span>
     </div>
     <div class="form-group">
         <label for="telefon">Telefon</label>
-        <input asp-for="Telefon" type="text" class="form-control" id="telefon" />
-        <span asp-validation-for="Telefon" class="text-danger"></span>
+        <input asp-for="PhoneNumber" type="text" class="form-control" id="telefon" />
+        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
     </div>
     <div class="form-group">
-        <label for="drzava">Država</label>
-        @*<input asp-for="Drzava" type="text" class="form-control" id="drzava" />
-            <span asp-validation-for="Drzava" class="text-danger"></span>*@
-        <select asp-for="DrzavaId" asp-items="Model.Drzave" class="form-control"></select>
+        <label for="Countries">Country</label>
+        <select asp-for="CountryID" asp-items="Model.Countries" class="form-control"></select>
     </div>
     <div class="form-group">
-        <label for="grad">Grad</label>
-        <input asp-for="Grad" type="text" class="form-control" id="grad" />
-        <span asp-validation-for="Grad" class="text-danger"></span>
+        <label for="Cities">City</label>
+        <select asp-for="CityID" asp-items="Model.Cities" class="form-control"></select>
     </div>
     <div class="form-group">
         <label for="adresa">Adresa</label>
-        <input asp-for="Adresa" type="text" class="form-control" id="adresa" />
-        <span asp-validation-for="Adresa" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label for="postanskiBroj">Poštanski broj</label>
-        <input asp-for="PostanskiBroj" type="text" class="form-control" id="postanskiBroj" />
-        <span asp-validation-for="PostanskiBroj" class="text-danger"></span>
+        <input asp-for="Address" type="text" class="form-control" id="adresa" />
+        <span asp-validation-for="Address" class="text-danger"></span>
     </div>
     <div class="form-group">
         <label for="email">Email</label>
@@ -72,10 +64,10 @@
     </div>
     <div class="form-group">
         <label for="brojKredKartice">Broj računa (kartice)</label>
-        <input asp-for="BrojKreditneKartice" class="form-control" id="brojKredKartice" />
-        <span asp-validation-for="BrojKreditneKartice" class="text-danger"></span>
+        <input asp-for="CreditCardNumber" class="form-control" id="brojKredKartice" />
+        <span asp-validation-for="CreditCardNumber" class="text-danger"></span>
     </div>
-    <input type="submit" value="Potvrdi" class="btn btn-success" /> 
+    <input type="submit" value="Confirm" class="btn btn-success" /> 
 </form>
 
 
