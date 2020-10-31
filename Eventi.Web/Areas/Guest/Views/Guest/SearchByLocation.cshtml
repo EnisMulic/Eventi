@@ -1,0 +1,77 @@
+﻿@model Eventi.Web.Areas.Guest.Models.EventSearchVM
+@{ ViewData["Title"] = "SearchByLocation"; }
+<style>
+    form {
+        margin-top: 2%;
+    }
+
+    a.btn {
+        color: gray;
+        margin-top: 1%;
+    }
+
+    #search {
+        color: grey;
+    }
+
+        #search:hover {
+            color: black;
+        }
+
+    td {
+        width: 50%;
+    }
+</style>
+
+<form>
+    <div class="input-group">
+        <input type="text" class="form-control" placeholder="Search" name="location" maxlength="30">
+        <div class="input-group-btn">
+            <button id="search" class="btn btn-light" type="submit">
+                Search
+            </button>
+        </div>
+    </div>
+</form>
+
+@if (Model.Events != null)
+{
+<table class="table">
+    <tbody>
+        @foreach (var e in Model.Events)
+        {
+            <tr>
+
+                <td>
+                    <div>
+                        @if (e.Image != null)
+                        {
+                            <img src="~/images/items/@e.Image" width="350" height="250" />
+                        }
+                        else
+                        {
+                            <img src="~/images/items/events.jpg" width="350" height="250" />
+                        }
+                    </div>
+                </td>
+
+                <td style="padding-top:8%">
+                    <div>
+                        <strong>@e.Name</strong> <br />
+
+                        @e.VenueName
+                        <br />
+                        @e.VenueCity
+
+                        <br />
+
+                        @e.Start- @e.End
+
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+}
+<a asp-area="" asp-controller="Home" , asp-action="Index" class="btn btn-light">Back to homepage</a>

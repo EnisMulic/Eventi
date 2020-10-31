@@ -17,65 +17,75 @@ namespace Eventi.Web.Areas.Guest.Controllers
     [Area("Guest")]
     public class GuestController : Controller
     {
-        private readonly MojContext ctx;
         private readonly IEventiApi _eventiApi;
         private readonly IAuthApi _authApi;
 
-        public GuestController(MojContext context, IEventiApi eventiApi, IAuthApi authApi)
+        public GuestController(IEventiApi eventiApi, IAuthApi authApi)
         {
             _eventiApi = eventiApi;
             _authApi = authApi;
-            ctx = context;
         }
-        public IActionResult PretraziPoNazivu(string filter)  // v1- odvojena pretraga po nazivu
+        public async Task<IActionResult> SearchByName(string filter)
         {
-            PretragaEventaVM model = new PretragaEventaVM();
+            EventSearchVM model = new EventSearchVM();
            
-           
-            DateTime date = DateTime.Now;
-            //Where(e => e.DatumOdrzavanja.CompareTo(date)==1) // gdje je datum veci od danasnjeg
             if (filter != null)
             {
-                
-                model.Eventi = ctx.Event.Include(e => e.ProstorOdrzavanja).Include(e => e.ProstorOdrzavanja.Grad).Where(e => e.DatumOdrzavanja.CompareTo(date) == 1).Where(e => e.IsOdobren == true).Where(e => e.IsOtkazan == false).
-                    Where(e => e.Naziv.ToLower().Equals(filter.ToLower()) || e.Naziv.ToLower().StartsWith(filter.ToLower())
-                     || e.Naziv.ToLower().Contains(filter.ToLower()))
-                    .Select(e => new PretragaEventaVM.Rows {
-                        EventId = e.Id,
-                        Naziv = e.Naziv,
-                        Kategorija = e.Kategorija.ToString(),
-                        ProstorOdrzavanjaNaziv = e.ProstorOdrzavanja.Naziv,
-                        ProstorOdrzavanjaGrad = e.ProstorOdrzavanja.Grad.Naziv,
-                        DatumOdrzavanja = e.DatumOdrzavanja.Day.ToString() + "." + e.DatumOdrzavanja.Month.ToString() + "." + e.DatumOdrzavanja.Year.ToString(),
-                        VrijemeOdrzavanja = e.VrijemeOdrzavanja,
-                        Slika = e.Slika
-                    }).ToList();
+                var response = await _eventiApi.GetEventAsync(new EventSearchRequest()
+                {
+                    Name = filter,
+                    IsApproved = true,
+                    IsCanceled = true,
+                    Start = DateTime.Now
+                });
+
+                model.Events = response.Content.Data
+                    .Select
+                    (
+                        i => new EventSearchVM.Rows()
+                        {
+                            EventID = i.ID,
+                            Name = i.Name,
+                            Category = i.EventCategory.ToString(),
+                            Start = i.Start,
+                            End = i.End,
+                            Image = i.Image
+                        }
+                    ).ToList();
             }
        
             return View(model);  
         }
-        public IActionResult PretraziPoLokaciji(string lokacija)  //v1 - odvojena pretraga po lokaciji
+        public async Task<IActionResult> SearchByLocation(string lokacija)
         {
-            PretragaEventaVM model = new PretragaEventaVM();
-         
-            DateTime date = DateTime.Now;
+            // To do: Implement event search by venue name
+            EventSearchVM model = new EventSearchVM();
+
             if (lokacija != null)
             {
-                model.Eventi = ctx.Event.Include(e=>e.ProstorOdrzavanja).Include(e=>e.ProstorOdrzavanja.Grad).Where(e => e.DatumOdrzavanja.CompareTo(date) == 1).Where(e => e.IsOdobren == true).Where(e => e.IsOtkazan == false).
-                   Where(e => e.ProstorOdrzavanja.Grad.Drzava.Naziv.ToLower().StartsWith(lokacija.ToLower()) || e.ProstorOdrzavanja.Naziv.ToLower().StartsWith(lokacija.ToLower()) || e.ProstorOdrzavanja.Naziv.ToLower().Contains(lokacija.ToLower())
-                      || e.ProstorOdrzavanja.Grad.Naziv.ToLower().StartsWith(lokacija.ToLower()) || e.ProstorOdrzavanja.Grad.Naziv.ToLower().Contains(lokacija.ToLower()))
-                   .Select(e=>new PretragaEventaVM.Rows {
-                       EventId = e.Id,
-                       Naziv = e.Naziv,
-                       Kategorija = e.Kategorija.ToString(),
-                       ProstorOdrzavanjaNaziv = e.ProstorOdrzavanja.Naziv,
-                       ProstorOdrzavanjaGrad = e.ProstorOdrzavanja.Grad.Naziv,
-                       DatumOdrzavanja = e.DatumOdrzavanja.Day.ToString() + "." + e.DatumOdrzavanja.Month.ToString() + "." + e.DatumOdrzavanja.Year.ToString(),
-                       VrijemeOdrzavanja = e.VrijemeOdrzavanja,
-                       Slika = e.Slika
-                   }).ToList();
+                var response = await _eventiApi.GetEventAsync(new EventSearchRequest()
+                {
+                    Name = lokacija,
+                    IsApproved = true,
+                    IsCanceled = true,
+                    Start = DateTime.Now
+                });
+
+                model.Events = response.Content.Data
+                    .Select
+                    (
+                        i => new EventSearchVM.Rows()
+                        {
+                            EventID = i.ID,
+                            Name = i.Name,
+                            Category = i.EventCategory.ToString(),
+                            Start = i.Start,
+                            End = i.End,
+                            Image = i.Image
+                        }
+                    ).ToList();
             }
-         
+
             return View(model);
         }
         public async Task<IActionResult> Registration()
@@ -114,12 +124,16 @@ namespace Eventi.Web.Areas.Guest.Controllers
             return View(model);
         }
 
-        public async Task<IActionResult> Registrater(RegistrationVM model)
+        public async Task<IActionResult> Registration(RegistrationVM model)
         {
             if (!ModelState.IsValid)
             {
-                model.Countries = ctx.Drzava.Select(d => new SelectListItem(d.Naziv, d.Id.ToString())).ToList();
-                return View("RegistracijaForma", model);
+                var response = await _eventiApi.GetCountryAsync();
+                model.Countries = response.Content.Data
+                    .Select(i => new SelectListItem(i.Name, i.ID.ToString()))
+                    .ToList();
+
+                return View("Registration", model);
             }
 
             var registration = new ClientRegistrationRequest()

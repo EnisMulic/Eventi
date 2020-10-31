@@ -1,8 +1,7 @@
-﻿@using Eventi.Data.Models
-@model Eventi.Web.Areas.Guest.Models.PretragaEventaVM
+﻿@model Eventi.Web.Areas.Guest.Models.EventSearchVM
 
 @{
-    ViewData["Title"] = "PretraziPoNazivu";
+    ViewData["Title"] = "SearchByName";
     DateTime date = DateTime.Now;
 
 }
@@ -16,13 +15,13 @@
         margin-top: 1%;
     }
 
-    #pretraga {
+    #search {
         color: grey;
     }
 
-        #pretraga:hover {
-            color: black;
-        }
+    #search:hover {
+        color: black;
+    }
 
     td {
         width: 50%;
@@ -34,26 +33,26 @@
     <div class="input-group">
         <input type="text" class="form-control" placeholder="Search" name="filter" maxlength="40">
         <div class="input-group-btn">
-            <button id="pretraga" class="btn btn-light" type="submit">
-                Traži
+            <button id="search" class="btn btn-light" type="submit">
+                Search
             </button>
         </div>
     </div>
 </form>
 
-@if (Model.Eventi != null)
+@if (Model.Events != null)
 {
     <table class="table">
         <tbody>
-            @foreach (var e in Model.Eventi)
+            @foreach (var e in Model.Events)
             {
                 <tr>
 
                     <td>
                         <div>
-                            @if (e.Slika != null)
+                            @if (e.Image != null)
                             {
-                                <img src="~/images/items/@e.Slika" width="350" height="250" />
+                                <img src="~/images/items/@e.Image" width="350" height="250" />
                             }
                             else
                             {
@@ -64,15 +63,15 @@
 
                     <td style="padding-top:8%">
                         <div>
-                            <strong>@e.Naziv</strong> <br />
+                            <strong>@e.Name</strong> <br />
 
-                            @e.ProstorOdrzavanjaNaziv
+                            @e.VenueName
                             <br />
-                            @e.ProstorOdrzavanjaGrad
+                            @e.VenueCity
 
                             <br />
 
-                            @e.DatumOdrzavanja- @e.VrijemeOdrzavanja h
+                            @e.Start- @e.End
 
                         </div>
                     </td>
@@ -81,6 +80,6 @@
         </tbody>
     </table>
 }
-<a asp-area="" asp-controller="Home" , asp-action="Index" class="btn btn-light">Nazad na početnu stranicu</a>
+<a asp-area="" asp-controller="Home" , asp-action="Index" class="btn btn-light">Back to homepage</a>
 
 
