@@ -15,11 +15,11 @@ namespace Eventi.Web.Areas.Client.Controllers
 {
     [Authorization(AccountCategory: AccountCategory.Client)]
     [Area("Client")]
-    public class PosjeceniEventiController : Controller
+    public class EventController : Controller
     {
         private readonly MojContext ctx;
 
-        public PosjeceniEventiController(MojContext context)
+        public EventController(MojContext context)
         {
             ctx = context;
         }
@@ -52,57 +52,6 @@ namespace Eventi.Web.Areas.Client.Controllers
                 return View(model);
             }
             return Redirect("/ModulKorisnik/Korisnik/Index");
-        }
-
-        public IActionResult Recenzija(int id, int page)
-        {
-            Recenzija r = ctx.Recenzija.Where(re=>re.KupovinaId == id).SingleOrDefault();
-            Kupovina k = ctx.Kupovina.Where(kp => kp.Id == id).Include(kp => kp.Event).SingleOrDefault();
-            RecenzijaVM model = new RecenzijaVM();
-            model.page = page;
-            if (r == null)
-            {
-                // recenzija se tek dodaje
-                model.RecenzijaId = 0;
-                model.KupovinaId = id;
-                model.NazivEventa = k.Event.Naziv;
-            }
-            else
-            {
-                // recenzija postoji
-                model.RecenzijaId = r.Id;
-                model.KupovinaId = r.KupovinaId;
-                model.Komentar = r.Komentar;
-                model.Ocjena = r.Ocjena;
-                model.NazivEventa = k.Event.Naziv;
-            }
-              
-            
-            return PartialView(model);
-        }
-
-        public IActionResult SnimiRecenziju(RecenzijaVM model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-            Recenzija r;
-            if (model.RecenzijaId == 0)
-            {
-                r = new Recenzija();
-                ctx.Recenzija.Add(r);
-            }
-            else
-            {
-               r = ctx.Recenzija.Where(re => re.Id==model.RecenzijaId).SingleOrDefault();
-            }
-            r.KupovinaId = model.KupovinaId;
-            r.Komentar = model.Komentar;
-            r.Ocjena = model.Ocjena;
-
-            ctx.SaveChanges();
-            return Redirect("/ModulKorisnik/PosjeceniEventi/Index?page="+model.page);
         }
     }
 }
