@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Eventi.Web.Areas.Client.Models
 {
-    public class PretragaEventaVM
+    public class EventSearchVM
     {
         public List<Rows> Events { get; set; }
          public int ClientID { get; set; }

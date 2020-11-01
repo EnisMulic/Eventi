@@ -1,9 +1,4 @@
-﻿
-@{
-   
-}
-@using Eventi.Data.Models;
-@model Eventi.Web.Areas.Client.Models.PretragaEventaVM
+﻿@model Eventi.Web.Areas.Client.Models.EventSearchVM
 
 
 <style>
@@ -22,10 +17,10 @@
         color: black;
     }
 
-        #linkEvent:hover {
-            color:#e61c41;
-            text-decoration: none;
-        }
+    #linkEvent:hover {
+        color:#e61c41;
+        text-decoration: none;
+    }
 
     #izbornik {
         display: inline;
@@ -42,35 +37,38 @@
         <input type="submit" class="btn btn-light" value="Traži" />
     </form>
     <div id="izbornik">
-        <a asp-area="ModulKorisnik" asp-controller="Korisnik" asp-action="Index" class="btn btn-light">Sve </a>
-        <a asp-area="ModulKorisnik" asp-controller="Korisnik" asp-action="Index" asp-route-filter="Muzika" class="btn btn-light">Muzika </a>
-        <a asp-area="ModulKorisnik" asp-controller="Korisnik" asp-action="Index" asp-route-filter="Kultura" class="btn btn-light">Kultura</a>
-        <a asp-area="ModulKorisnik" asp-controller="Korisnik" asp-action="Index" asp-route-filter="Sport" class="btn btn-light">Sport </a>
-        <a asp-area="ModulKorisnik" asp-controller="PosjeceniEventi" asp-action="Index" class="btn btn-light">Posjećeni eventi</a>
+        <a asp-area="Client" asp-controller="Client" asp-action="Index" class="btn btn-light">All </a>
+        <a asp-area="Client" asp-controller="Client" asp-action="Index" asp-route-filter="Music" class="btn btn-light">Music </a>
+        <a asp-area="Client" asp-controller="Client" asp-action="Index" asp-route-filter="Culture" class="btn btn-light">Culture</a>
+        <a asp-area="Client" asp-controller="Client" asp-action="Index" asp-route-filter="Sport" class="btn btn-light">Sport </a>
+        <a asp-area="Client" asp-controller="PosjeceniEventi" asp-action="Index" class="btn btn-light">Posjećeni eventi</a>
     </div>
 </div>
 
 <div id="glavniDiv" class="row text-center">
 
-    @foreach (var e in Model.Eventi)
+    @foreach (var e in Model.Events)
     {
         <div class="col-sm-4">
             <div id="unutrasnji" class="thumbnail">
-                @if (e.Slika == null)
+                @if (e.Image == null)
                 {                                                      
                      <img src="~/images/items/events.jpg"  width="350" height="250">
                 }
                 else
                 {
-                <img src="~/images/items/@e.Slika"  width="350" height="250"> 
+                <img src="~/images/items/@e.Image"  width="350" height="250"> 
                 }
-                <p> <a id="linkEvent" asp-area="ModulKorisnik" asp-controller="Korisnik" asp-action="OEventu" asp-route-eId="@e.EventId" asp-route-korId="@Model.KorisnikId"><strong>@e.Naziv</strong></a></p>
+                <p> 
+                    <a id="linkEvent" asp-area="Client" asp-controller="Client" asp-action="EventDetails" asp-route-EventID="@e.EventID" asp-route-ClientID="@Model.ClientID">
+                        <strong>@e.Name</strong>
+                    </a>
+                </p>
                 <p>
-                    @e.ProstorOdrzavanjaGrad
+                    @e.VenueCity
 
                     <br />
-                    @e.DatumOdrzavanja
-                    - @e.VrijemeOdrzavanja h
+                    @e.Start - @e.End
 
                 </p>
 
