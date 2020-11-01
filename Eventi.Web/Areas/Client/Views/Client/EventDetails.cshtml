@@ -1,9 +1,9 @@
 ﻿
 @{
-    ViewData["Title"] = "OEventu";
+    ViewData["Title"] = "EventDetails";
 }
 
-@model Eventi.Web.Areas.Client.Models.EventKorisnikVM
+@model Eventi.Web.Areas.Client.Models.EventClientVM
 
 <style>
 
@@ -75,15 +75,19 @@
 
        
 </style>
-<h5><strong> <a id="linkNaziv" href="/ModulKorisnik/Korisnik/OEventu?eId=@Model.EventId&korId=@Model.KorisnikId">@Model.Naziv</a></strong></h5>
+<h5>
+    <strong> 
+        <a id="linkNaziv" href="/Client/Client/EventDetails?EventID=@Model.EventID&ClientID=@Model.ClientID">@Model.Name</a>
+    </strong>
+</h5>
 <br />
 <div id="ajaxDiv">
     <table id="veca">
         <tr>
             <td id="prviTd">
-                @if (Model.Slika != null && Model.Slika.Equals(" ")==false)
+                @if (Model.Image != null && Model.Image.Equals(" ")==false)
                 {
-                    <img src="~/images/items/@Model.Slika" width="350" height="250" />
+                    <img src="~/images/items/@Model.Image" width="350" height="250" />
                 }
                 else
                 {
@@ -95,21 +99,8 @@
                 <table id="manja">
                     <tr>
                         <td>
-                            <div id="likeTd">
-                                @if (Model.IsLikean == false)
-                                {
-                                    <a class="tdLink" href="/ModulKorisnik/Korisnik/LikeEvent?eId=@Model.EventId&korId=@Model.KorisnikId" ajax-poziv="like" ajax-rezultat="likeTd">Like</a>
-                                }
-                                else
-                                {
-                                    <a class="tdLink" href="/ModulKorisnik/Korisnik/DisLikeEvent?eId=@Model.EventId&korId=@Model.KorisnikId" ajax-poziv="dislike"
-                                       ajax-rezultat="likeTd">Dislike</a>
-                                }
-                            </div>
-                        </td>
-                        <td>
                             <div id="kupiKartuTd">
-                                <a class="tdLink" href="/ModulKorisnik/Korisnik/KupiKartu?eId=@Model.EventId&kId=@Model.KorisnikId" ajax-poziv="karta" ajax-rezultat="ajaxDiv">Kupi kartu</a>
+                                <a class="tdLink" href="/Client/Client/BuyTicket?EventID=@Model.EventID&ClientID=@Model.ClientID" ajax-poziv="karta" ajax-rezultat="ajaxDiv">Buy Ticket</a>
                             </div>
                         </td>
                     </tr>
@@ -122,13 +113,13 @@
 
             <td id="treciTd" colspan="2">
 
-                <p>Kategorija: @Model.Kategorija</p>
-                <p>Datum: @Model.DatumOdrzavanja u @Model.VrijemeOdrzavanja</p>
-                <p>Grad: @Model.ProstorOdrzavanjaGrad</p>
-                <p>Prostor odrzvanja: @Model.ProstorOdrzavanjaNaziv  - @Model.ProstorOdrzavanjaAdresa</p>
-                @if (@Model.Opis != null)
+                <p>Category: @Model.Category</p>
+                <p>Date: @Model.Start - @Model.End</p>
+                <p>City: @Model.VenueCity</p>
+                <p>Venue: @Model.VenueName  - @Model.VenueAddress</p>
+                @if (@Model.Description != null)
                 {
-                    <p>O eventu: @Model.Opis</p>
+                    <p>Description: @Model.Description</p>
                 }
             </td>
         </tr>

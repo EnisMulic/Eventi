@@ -1,0 +1,103 @@
+﻿
+@{
+    ViewData["Title"] = "UserDetails";
+}
+
+@model Eventi.Web.Areas.Client.Models.ClientDetailsVM
+
+<style>
+    .labelDiv{
+        width:20%;
+        display:normal;
+        margin-right:10%;
+    }
+    .form-inline label{
+       justify-content:left;
+    }    
+   
+    #slika{
+        margin-right:10%;
+    }
+    #forma{
+        width:60%;
+    }
+     form{
+        width:100%;
+        margin-right:0%;
+     }
+    #nadDiv{
+        display:flex;
+    }
+    .btn-success{
+        width:60%;
+    }
+  
+</style>
+<div id="nadDiv">
+    <div id="slika">
+        @if (Model.Image != null)           
+        {
+            <img src="~/images/users/@Model.Image" width="300" height="250"/>
+        }
+        else 
+        {
+            <img src="~/images/korisnicke/userIcon.png" width="300" height="250"  />
+        }
+    </div>
+
+    <div id="forma">
+        <form asp-action="SnimiPodatke" method="post" enctype="multipart/form-data">
+            <input type="hidden" asp-for="ID" value="@Model.ID" />
+            <input type="hidden" asp-for="Image" value="@Model.Image" />
+
+            <div class="form-inline">
+
+                <label class="labelDiv">First Name: </label>
+                <input asp-for="FirstName" type="text" class="form-control" value="@Model.FirstName" id="ime" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+
+            </div>
+            <div class="form-inline">
+                <label class="labelDiv" for="LastName">Last Name: </label>
+                <input asp-for="LastName" type="text" class="form-control" value="@Model.LastName" id="prezime" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+            <div class="form-inline">
+                <label class="labelDiv" for="telefon">Telefon: </label>
+                <input asp-for="PhoneNumber" type="text" class="form-control" id="telefon" value="@Model.PhoneNumber" />
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="form-inline">
+                <label class="labelDiv" for="Country">Country: </label>
+                <select class="form-control" asp-for="CountryID" asp-items="@Model.Countries"></select>
+            </div>
+            <div class="form-inline">
+                <label class="labelDiv" for="City">City</label>
+                <input asp-for="City" type="text" class="form-control" id="City" value="@Model.City" />
+                <span asp-validation-for="City" class="text-danger"></span>
+            </div>
+            <div class="form-inline">
+                <label class="labelDiv" for="Address">Address</label>
+                <input asp-for="Address" type="text" class="form-control" value="@Model.Address" id="Address" />
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+            <div class="form-inline">
+                <label class="labelDiv" for="email">Email</label>
+                <input asp-for="Email" type="text" class="form-control" value="@Model.Email" id="email" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-inline">
+                <label class="labelDiv" for="CreditCardNumber">Credit Card Number</label>
+                <input asp-for="CreditCardNumber" class="form-control" value="@Model.CreditCardNumber" id="CreditCardNumber" />
+                <span asp-validation-for="CreditCardNumber" class="text-danger"></span>
+            </div>
+            <div class="form-inline">
+                <label class="labelDiv">Image</label>
+                <input type="file" name="slika" />
+            </div>
+
+            <input type="submit" value="Save" class="btn btn-success" />
+        </form>
+    </div>
+</div>
+
