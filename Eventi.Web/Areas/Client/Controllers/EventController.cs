@@ -1,15 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Eventi.Common;
+using Eventi.Contracts.V1.Requests;
 using Eventi.Data.EF;
-using Eventi.Data.Models;
+using Eventi.Sdk;
 using Eventi.Web.Areas.Client.Models;
 using Eventi.Web.Helper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using ReflectionIT.Mvc.Paging;
 
 namespace Eventi.Web.Areas.Client.Controllers
 {
@@ -18,40 +16,51 @@ namespace Eventi.Web.Areas.Client.Controllers
     public class EventController : Controller
     {
         private readonly MojContext ctx;
+        private readonly IEventiApi _eventiApi;
 
-        public EventController(MojContext context)
+        public EventController(IEventiApi eventiApi)
         {
-            ctx = context;
+            _eventiApi = eventiApi;
         }
 
         [Obsolete]   
         public async Task<IActionResult> Index(int page=1)
         {
-            var l = await HttpContext.GetLoggedInUser();
-            if (l != null)
+            var account = await HttpContext.GetLoggedInUser();
+            if (account != null)
             {
-                Korisnik k = ctx.Korisnik.Where(k => k.Osoba.LogPodaciId == l.ID).Include(k => k.Osoba).SingleOrDefault();
 
-                var posjeceni = ctx.Kupovina.Where(p => p.KorisnikId == k.Id)
-                    .Select(p => new PrikazPosjeceniEventiVM
-                    {
-                        page=page,
-                        KupovinaId = p.Id,
-                        KorisnikId = k.Id,
-                        EventId = p.EventId,
-                        DatumOdrzavanja = p.Event.DatumOdrzavanja.ToShortDateString(),
-                        Kategorija = p.Event.Kategorija.ToString(),
-                        Naziv = p.Event.Naziv,
-                        Slika = p.Event.Slika,
-                        ProstorOdrzavanjaGrad = p.Event.ProstorOdrzavanja.Grad.Naziv,
-                        VrijemeOdrzavanja = p.Event.VrijemeOdrzavanja,
-                        UkupnoPlaceno = ctx.KupovinaTip.Where(t => t.KupovinaId == p.Id).Sum(t => t.Cijena)
-                    }).AsNoTracking().OrderBy(p => p.KupovinaId);
-                var model = await PagingList<PrikazPosjeceniEventiVM>.CreateAsync(posjeceni, 2, page);
+                var clientResponse = await _eventiApi.GetClientAsync(new ClientSearchRequest()
+                {
+                    AccountID = account.ID
+                });
+                var Client = clientResponse.Content.Data.ToList()[0];
+
+                var eventResponse = await _eventiApi.GetClientEvents(Client.ID);
+                var events = eventResponse.Content;
+                var model = new VisitedEventsVM()
+                {
+                    Events = eventResponse.Content
+                        .Select
+                        (
+                            i => new VisitedEventsVM.Row
+                            {
+                                EventID = i.ID,
+                                Category = i.EventCategory.ToString(),
+                                Name = i.Name,
+                                Image = i.Image,
+                                Start = i.Start,
+                                End = i.End
+                            }
+                        )
+                        .ToList()
+                };
+                
+                
 
                 return View(model);
             }
-            return Redirect("/ModulKorisnik/Korisnik/Index");
+            return Redirect("/Client/Client/Index");
         }
     }
 }

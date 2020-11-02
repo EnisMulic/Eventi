@@ -9,7 +9,7 @@
     }
 </style>
 
-@model ReflectionIT.Mvc.Paging.PagingList<Eventi.Web.Areas.Client.Models.PrikazPosjeceniEventiVM>
+@model Eventi.Web.Areas.Client.Models.VisitedEventsVM
 @using ReflectionIT.Mvc.Paging
 @addTagHelper *,ReflectionIT.Mvc.Paging
 
@@ -22,32 +22,29 @@
 <br />
 <table class="table table-dark">
     <tbody>
-        @foreach(var p in Model)
+        @foreach(var p in Model.Events)
        {
         <tr>
             <td style="width:230px; vertical-align:bottom">
-                @if (p.Slika == null)
+                @if (p.Image == null)
                         {
                 <img src="~/images/items/events.jpg" width="290" height="190">
                         }
                         else
                         {
-                <img src="~/images/items/@p.Slika" width="290" height="190">
+                <img src="~/images/items/@p.Image" width="290" height="190">
                         }
             </td>
             <td>
-                <p><strong>@p.Naziv</strong></p>
+                <p><strong>@p.Name</strong></p>
 
-                <p>@p.Kategorija</p>
-                <p>@p.DatumOdrzavanja @p.VrijemeOdrzavanja</p>
-                <p>@p.ProstorOdrzavanjaGrad</p>
+                <p>@p.Category</p>
+                <p>@p.Start - @p.End</p>
+                <p>@p.VenueCity</p>
             </td>
             <td>
                 <p>Cijena svih kupljenih karata:</p>
-                <p>@p.UkupnoPlaceno  KM</p>
-            </td>
-            <td>
-                <a ajax-poziv="da" ajax-rezultat="ajaxRecenzija" href="/ModulKorisnik/PosjeceniEventi/Recenzija?id=@p.KupovinaId&page=@p.page" class="btn btn-primary">Recenzija</a>
+                <p>@p.SumPayed  KM</p>
             </td>
         </tr>
 
@@ -55,10 +52,5 @@
     </tbody>
 </table>
 
-
-
-<nav>
-    <vc:pager paging-list="@Model" />
-</nav>
 
 
