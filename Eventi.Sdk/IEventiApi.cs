@@ -72,6 +72,9 @@ namespace Eventi.Sdk
 
         [Delete("/api/v1/Client/{id}")]
         Task<ApiResponse<bool>> DeleteClientAsync(int id);
+
+        [Get("/api/v1/Client/{id}/Events")]
+        Task<ApiResponse<List<EventResponse>>> GetClientEvents(int id);
         #endregion
 
         #region Administrator
