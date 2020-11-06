@@ -55,6 +55,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Eventi.Common\Eventi.Common.csproj" />
     <ProjectReference Include="..\Eventi.Data\Eventi.Data.csproj" />
     <ProjectReference Include="..\Eventi.Sdk\Eventi.Sdk.csproj" />
   </ItemGroup>
