@@ -2,17 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Eventi.Data.EF;
-using Eventi.Data.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.IO;
 using Microsoft.AspNetCore.Http;
 using Eventi.Web.Helper;
 using Eventi.Web.Areas.Organizer.ViewModels;
-using Microsoft.Extensions.Configuration;
-using Nexmo.Api;
 using Eventi.Common;
 using Eventi.Sdk;
 using Eventi.Contracts.V1.Requests;
@@ -23,15 +18,11 @@ namespace Eventi.Web.Areas.Organizer.Controllers
     [Area("Organizer")]
     public class HomeController : Controller
     {
-        private readonly MojContext ctx;
-        private readonly IConfiguration _configuration;
         private readonly IEventiApi _eventiApi;
 
-        public HomeController(MojContext context, IConfiguration configuration, IEventiApi eventiApi)
+        public HomeController(IEventiApi eventiApi)
         {
             _eventiApi = eventiApi;
-            ctx = context;
-            _configuration = configuration;
         }
 
         private async Task<List<EventVM>> GetEvents(int orgId)
@@ -69,19 +60,8 @@ namespace Eventi.Web.Areas.Organizer.Controllers
 
             List<EventVM> events = await GetEvents(organizer.ID);
 
-            // ToDo:
-            var model = new StatistickiPodaciVM
-            {
-                Data = events.Select(i => new StatistickiPodaciVM.Rows
-                {
-                    EventName = i.Name
-                }
-                ).ToList()
-            };
-
             var venueResponse = await _eventiApi.GetVenueAsync();
 
-            ViewData["StatistickiPodaci"] = model;
             ViewData["OrganizatorID"] = organizer.ID;
             ViewData["EventiOrganizatora"] = events;
             ViewData["ProstoriOdrzavanja"] = venueResponse.Content.Data.Select(s => new SelectListItem
@@ -93,49 +73,8 @@ namespace Eventi.Web.Areas.Organizer.Controllers
             return View();
         }
 
-        bool provjeraTipKarte(int eventID, TipKarte tip)
-        {
-            var provjeraTip = ctx.ProdajaTip.Where(p => p.EventId == eventID).Include(e => e.Event).ToList();
-
-            if (provjeraTip.Count() == 0)
-            {
-                return true;
-            }
-            else
-            {
-                foreach (var x in provjeraTip)
-                {
-                    if (x.TipKarte == tip)
-                        return false;
-                }
-            }
-
-            return true;
-        }
-
-        public IActionResult SnimiProdajaTip(SnimiProdajaTipVM data)
-        {
-            int optCombo = Int32.Parse(data._tipKarteCombo);
-                       
-            if (provjeraTipKarte(data._eventID,(TipKarte)optCombo))
-            {
-                int optRadio = data._postojeSjedista;
-                ProdajaTip p = new ProdajaTip
-                {
-                    TipKarte = (TipKarte)optCombo,
-                    UkupnoKarataTip = data._ukupnoKarataTip,
-                    PostojeSjedista = optRadio != 0,
-                    CijenaTip = data._cijenaTip,
-                    BrojProdatihKarataTip=0,
-                    EventId = data._eventID,
-                };
-
-                ctx.ProdajaTip.Add(p);
-                ctx.SaveChanges();
-            }
-
-            return Redirect("EventInfoPrikaz?EventID=" + data._eventID.ToString());
-        }
+        
+        
 
         public async Task<IActionResult> SaveEvent(SaveEventVM data, IFormFile slika)
         {
@@ -209,33 +148,8 @@ namespace Eventi.Web.Areas.Organizer.Controllers
             return View("EventDetails");
         }
 
-        public IActionResult OtkaziEvent(int EventID)
-        {
-            var query =
-                from ev in ctx.Event
-                where ev.Id == EventID
-                select ev;
-            foreach(var _event in query)
-            {
-                _event.IsOtkazan = true;
-            }
-
-
-            var Nexmo_Api_Key = _configuration.GetSection("NEXMO_API_KEY").Value;
-            var Nexmo_Api_Secret = _configuration.GetSection("NEXMO_API_SECRET").Value;
-
-            var client = new Nexmo.Api.Client(creds: new Nexmo.Api.Request.Credentials(nexmoApiKey: Nexmo_Api_Key, nexmoApiSecret: Nexmo_Api_Secret));
-                client.SMS.Send(new SMS.SMSRequest
-                {
-                    from = "NEXMO_Zinedin",
-                    to = "387111111111",
-                    text = "Ovo je test poruka preko Nexmo"
-                });
-
-            return Redirect("EventInfoPrikaz?EventID=" + EventID.ToString());
-        }
-
         
+
         public async Task<IActionResult> EventEdit(int EventID)
         {
             var response = await _eventiApi.GetEventAsync(EventID);

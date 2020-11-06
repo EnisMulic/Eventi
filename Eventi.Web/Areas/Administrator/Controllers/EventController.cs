@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Eventi.Common;
 using Eventi.Contracts.V1.Requests;
-using Eventi.Data.EF;
-using Eventi.Data.Models;
-using Eventi.Data.Repository;
 using Eventi.Sdk;
 using Eventi.Web.Areas.Administrator.Models;
 using Eventi.Web.Helper;

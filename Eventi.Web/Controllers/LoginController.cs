@@ -1,33 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Eventi.Data.EF;
-using Eventi.Data.Models;
 using Eventi.Web.Helper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Eventi.Web.ViewModels;
 using Eventi.Sdk;
 using Eventi.Contracts.V1.Requests;
 using System.IdentityModel.Tokens.Jwt;
-using Eventi.Contracts.V1.Responses;
 using AutoMapper;
 using Eventi.Web.Models;
-using Newtonsoft.Json.Linq;
 
 namespace Eventi.Web.Controllers
 {
     public class LoginController : Controller
     {
-        private MojContext ctx;
         private readonly IAuthApi _authApi;
         private readonly IEventiApi _eventiApi;
         private readonly IMapper _mapper;
 
-        public LoginController(MojContext context, IAuthApi authApi, IEventiApi eventiApi, IMapper mapper)
+        public LoginController(IAuthApi authApi, IEventiApi eventiApi, IMapper mapper)
         {
-            ctx = context;
             _authApi = authApi;
             _eventiApi = eventiApi;
             _mapper = mapper;

@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Eventi.Common;
 using Eventi.Contracts.V1.Requests;
-using Eventi.Data.EF;
 using Eventi.Sdk;
 using Eventi.Web.Areas.Client.Models;
 using Eventi.Web.Helper;
@@ -15,7 +14,6 @@ namespace Eventi.Web.Areas.Client.Controllers
     [Area("Client")]
     public class EventController : Controller
     {
-        private readonly MojContext ctx;
         private readonly IEventiApi _eventiApi;
 
         public EventController(IEventiApi eventiApi)

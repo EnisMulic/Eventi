@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Eventi.Common;
 using Eventi.Contracts.V1.Requests;
-using Eventi.Data.EF;
 using Eventi.Sdk;
 using Eventi.Web.Areas.Administrator.Models;
 using Eventi.Web.Helper;
@@ -15,7 +14,7 @@ namespace Eventi.Web.Areas.Administrator.Controllers
     public class ClientController : Controller
     {
         private readonly IEventiApi _eventiApi;
-        public ClientController(MojContext context, IEventiApi eventiApi)
+        public ClientController(IEventiApi eventiApi)
         {
             _eventiApi = eventiApi;
         }

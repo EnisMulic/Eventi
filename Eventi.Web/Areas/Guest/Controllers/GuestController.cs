@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Eventi.Web.Areas.Guest.Models;
-using Eventi.Data.EF;
 using Microsoft.AspNetCore.Mvc;
-using Eventi.Data.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using Eventi.Sdk;
 using System.Threading.Tasks;
-using AspNetCore;
 using Eventi.Contracts.V1.Requests;
 
 namespace Eventi.Web.Areas.Guest.Controllers

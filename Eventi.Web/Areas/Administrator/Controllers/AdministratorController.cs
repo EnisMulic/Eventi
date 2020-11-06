@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Eventi.Common;
 using Eventi.Contracts.V1.Requests;
-using Eventi.Data.EF;
 using Eventi.Sdk;
 using Eventi.Web.Areas.Administrator.Models;
 using Eventi.Web.Helper;
@@ -15,10 +14,9 @@ namespace Eventi.Web.Areas.Administrator.Controllers
     public class AdministratorController : Controller
     {
         private readonly IEventiApi _eventiApi;
-        public AdministratorController(MojContext context, IEventiApi eventiApi)
+        public AdministratorController(IEventiApi eventiApi)
         {
             _eventiApi = eventiApi;
-
         }
 
         public async Task<IActionResult> AdminProfile(int ID)

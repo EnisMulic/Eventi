@@ -3,10 +3,7 @@
 @{
     Layout = null;
     var eventInfo = (EventVM) ViewData["eventInfo"];
-    var prodajaTipInfo = (List<OrganizatorProdajaTipVM>) ViewData["_prodajaTipInfo"];
 }
-
-@model SnimiProdajaTipVM
 
 <!DOCTYPE html>
 <html lang="en">
@@ -213,74 +210,13 @@ font-family: 'Roboto', sans-serif;
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var i in prodajaTipInfo)
-                        {
-
-                            <tr class="info">
-                                <td>@i._tipKarte</td>
-                                <td>@i._ukupnoKarataTip</td>
-                                <td>@i._brojProdatihKarataTip</td>
-                                <td>@i._cijenaTip</td>
-                                @if (i._postojeSjedista == "True")
-                                {
-                                    <td>DA</td>
-                                }
-                                else
-                                {
-                                    <td>NE</td>
-                                }
-                            </tr>
-                        }
+                        
                     </tbody>
                 </table>
             </div>
         </div>
 
-        <div id="modalForma" class="modal">
-
-            <div class="modal-content">
-                <span class="close">&times;</span>
-                <form asp-action="SnimiProdajaTip" method="post">
-
-                    <input hidden asp-for="_eventID" value="@eventInfo.ID" />
-
-                    <label for="tipKarteCmb">Tip karte : </label>
-                    <select required id="tipKarteCmb" asp-for="_tipKarteCombo">
-                        <option value="" disabled selected>odaberite tip</option>
-                        <option value="0">VIP</option>
-                        <option value="1">Parter</option>
-                        <option value="2">Tribina</option>
-                        <option value="3">Obicna</option>
-                    </select>
-
-
-                    <div class="form-group">
-                        <label for="cijenaTip">Cijena karte : </label>
-                        <input required type="number" class="form-control" id="cijenaTip" asp-for="_cijenaTip">
-                    </div>
-
-                    <label>Postoje sjedista :</label>
-
-                    <div class="radio">
-                        <label><input required type="radio" asp-for="_postojeSjedista" value="1">Da</label>
-                    </div>
-
-                    <div class="radio">
-                        <label><input required type="radio" asp-for="_postojeSjedista" value="0">Ne</label>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="ukupnoKarata">Broj karata za izdavanje :</label>
-                        <input required type="number" class="form-control" id="ukupnoKarata" asp-for="_ukupnoKarataTip">
-                    </div>
-
-
-                    <br />
-                    <button type="submit" class="btn btn-default">Submit</button>
-                </form>
-            </div>
-
-        </div>
+        
 
         <script>
             var modal = document.getElementById("modalForma");

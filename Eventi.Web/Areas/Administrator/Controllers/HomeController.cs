@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
+using AspNetCore;
 using Eventi.Common;
-using Eventi.Data.EF;
-using Eventi.Data.Repository;
+using Eventi.Sdk;
 using Eventi.Web.Areas.Administrator.Models;
 using Eventi.Web.Helper;
 using Microsoft.AspNetCore.Http;
@@ -13,12 +13,10 @@ namespace Eventi.Web.Areas.Administrator.Controllers
     [Area("Administrator")]
     public class HomeController : Controller
     {
-        private readonly MojContext ctx;
-        private readonly EventAttenderUnitOfWork uow;
-        public HomeController(MojContext context)
+        private readonly IEventiApi _eventiApi1;
+        public HomeController(IEventiApi eventiApi)
         {
-            ctx = context;
-            uow = new EventAttenderUnitOfWork(ctx);
+            _eventiApi1 = eventiApi;
         }
 
         public async Task<IActionResult> Index()
