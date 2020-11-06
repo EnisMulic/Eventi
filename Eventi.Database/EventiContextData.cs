@@ -1,10 +1,9 @@
-﻿using Eventi.Core.Helpers;
+﻿using Eventi.Common;
+using Eventi.Core.Helpers;
 using Eventi.Domain;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Data.SqlTypes;
-using System.Runtime.InteropServices.ComTypes;
 
 namespace Eventi.Database
 {
@@ -26,7 +25,7 @@ namespace Eventi.Database
                         new Account
                         {
                             ID = 1,
-                            AccountCategory = Common.AccountCategory.Organizer,
+                            AccountCategory = AccountCategory.Organizer,
                             Email = "org@eventi.com",
                             PasswordSalt = salt[0],
                             PasswordHash = HashHelper.GenerateHash(salt[0], "test"),
@@ -35,7 +34,7 @@ namespace Eventi.Database
                         new Account
                         {
                             ID = 2,
-                            AccountCategory = Common.AccountCategory.Administrator,
+                            AccountCategory = AccountCategory.Administrator,
                             Email = "admin@eventi.com",
                             PasswordSalt = salt[1],
                             PasswordHash = HashHelper.GenerateHash(salt[1], "test"),
@@ -44,7 +43,7 @@ namespace Eventi.Database
                         new Account
                         {
                             ID = 3,
-                            AccountCategory = Common.AccountCategory.Client,
+                            AccountCategory = AccountCategory.Client,
                             Email = "client@eventi.com",
                             PasswordSalt = salt[2],
                             PasswordHash = HashHelper.GenerateHash(salt[2], "test"),
@@ -152,16 +151,16 @@ namespace Eventi.Database
                 (
                     new List<Venue>()
                     {
-                        new Venue { ID = 1,  CityID = 1, Name = "Venue 01", Address = "Address", VenueCategory = Common.VenueCategory.Arena},
-                        new Venue { ID = 2,  CityID = 1, Name = "Venue 02", Address = "Address", VenueCategory = Common.VenueCategory.Arena},
-                        new Venue { ID = 3,  CityID = 1, Name = "Venue 03", Address = "Address", VenueCategory = Common.VenueCategory.Arena},
-                        new Venue { ID = 4,  CityID = 1, Name = "Venue 04", Address = "Address", VenueCategory = Common.VenueCategory.Arena},
-                        new Venue { ID = 5,  CityID = 1, Name = "Venue 05", Address = "Address", VenueCategory = Common.VenueCategory.Hall},
-                        new Venue { ID = 6,  CityID = 1, Name = "Venue 06", Address = "Address", VenueCategory = Common.VenueCategory.Hall},
-                        new Venue { ID = 7,  CityID = 2, Name = "Venue 07", Address = "Address", VenueCategory = Common.VenueCategory.Hall},
-                        new Venue { ID = 8,  CityID = 2, Name = "Venue 08", Address = "Address", VenueCategory = Common.VenueCategory.Stadium},
-                        new Venue { ID = 9,  CityID = 3, Name = "Venue 09", Address = "Address", VenueCategory = Common.VenueCategory.Stadium},
-                        new Venue { ID = 10, CityID = 3, Name = "Venue 10", Address = "Address", VenueCategory = Common.VenueCategory.Stadium}
+                        new Venue { ID = 1,  CityID = 1, Name = "Venue 01", Address = "Address", VenueCategory = VenueCategory.Arena},
+                        new Venue { ID = 2,  CityID = 1, Name = "Venue 02", Address = "Address", VenueCategory = VenueCategory.Arena},
+                        new Venue { ID = 3,  CityID = 1, Name = "Venue 03", Address = "Address", VenueCategory = VenueCategory.Arena},
+                        new Venue { ID = 4,  CityID = 1, Name = "Venue 04", Address = "Address", VenueCategory = VenueCategory.Arena},
+                        new Venue { ID = 5,  CityID = 1, Name = "Venue 05", Address = "Address", VenueCategory = VenueCategory.Hall},
+                        new Venue { ID = 6,  CityID = 1, Name = "Venue 06", Address = "Address", VenueCategory = VenueCategory.Hall},
+                        new Venue { ID = 7,  CityID = 2, Name = "Venue 07", Address = "Address", VenueCategory = VenueCategory.Hall},
+                        new Venue { ID = 8,  CityID = 2, Name = "Venue 08", Address = "Address", VenueCategory = VenueCategory.Stadium},
+                        new Venue { ID = 9,  CityID = 3, Name = "Venue 09", Address = "Address", VenueCategory = VenueCategory.Stadium},
+                        new Venue { ID = 10, CityID = 3, Name = "Venue 10", Address = "Address", VenueCategory = VenueCategory.Stadium}
                     }
                 );
 

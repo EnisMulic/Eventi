@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Eventi.Common\Eventi.Common.csproj" />
     <ProjectReference Include="..\Eventi.Core\Eventi.Core.csproj" />
     <ProjectReference Include="..\Eventi.Domain\Eventi.Domain.csproj" />
   </ItemGroup>
