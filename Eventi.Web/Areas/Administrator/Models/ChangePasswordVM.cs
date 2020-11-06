@@ -7,31 +7,31 @@ using System.Threading.Tasks;
 
 namespace Eventi.Web.Areas.Administrator.Models
 {
-    public class PromjenaPasswordaVM
+    public class ChangePasswordVM
     {
         //Admin id
-        public int Id { get; set; }
-        public int LogPodaciId { get; set; }
+        public int ID { get; set; }
+        public int AccountID { get; set; }
 
-        [Required(ErrorMessage = "Obavezno polje")]
-        [MinLength(8, ErrorMessage = "Minimalno 8 znakova")]
+        [Required]
+        [MinLength(8)]
         [MaxLength(25)]
         [Remote(action: "IsOldPassword", controller: "Administrator", areaName: "Administrator",
-                AdditionalFields = "LogPodaciId",
-                ErrorMessage = "Password nije ispravan")]
+                AdditionalFields = "AccountID",
+                ErrorMessage = "Wrong Password")]
         public string OldPassword { get; set; }
 
-        [Required(ErrorMessage = "Obavezno polje")]
-        [MinLength(8, ErrorMessage = "Minimalno 8 znakova")]
+        [Required]
+        [MinLength(8)]
         [MaxLength(25)]
         public string NewPassword { get; set; }
 
-        [Required(ErrorMessage = "Obavezno polje")]
-        [MinLength(8, ErrorMessage = "Minimalno 8 znakova")]
+        [Required]
+        [MinLength(8)]
         [MaxLength(25)]
         [Remote(action: "MatchNewPassword", controller: "Administrator", areaName: "Administrator",
                 AdditionalFields = "NewPassword",
-                ErrorMessage = "Password se ne podudara")]
+                ErrorMessage = "Passwords do not match")]
         public string NewPasswordConfirmed { get; set; }
     }
 }

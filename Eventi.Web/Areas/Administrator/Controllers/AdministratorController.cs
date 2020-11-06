@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Eventi.Common;
 using Eventi.Contracts.V1.Requests;
 using Eventi.Data.EF;
-using Eventi.Data.Models;
-using Eventi.Data.Repository;
 using Eventi.Sdk;
 using Eventi.Web.Areas.Administrator.Models;
 using Eventi.Web.Helper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Eventi.Web.Areas.Administrator.Controllers
 {
@@ -85,32 +80,27 @@ namespace Eventi.Web.Areas.Administrator.Controllers
             return Redirect("AdminProfile?id=" + model.ID);
         }
 
-        //public IActionResult PromijeniPassword(int id)
-        //{
-        //    var Admin = uow.AdministratorRepository.GetAll()
-        //        .Include(i => i.Osoba)
-        //        .Include(i => i.Osoba.LogPodaci)
-        //        .Where(i => i.Id == id)
-        //        .SingleOrDefault();
+        public async Task<IActionResult> ChangePassword(int id)
+        {
+            var account = await HttpContext.GetLoggedInUser();
+            var response = await _eventiApi.GetAdministratorAsync(id);
 
-        //    var model = new AdministratorVM
-        //    {
-        //        ID = id,
-        //        LogPodaciId = Admin.Osoba.LogPodaci.Id,
-        //        Username = Admin.Osoba.LogPodaci.Username,
-        //        OldPassword = Admin.Osoba.LogPodaci.Password
-        //    };
+            var admin = response.Content;
+            var model = new AdministratorVM
+            {
+                ID = id,
+                AccountID = admin.AccountID,
+                Username = admin.Username
+            };
 
-        //    return View(model);
-        //}
+            return View(model);
+        }
 
 
-        //public IActionResult SnimiPassword(AdministratorVM model)
-        //{
-        //    var LogPodaci = uow.LogPodaciRepository.Get(model.LogPodaciId);
-        //    LogPodaci.Password = model.NewPassword;
-        //    ctx.SaveChanges();
-        //    return Redirect("AdminProfil?id=" + model.ID);
-        //}      
+        public IActionResult SavePassword(AdministratorVM model)
+        {
+            // To Do
+            return Redirect("AdminProfil?id=" + model.ID);
+        }
     }
 }
