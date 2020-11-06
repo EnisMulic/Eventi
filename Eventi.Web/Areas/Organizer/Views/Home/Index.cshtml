@@ -9,7 +9,7 @@
 
 }
 
-@model SnimiEventVM
+@model SaveEventVM
 
 <!DOCTYPE html>
 <html lang="en">
@@ -40,9 +40,9 @@
         function ProsjecnaOcjena() {
             var data = google.visualization.arrayToDataTable([
                 ['Event', 'Prosjecna ocjena'],
-                  @foreach(var items in model.Redovi)
+                  @foreach(var items in model.Data)
                   {
-                      <text>['@items.NazivEventa',@items.ProsjecnaOcjenaEventa],</text>
+                      <text>['@items.EventName']</text>
                   }
                 ['Mushrooms', 3]
             ]);
@@ -69,9 +69,9 @@
 
 
           data.addRows([
-                  @foreach(var items in model.Redovi)
+                  @foreach(var items in model.Data)
                   {
-                      <text>['@items.NazivEventa',@items.UkupnoBrojProdatihKarata],</text>
+                      <text>['@items.EventName',@items.TicketsSold],</text>
                   }
                 ['Mushrooms', 3]
           ]);
@@ -96,9 +96,9 @@
 
 
           data.addRows([
-                  @foreach(var items in model.Redovi)
+                  @foreach(var items in model.Data)
                   {
-                      <text>['@items.NazivEventa',@items.UkupanPrihodPoEventu],</text>
+                      <text>['@items.EventName',@items.SumTotal],</text>
                   }
                 ['Mushrooms', 3]
           ]);
@@ -313,16 +313,16 @@
             <div class="modal-content">
                 <span class="close" style="color:red;">&times;</span>
                 <form asp-action="SnimiEvent" method="post" enctype="multipart/form-data">
-                    <input type="hidden" asp-for="_organizatorID" value="@orgId" />
+                    <input type="hidden" asp-for="OrganizerID" value="@orgId" />
 
                     <div class="form-group">
                         <label for="nazivEventa">Naziv eventa</label>
-                        <input required type="text" class="form-control inputBox inputi" id="nazivEventa" asp-for="_nazivEventa">
+                        <input required type="text" class="form-control inputBox inputi" id="nazivEventa" asp-for="Name">
                     </div>
 
                     <div class="form-group">
                         <label for="opisEventa">Opis</label>
-                        <textarea type="text" class="form-control inputBox inputi" id="opisEventa" asp-for="_opisEventa"></textarea>
+                        <textarea type="text" class="form-control inputBox inputi" id="opisEventa" asp-for="Description"></textarea>
                     </div>
 
                     <div class="form-group">
@@ -332,29 +332,29 @@
 
                     <div class="form-group">
                         <label for="datumEventa">Datum odrzavanja</label>
-                        <input style="width:200px;" required type="date" class="form-control inputBox" id="datumEventa" asp-for="_datumEventa">
+                        <input style="width:200px;" required type="date" class="form-control inputBox" id="datumEventa" asp-for="Start">
                     </div>
 
                     <div class="form-group">
-                        <label for="vrijemeEventa">Vrijeme odrzavanja</label>
-                        <input style="width:200px;" required type="time" class="form-control inputBox" id="vrijemeEventa" asp-for="_vrijemeEventa">
+                        <label for="datumEventa">Datum odrzavanja</label>
+                        <input style="width:200px;" required type="date" class="form-control inputBox" id="datumEventa" asp-for="End">
                     </div>
 
                     <label>Kategorija eventa</label>
                     <div class="radioBox inputBox">
                         <div class="radio">
-                            <label><input required type="radio" asp-for="_optradio" value="0">Muzika</label>
+                            <label><input required type="radio" asp-for="OptRadio" value="0">Muzika</label>
                         </div>
                         <div class="radio">
-                            <label><input required type="radio" asp-for="_optradio" value="1">Kultura</label>
+                            <label><input required type="radio" asp-for="OptRadio" value="1">Kultura</label>
                         </div>
                         <div class="radio">
-                            <label><input required type="radio" asp-for="_optradio" value="2">Sport</label>
+                            <label><input required type="radio" asp-for="OptRadio" value="2">Sport</label>
                         </div>
                     </div>
                     <br />
                     <label for="odabirProstor">Prostor odrzavanja</label>
-                    <select class="inputBox" required id="odabirProstor" asp-for="_optcombo" asp-items="prostori">
+                    <select class="inputBox" required id="odabirProstor" asp-for="OptCombo" asp-items="prostori">
                         <option value="" disabled selected>odaberite prostor</option>
                     </select>
                     <br />

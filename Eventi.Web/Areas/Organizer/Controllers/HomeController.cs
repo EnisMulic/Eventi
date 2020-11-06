@@ -11,8 +11,6 @@ using System.IO;
 using Microsoft.AspNetCore.Http;
 using Eventi.Web.Helper;
 using Eventi.Web.Areas.Organizer.ViewModels;
-using SendGrid;
-using SendGrid.Helpers.Mail;
 using Microsoft.Extensions.Configuration;
 using Nexmo.Api;
 using Eventi.Common;
@@ -71,15 +69,14 @@ namespace Eventi.Web.Areas.Organizer.Controllers
 
             List<EventVM> events = await GetEvents(organizer.ID);
 
+            // ToDo:
             var model = new StatistickiPodaciVM
             {
-                Redovi = ctx.Event.Where(x => x.OrganizatorId == organizer.ID).Select(x => new StatistickiPodaciVM.Rows
+                Data = events.Select(i => new StatistickiPodaciVM.Rows
                 {
-                    NazivEventa = x.Naziv,
-                    UkupnoBrojProdatihKarata = ctx.ProdajaTip.Where(y => y.EventId == x.Id).Select(y => y.BrojProdatihKarataTip).Sum(),
-                    UkupanPrihodPoEventu = ctx.ProdajaTip.Where(y => y.EventId == x.Id).Sum(y => y.BrojProdatihKarataTip * y.CijenaTip),
-                    ProsjecnaOcjenaEventa = ctx.Recenzija.Where(y => y.Kupovina.EventId == x.Id).Select(y => y.Ocjena).Average().ToString("F") 
-                   }).ToList()
+                    EventName = i.Name
+                }
+                ).ToList()
             };
 
             var venueResponse = await _eventiApi.GetVenueAsync();
@@ -96,7 +93,7 @@ namespace Eventi.Web.Areas.Organizer.Controllers
             return View();
         }
 
-        bool provjeraTipKarte(int eventID,TipKarte tip)
+        bool provjeraTipKarte(int eventID, TipKarte tip)
         {
             var provjeraTip = ctx.ProdajaTip.Where(p => p.EventId == eventID).Include(e => e.Event).ToList();
 
@@ -140,7 +137,7 @@ namespace Eventi.Web.Areas.Organizer.Controllers
             return Redirect("EventInfoPrikaz?EventID=" + data._eventID.ToString());
         }
 
-        public async Task<IActionResult> SaveEvent(SnimiEventVM data, IFormFile slika)
+        public async Task<IActionResult> SaveEvent(SaveEventVM data, IFormFile slika)
         {
             if (slika != null && slika.Length > 0)
             {
@@ -151,38 +148,25 @@ namespace Eventi.Web.Areas.Organizer.Controllers
                     await slika.CopyToAsync(fajlSteam);
                 }
 
-                data._slika = nazivFajla;
+                data.Image = nazivFajla;
 
-                int optRadio = Int32.Parse(data._optradio);
-                int optCombo = Int32.Parse(data._optcombo);
-                Event e = new Event
+                int optRadio = Int32.Parse(data.OptRadio);
+                int optCombo = Int32.Parse(data.OptCombo);
+                var newEvent = new EventInsertRequest()
                 {
-                    Naziv = data._nazivEventa,
-                    Opis = data._opisEventa,
-                    Slika = data._slika,
-                    DatumOdrzavanja = DateTime.ParseExact(data._datumEventa, "yyyy-MM-dd", null),
-                    VrijemeOdrzavanja = data._vrijemeEventa,
-                    Kategorija = (Kategorija)(optRadio),
-                    ProstorOdrzavanjaId = optCombo,
-                    IsOdobren = false,
-                    IsOtkazan = false,
-                    OrganizatorId = data._organizatorID
+                    Name = data.Name,
+                    Description = data.Description,
+                    Image = data.Image,
+                    Start = data.Start,
+                    End = data.End,
+                    EventCategory = (EventCategory)(optRadio),
+                    VenueID = optCombo,
+                    IsApproved = false,
+                    IsCanceled = false,
+                    OrganizerID = data.OrganizerID
                 };
 
-                ctx.Event.Add(e);
-                await ctx.SaveChangesAsync();
-
-                var apiKey = _configuration.GetSection("SENDGRID_API_KEY").Value;
-                var client = new SendGridClient(apiKey);
-                var from = new EmailAddress("Eventi@outlook.com", "Event Attender team");
-                List<EmailAddress> tos = new List<EmailAddress>
-                {
-                    new EmailAddress("zinedin.mezit.98@gmail.com","Zinedin Mezit")
-                };
-                var subject = "Obavijest o novom eventu";
-                var htmlContent = $"<h1>Kreiran je novi event : {data._nazivEventa}</h1>";
-                var msg = MailHelper.CreateSingleEmailToMultipleRecipients(from, tos, subject, "", htmlContent, false);
-                var response = await client.SendEmailAsync(msg);
+                await _eventiApi.CreateEventAsync(newEvent);
             }
             return Redirect("Index");
         }

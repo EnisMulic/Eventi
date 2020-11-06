@@ -6,18 +6,22 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Areas\Administrator\Views\Home\**" />
     <Compile Remove="Areas\Guest\Data\**" />
     <Compile Remove="Areas\Client\Data\**" />
     <Compile Remove="Areas\Organizer\Data\**" />
     <Compile Remove="Views\Organizator\**" />
+    <Content Remove="Areas\Administrator\Views\Home\**" />
     <Content Remove="Areas\Guest\Data\**" />
     <Content Remove="Areas\Client\Data\**" />
     <Content Remove="Areas\Organizer\Data\**" />
     <Content Remove="Views\Organizator\**" />
+    <EmbeddedResource Remove="Areas\Administrator\Views\Home\**" />
     <EmbeddedResource Remove="Areas\Guest\Data\**" />
     <EmbeddedResource Remove="Areas\Client\Data\**" />
     <EmbeddedResource Remove="Areas\Organizer\Data\**" />
     <EmbeddedResource Remove="Views\Organizator\**" />
+    <None Remove="Areas\Administrator\Views\Home\**" />
     <None Remove="Areas\Guest\Data\**" />
     <None Remove="Areas\Client\Data\**" />
     <None Remove="Areas\Organizer\Data\**" />
@@ -46,7 +50,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\Administrator\Views\Home\" />
     <Folder Include="wwwroot\images\items\" />
     <Folder Include="wwwroot\images\korisnicke\" />
   </ItemGroup>
